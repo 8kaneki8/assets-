@@ -113,6 +113,51 @@ body{background:radial-gradient(ellipse at 8% 18%,#e9e4d4 0,transparent 28%),rad
 }
 @media(max-width:440px){.hero h2{font-size:28px}.board{grid-template-columns:1fr 1fr}.nav button{font-size:11px;padding:8px 11px}.brand{gap:9px}}
 
+
+/* TEAM-DRIVEN IHYAA THEME + CENTERED BRAND */
+:root{--team:#a9434d;--team-soft:#faeeee;--team-line:#edc9cc;--team-glow:#a9434d35}
+body[data-turn="blue"]{--team:#376fae;--team-soft:#edf4fc;--team-line:#c8dbf1;--team-glow:#376fae35}
+body[data-turn="red"]{--team:#a9434d;--team-soft:#faeeee;--team-line:#edc9cc;--team-glow:#a9434d35}
+body{background:linear-gradient(180deg,var(--team-soft) 0,#f8f7f2 360px,#f8f7f2 100%);transition:background .45s ease}
+.top{background:linear-gradient(135deg,color-mix(in srgb,var(--team) 92%,#172b36),var(--team));transition:background .5s ease;min-height:0;padding:24px 5vw 54px}
+.top:before{opacity:.07}
+.top:after{display:none}
+.nav{justify-content:center;min-height:150px}
+.brand{flex-direction:column;gap:7px;text-align:center}
+.brand img{width:112px;height:112px;object-fit:contain;padding:0;border:0;border-radius:0;background:transparent;box-shadow:none;mix-blend-mode:multiply}
+.brand h1{font-size:25px}
+.brand p{font-size:13px}
+.nav button{position:absolute;left:0;top:8px}
+.hero{margin:24px auto 0;text-align:center}
+.eyebrow{border-color:#ffffff55;background:#ffffff14}
+.wrap{margin:-25px auto 0}
+.team{transition:border-color .4s,box-shadow .4s}
+.team.red{border-color:color-mix(in srgb,var(--red) 32%,white)}
+.team.blue{border-color:color-mix(in srgb,var(--blue) 32%,white)}
+.turn{border-color:var(--team-line);background:var(--team-soft);box-shadow:0 10px 30px var(--team-glow);transition:all .4s ease}
+.turn small,.turn strong{color:var(--team)}
+.section-head h2{color:var(--team);transition:color .4s}
+.category h3{color:var(--team);transition:color .4s}
+.cell{color:var(--team);background:var(--team-soft);border-color:var(--team-line)}
+.cell:hover:not(:disabled){background:color-mix(in srgb,var(--team-soft) 70%,white);box-shadow:0 8px 22px var(--team-glow)}
+.primary{background:var(--team);transition:background .4s}
+.q-value{color:var(--team);background:var(--team-soft);border-color:var(--team-line)}
+.draw-stage{position:fixed;inset:0;z-index:30;display:none;align-items:center;justify-content:center;padding:20px;background:#071b19d9;backdrop-filter:blur(9px)}
+.draw-stage.show{display:flex}
+.draw-card{width:min(460px,100%);padding:34px 24px;text-align:center;background:#fff;border-radius:28px;border:1px solid #e7dfca;box-shadow:0 30px 100px #0005;animation:modalIn .35s ease both}
+.draw-emblem{width:116px;height:116px;margin:0 auto 18px;border-radius:50%;display:grid;place-items:center;border:5px solid var(--team);background:var(--team-soft);color:var(--team);font-size:42px;font-weight:900;box-shadow:0 0 0 10px var(--team-glow);transition:all .3s}
+.draw-emblem.spinning{animation:drawSpin .65s linear infinite}
+@keyframes drawSpin{to{transform:rotate(360deg)}}
+.draw-title{font-size:24px;font-weight:900;color:#18382f;margin:0 0 8px}
+.draw-sub{color:#7b887f;margin:0 0 20px}
+.draw-result{font-size:25px;font-weight:900;color:var(--team);min-height:42px;margin:12px 0}
+.draw-track{height:8px;border-radius:20px;background:#edf0e9;overflow:hidden}
+.draw-track span{display:block;height:100%;width:0;background:var(--team);border-radius:20px}
+.draw-track.running span{animation:drawProgress 2.8s ease forwards}
+@keyframes drawProgress{to{width:100%}}
+.draw-close{margin-top:18px}
+@media(max-width:600px){.nav{min-height:135px}.brand img{width:92px;height:92px}.nav button{top:0;left:0;padding:8px 10px;font-size:11px}.hero{margin-top:20px}}
+
 </style></head>
 <body>
 <header class="top"><div class="nav"><div class="brand"><img src="4824b048-edb2-4204-9caf-d8b8e7a70e42%20(1).png" alt="شعار إحياء"><div><h1>مؤسسة إحياء</h1><p>جيل على خطى السابقين</p></div></div><button id="hostOpen">⚙ لوحة تحكم الهوست</button></div><div class="hero"><div class="eyebrow">مسابقة تفاعلية • علم ومتعة وتنافس</div><h2>تحدّي المعرفة يبدأ من هنا</h2><p>اختر الفئة والنقاط، وتعاون مع فريقك للوصول إلى القمة.</p></div></header>
@@ -121,7 +166,7 @@ body{background:radial-gradient(ellipse at 8% 18%,#e9e4d4 0,transparent 28%),rad
 <div class="hostbar"><button class="secondary" id="drawBtn">🎲 قرعة البداية</button><button class="secondary" id="switchBtn">⇄ تبديل الدور</button><button class="gold" id="resetBtn">↻ إعادة ضبط النقاط</button></div><div class="footer">مؤسسة إحياء • جيل على خطى السابقين</div></main>
 <div class="overlay" id="questionOverlay"><div class="modal"><div class="modal-head"><h2>سؤال المسابقة</h2><button class="close" data-close="questionOverlay">×</button></div><div class="q-value" id="qValue"></div><div class="question" id="qText"></div><div class="answer" id="qAnswer"></div><div class="actions"><button class="secondary" id="showAnswer">إظهار الإجابة</button><button class="primary" id="correctBtn">✓ إجابة صحيحة</button><button class="secondary" id="wrongBtn">✕ إجابة غير صحيحة</button></div><p class="hint">الإجابة الصحيحة تمنح الفريق صاحب الدور نقاط السؤال، والإجابة غير الصحيحة تنقل الدور للفريق الآخر.</p></div></div>
 <div class="overlay" id="hostOverlay"><div class="modal"><div class="modal-head"><h2>إعداد وإدارة المسابقة</h2><button class="close" data-close="hostOverlay">×</button></div><div class="formrow"><div class="field"><label>اسم الفريق الأحمر</label><input id="editRed" value="الفريق الأحمر"></div><div class="field"><label>اسم الفريق الأزرق</label><input id="editBlue" value="الفريق الأزرق"></div></div><div class="field"><label>الفئات والأسئلة</label><div id="categoryEditor"></div><button class="secondary" id="addCategory">＋ إضافة فئة</button></div><div class="actions"><button class="primary" id="saveSettings">حفظ الإعدادات</button><button class="gold" id="newGame">بدء مسابقة جديدة</button></div><p class="hint">تُحفظ الإعدادات والنقاط على هذا الجهاز فقط. أضف سؤالًا وإجابة لكل قيمة نقاط. يمكنك تعديل الأسئلة قبل بدء المسابقة.</p></div></div>
-<div class="toast" id="toast"></div>
+<div class="draw-stage" id="drawStage"><div class="draw-card"><div class="draw-emblem" id="drawEmblem">؟</div><h2 class="draw-title">قرعة البداية</h2><p class="draw-sub" id="drawSub">يتم اختيار الفريق الذي سيبدأ المسابقة...</p><div class="draw-result" id="drawResult">استعدوا!</div><div class="draw-track" id="drawTrack"><span></span></div><button class="primary draw-close" id="drawClose" style="display:none">ابدأ المسابقة</button></div></div><div class="toast" id="toast"></div>
 <script>
 const DEFAULT=[{name:"القرآن والتفسير",questions:[{v:100,q:"ما السورة التي تُسمّى أمّ الكتاب؟",a:"سورة الفاتحة"},{v:200,q:"كم عدد أجزاء القرآن الكريم؟",a:"ثلاثون جزءًا"},{v:300,q:"ما أطول سورة في القرآن الكريم؟",a:"سورة البقرة"},{v:400,q:"ما السورة التي لا تبدأ بالبسملة؟",a:"سورة التوبة"},{v:500,q:"ما السورة التي وردت فيها سجدتان؟",a:"سورة الحج"}]},{name:"الحديث والسيرة",questions:[{v:100,q:"من هو أول مؤذن في الإسلام؟",a:"بلال بن رباح رضي الله عنه"},{v:200,q:"في أي مدينة وُلد النبي ﷺ؟",a:"مكة المكرمة"},{v:300,q:"ما اسم مرضعة النبي ﷺ؟",a:"حليمة السعدية"},{v:400,q:"كم سنة استمرت الدعوة في مكة قبل الهجرة؟",a:"ثلاث عشرة سنة"},{v:500,q:"ما اسم الغار الذي نزل فيه الوحي أول مرة؟",a:"غار حراء"}]},{name:"الفقه والعبادات",questions:[{v:100,q:"كم عدد الصلوات المفروضة في اليوم والليلة؟",a:"خمس صلوات"},{v:200,q:"ما قبلة المسلمين؟",a:"الكعبة المشرفة"},{v:300,q:"في أي شهر يصوم المسلمون؟",a:"شهر رمضان"},{v:400,q:"كم عدد أركان الإسلام؟",a:"خمسة"},{v:500,q:"ما العبادة التي تكون في وقت مخصوص من يوم عرفة؟",a:"الوقوف بعرفة"}]}];
 let state={categories:DEFAULT.map(c=>({...c,questions:c.questions.map(x=>({...x,used:false}))})),names:["الفريق الأحمر","الفريق الأزرق"],scores:[0,0],turn:0,current:null};
@@ -129,14 +174,22 @@ const $=id=>document.getElementById(id);
 function save(){localStorage.setItem("ihyaaQuiz",JSON.stringify(state))}
 function load(){try{const s=JSON.parse(localStorage.getItem("ihyaaQuiz"));if(s&&s.categories)state=s}catch(e){}}
 function toast(t){$("toast").textContent=t;$("toast").classList.add("show");setTimeout(()=>$("toast").classList.remove("show"),2300)}
-function render(){ $("redName").textContent=state.names[0];$("blueName").textContent=state.names[1];$("redScore").textContent=state.scores[0];$("blueScore").textContent=state.scores[1];$("turnName").textContent=state.names[state.turn];let n=0;$("board").innerHTML="";state.categories.forEach((c,ci)=>{let card=document.createElement("article");card.className="category";let h=document.createElement("h3");h.textContent=c.name;card.append(h);let cells=document.createElement("div");cells.className="cells";c.questions.slice().sort((a,b)=>a.v-b.v).forEach(q=>{if(!q.used)n++;let b=document.createElement("button");b.className="cell";b.textContent=q.v;b.disabled=!!q.used;b.onclick=()=>openQuestion(ci,q.v);cells.append(b)});card.append(cells);$("board").append(card)});$("remaining").textContent=n+" سؤال متاح";save()}
+function render(){ document.body.dataset.turn=state.turn===0?"red":"blue"; $("redName").textContent=state.names[0];$("blueName").textContent=state.names[1];$("redScore").textContent=state.scores[0];$("blueScore").textContent=state.scores[1];$("turnName").textContent=state.names[state.turn];let n=0;$("board").innerHTML="";state.categories.forEach((c,ci)=>{let card=document.createElement("article");card.className="category";let h=document.createElement("h3");h.textContent=c.name;card.append(h);let cells=document.createElement("div");cells.className="cells";c.questions.slice().sort((a,b)=>a.v-b.v).forEach(q=>{if(!q.used)n++;let b=document.createElement("button");b.className="cell";b.textContent=q.v;b.disabled=!!q.used;b.onclick=()=>openQuestion(ci,q.v);cells.append(b)});card.append(cells);$("board").append(card)});$("remaining").textContent=n+" سؤال متاح";save()}
 function openQuestion(ci,v){let q=state.categories[ci].questions.find(x=>x.v===v);if(!q||q.used)return;state.current={ci,v};$("qValue").textContent=v+" نقطة • "+state.names[state.turn];$("qText").textContent=q.q;$("qAnswer").textContent="الإجابة: "+q.a;$("qAnswer").style.display="none";$("questionOverlay").classList.add("show")}
 function close(id){$(id).classList.remove("show")}
 document.querySelectorAll("[data-close]").forEach(b=>b.onclick=()=>close(b.dataset.close));
 $("showAnswer").onclick=()=>{$("qAnswer").style.display="block"};
 $("correctBtn").onclick=()=>{if(!state.current)return;let q=state.categories[state.current.ci].questions.find(x=>x.v===state.current.v);q.used=true;state.scores[state.turn]+=q.v;state.current=null;close("questionOverlay");render();toast("أحسنتم! تمت إضافة النقاط للفريق.")};
 $("wrongBtn").onclick=()=>{if(!state.current)return;let q=state.categories[state.current.ci].questions.find(x=>x.v===state.current.v);q.used=true;state.turn=1-state.turn;state.current=null;close("questionOverlay");render();toast("انتقل الدور إلى "+state.names[state.turn])};
-$("drawBtn").onclick=()=>{state.turn=Math.random()<.5?0:1;render();toast("الفريق الذي يبدأ: "+state.names[state.turn])};
+let drawTimer=null;
+$("drawBtn").onclick=()=>{
+ if(drawTimer)return;
+ const stage=$("drawStage"),emblem=$("drawEmblem"),result=$("drawResult"),sub=$("drawSub"),track=$("drawTrack"),closeBtn=$("drawClose");
+ stage.classList.add("show");closeBtn.style.display="none";emblem.classList.add("spinning");result.textContent="جاري إجراء القرعة...";sub.textContent="لحظات ويتم تحديد الفريق صاحب البداية";track.classList.add("running");
+ let ticks=0;const preview=setInterval(()=>{const i=ticks++%2;emblem.style.color=i?"#376fae":"#a9434d";emblem.style.borderColor=i?"#376fae":"#a9434d";result.textContent=state.names[i];},130);
+ drawTimer=setTimeout(()=>{clearInterval(preview);state.turn=Math.random()<.5?0:1;emblem.classList.remove("spinning");emblem.style.color=state.turn===0?"#a9434d":"#376fae";emblem.style.borderColor=state.turn===0?"#a9434d":"#376fae";result.textContent="🎉 "+state.names[state.turn];sub.textContent="هذا هو الفريق الذي سيبدأ المسابقة";render();closeBtn.style.display="inline-block";track.classList.remove("running");drawTimer=null;},2900);
+};
+$("drawClose").onclick=()=>{$("drawStage").classList.remove("show")};
 $("switchBtn").onclick=()=>{state.turn=1-state.turn;render();toast("الدور الآن: "+state.names[state.turn])};
 $("resetBtn").onclick=()=>{if(confirm("هل تريد تصفير النقاط وإعادة جميع الأسئلة؟")){state.scores=[0,0];state.turn=0;state.categories.forEach(c=>c.questions.forEach(q=>q.used=false));render();toast("تم تجهيز لوحة جديدة")}};
 $("hostOpen").onclick=()=>{buildEditor();$("editRed").value=state.names[0];$("editBlue").value=state.names[1];$("hostOverlay").classList.add("show")};
