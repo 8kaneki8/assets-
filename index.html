@@ -181,13 +181,33 @@ button{transition:transform .2s var(--motion-spring),box-shadow .2s,border-color
 button:active{transform:translateY(1px) scale(.975)}
 @media(prefers-reduced-motion:reduce){.category,.cell,.cell:disabled,.team .points.score-pop,.answer.reveal,.toast.show{animation:none!important}button,.cell{transition:none!important}}
 
+
+/* IHYAA GAME SHOW MOTION */
+.timer-wrap{margin:0 auto 20px;max-width:520px;padding:12px 15px;border:1px solid #e5e9df;border-radius:16px;background:linear-gradient(135deg,#f8faf5,#fff);transition:border-color .25s,background .25s}
+.timer-meta{display:flex;align-items:center;justify-content:space-between;margin-bottom:9px;color:#52665a;font-weight:800}
+#timerText{font-size:27px;line-height:1;color:#16734f;font-variant-numeric:tabular-nums;min-width:36px;text-align:center}
+.timer-track{height:10px;border-radius:20px;background:#e5ebe3;overflow:hidden}
+.timer-track span{display:block;width:100%;height:100%;border-radius:20px;background:linear-gradient(90deg,#20a36e,#b5b94a);transform-origin:right;transition:width 1s linear,background .3s}
+.timer-wrap.urgent{border-color:#e8a2a2;background:#fff7f6}
+.timer-wrap.urgent #timerText{color:#c43e49}
+.timer-wrap.urgent .timer-track span{background:linear-gradient(90deg,#ef9b45,#d83e4e)}
+@keyframes questionSpotlight{0%{opacity:0;transform:translateY(28px) scale(.94);filter:blur(8px)}65%{opacity:1;transform:translateY(-3px) scale(1.01);filter:blur(0)}100%{transform:translateY(0) scale(1)}}
+@keyframes teamHandoff{0%{transform:translateX(0);opacity:1}45%{transform:translateX(-24px);opacity:0}55%{transform:translateX(24px);opacity:0}100%{transform:translateX(0);opacity:1}}
+@keyframes clockPulse{0%,100%{transform:scale(1)}50%{transform:scale(1.12)}}
+.modal{animation:questionSpotlight .55s cubic-bezier(.2,.9,.25,1) both}
+.question{animation:questionSpotlight .65s .08s both}
+.q-value{transition:background .3s,color .3s,transform .3s}
+.timer-wrap.urgent #timerText{animation:clockPulse .8s ease-in-out infinite}
+.score-pop{filter:drop-shadow(0 0 9px #d4ae4b)}
+@media(prefers-reduced-motion:reduce){.modal,.question{animation:none!important}#timerText{animation:none!important}}
+
 </style></head>
 <body>
 <header class="top"><div class="nav"><div class="brand"><img src="4824b048-edb2-4204-9caf-d8b8e7a70e42%20(1).png" alt="شعار إحياء"><div><h1>مؤسسة إحياء</h1><p>جيل على خطى السابقين</p></div></div><button id="hostOpen">⚙ لوحة تحكم الهوست</button></div><div class="hero"><div class="eyebrow">مسابقة تفاعلية • علم ومتعة وتنافس</div><h2>تحدّي المعرفة يبدأ من هنا</h2><p>اختر الفئة والنقاط، وتعاون مع فريقك للوصول إلى القمة.</p></div></header>
 <main class="wrap"><section class="scoreboard"><div class="team red"><div><h3 id="redName">الفريق الأحمر</h3><small>الفريق الأول</small></div><div class="points" id="redScore">0</div></div><div class="turn"><small>الدور الحالي</small><strong id="turnName">الفريق الأحمر</strong></div><div class="team blue"><div><h3 id="blueName">الفريق الأزرق</h3><small>الفريق الثاني</small></div><div class="points" id="blueScore">0</div></div></section>
 <div class="section-head"><div><h2>لوحة التحدّي</h2><p>اختر سؤالًا متاحًا لبدء الجولة</p></div><span class="hint" id="remaining">— سؤال متاح</span></div><section class="board" id="board"></section>
 <div class="hostbar"><button class="secondary" id="drawBtn">🎲 قرعة البداية</button><button class="secondary" id="switchBtn">⇄ تبديل الدور</button><button class="gold" id="resetBtn">↻ إعادة ضبط النقاط</button></div><div class="footer">مؤسسة إحياء • جيل على خطى السابقين</div></main>
-<div class="overlay" id="questionOverlay"><div class="modal"><div class="modal-head"><h2>سؤال المسابقة</h2><button class="close" data-close="questionOverlay">×</button></div><div class="q-value" id="qValue"></div><div class="question" id="qText"></div><div class="answer" id="qAnswer"></div><div class="actions"><button class="secondary" id="showAnswer">إظهار الإجابة</button><button class="primary" id="correctBtn">✓ إجابة صحيحة</button><button class="secondary" id="wrongBtn">✕ إجابة غير صحيحة</button></div><p class="hint">الإجابة الصحيحة تمنح الفريق صاحب الدور نقاط السؤال، والإجابة غير الصحيحة تنقل الدور للفريق الآخر.</p></div></div>
+<div class="overlay" id="questionOverlay"><div class="modal"><div class="modal-head"><h2>سؤال المسابقة</h2><button class="close" data-close="questionOverlay">×</button></div><div class="q-value" id="qValue"></div><div class="timer-wrap" id="timerWrap"><div class="timer-meta"><span>الوقت المتبقي</span><strong id="timerText">30</strong></div><div class="timer-track"><span id="timerBar"></span></div></div><div class="question" id="qText"></div><div class="answer" id="qAnswer"></div><div class="actions"><button class="secondary" id="showAnswer">إظهار الإجابة</button><button class="primary" id="correctBtn">✓ إجابة صحيحة</button><button class="secondary" id="wrongBtn">✕ إجابة غير صحيحة</button></div><p class="hint">الإجابة الصحيحة تمنح النقاط للفريق، ثم ينتقل الدور للسؤال التالي مع الفريق المنافس. وإذا أخطأ الفريق أو انتهى الوقت، ينتقل نفس السؤال للمنافس.</p></div></div>
 <div class="overlay" id="hostOverlay"><div class="modal"><div class="modal-head"><h2>إعداد وإدارة المسابقة</h2><button class="close" data-close="hostOverlay">×</button></div><div class="formrow"><div class="field"><label>اسم الفريق الأحمر</label><input id="editRed" value="الفريق الأحمر"></div><div class="field"><label>اسم الفريق الأزرق</label><input id="editBlue" value="الفريق الأزرق"></div></div><div class="field"><label>الفئات والأسئلة</label><div id="categoryEditor"></div><button class="secondary" id="addCategory">＋ إضافة فئة</button></div><div class="actions"><button class="primary" id="saveSettings">حفظ الإعدادات</button><button class="gold" id="newGame">بدء مسابقة جديدة</button></div><p class="hint">تُحفظ الإعدادات والنقاط على هذا الجهاز فقط. أضف سؤالًا وإجابة لكل قيمة نقاط. يمكنك تعديل الأسئلة قبل بدء المسابقة.</p></div></div>
 <div class="draw-stage" id="drawStage"><div class="draw-card"><div class="draw-emblem" id="drawEmblem">؟</div><h2 class="draw-title">قرعة البداية</h2><p class="draw-sub" id="drawSub">يتم اختيار الفريق الذي سيبدأ المسابقة...</p><div class="draw-result" id="drawResult">استعدوا!</div><div class="draw-track" id="drawTrack"><span></span></div><button class="primary draw-close" id="drawClose" style="display:none">ابدأ المسابقة</button></div></div><div class="toast" id="toast"></div>
 <script>
@@ -198,12 +218,18 @@ function save(){localStorage.setItem("ihyaaQuiz",JSON.stringify(state))}
 function load(){try{const s=JSON.parse(localStorage.getItem("ihyaaQuiz"));if(s&&s.categories)state=s}catch(e){}}
 function toast(t){$("toast").textContent=t;$("toast").classList.add("show");setTimeout(()=>$("toast").classList.remove("show"),2300)}
 function render(){ document.body.dataset.turn=state.turn===0?"red":"blue"; const oldScores=window.__ihyaaScores||[state.scores[0],state.scores[1]]; $("redName").textContent=state.names[0];$("blueName").textContent=state.names[1];$("redScore").textContent=state.scores[0];$("blueScore").textContent=state.scores[1];[0,1].forEach(i=>{const el=$(i===0?"redScore":"blueScore");el.classList.remove("score-pop");if(state.scores[i]!==oldScores[i]){void el.offsetWidth;el.classList.add("score-pop")}});window.__ihyaaScores=[...state.scores];$("turnName").textContent=state.names[state.turn];let n=0;$("board").innerHTML="";state.categories.forEach((c,ci)=>{let card=document.createElement("article");card.className="category";let h=document.createElement("h3");h.textContent=c.name;card.append(h);let cells=document.createElement("div");cells.className="cells";c.questions.slice().sort((a,b)=>a.v-b.v).forEach(q=>{if(!q.used)n++;let b=document.createElement("button");b.className="cell";b.style.animationDelay=(ci*.07+cells.children.length*.045)+"s";b.textContent=q.v;b.disabled=!!q.used;b.onclick=()=>openQuestion(ci,q.v);cells.append(b)});card.append(cells);$("board").append(card)});$("remaining").textContent=n+" سؤال متاح";save()}
-function openQuestion(ci,v){let q=state.categories[ci].questions.find(x=>x.v===v);if(!q||q.used)return;state.current={ci,v};$("qValue").textContent=v+" نقطة • "+state.names[state.turn];$("qText").textContent=q.q;$("qAnswer").textContent="الإجابة: "+q.a;$("qAnswer").classList.remove("reveal");$("qAnswer").style.display="none";$("questionOverlay").classList.add("show")}
-function close(id){$(id).classList.remove("show")}
+let answerInterval=null,answerDeadline=0,remainingSeconds=30;
+function stopAnswerTimer(){if(answerInterval){clearInterval(answerInterval);answerInterval=null}}
+function paintTimer(){const left=Math.max(0,Math.ceil((answerDeadline-Date.now())/1000));remainingSeconds=left;$("timerText").textContent=left;$("timerBar").style.width=(left/30*100)+"%";$("timerWrap")?.classList.toggle("urgent",left<=10)}
+function startAnswerTimer(){stopAnswerTimer();answerDeadline=Date.now()+30000;paintTimer();answerInterval=setInterval(()=>{paintTimer();if(Date.now()>=answerDeadline){stopAnswerTimer();passSameQuestion("انتهى الوقت! انتقل نفس السؤال إلى "+state.names[state.turn]);}},200)}
+function updateQuestionTurn(){if(!state.current)return;$("qValue").textContent=state.current.v+" نقطة • "+state.names[state.turn];$("qAnswer").style.display="none";$("qAnswer").classList.remove("reveal");$("questionOverlay").classList.add("show");startAnswerTimer()}
+function openQuestion(ci,v){let q=state.categories[ci].questions.find(x=>x.v===v);if(!q||q.used)return;state.current={ci,v};$("qText").textContent=q.q;$("qAnswer").textContent="الإجابة: "+q.a;updateQuestionTurn()}
+function close(id){if(id==="questionOverlay")stopAnswerTimer();$(id).classList.remove("show")}
 document.querySelectorAll("[data-close]").forEach(b=>b.onclick=()=>close(b.dataset.close));
 $("showAnswer").onclick=()=>{$("qAnswer").style.display="block";$("qAnswer").classList.remove("reveal");void $("qAnswer").offsetWidth;$("qAnswer").classList.add("reveal")};
-$("correctBtn").onclick=()=>{if(!state.current)return;let q=state.categories[state.current.ci].questions.find(x=>x.v===state.current.v);q.used=true;state.scores[state.turn]+=q.v;state.current=null;close("questionOverlay");render();toast("أحسنتم! تمت إضافة النقاط للفريق.")};
-$("wrongBtn").onclick=()=>{if(!state.current)return;let q=state.categories[state.current.ci].questions.find(x=>x.v===state.current.v);q.used=true;state.turn=1-state.turn;state.current=null;close("questionOverlay");render();toast("انتقل الدور إلى "+state.names[state.turn])};
+$("correctBtn").onclick=()=>{if(!state.current)return;stopAnswerTimer();let q=state.categories[state.current.ci].questions.find(x=>x.v===state.current.v);q.used=true;state.scores[state.turn]+=q.v;state.turn=1-state.turn;state.current=null;close("questionOverlay");render();toast("إجابة صحيحة! النقاط للفريق، والدور الآن للفريق المنافس لاختيار سؤال جديد.")};
+function passSameQuestion(message){if(!state.current)return;stopAnswerTimer();state.turn=1-state.turn;render();updateQuestionTurn();toast(message)}
+$("wrongBtn").onclick=()=>passSameQuestion("إجابة غير صحيحة! نفس السؤال ينتقل إلى "+state.names[1-state.turn]);
 let drawTimer=null;
 $("drawBtn").onclick=()=>{
  if(drawTimer)return;
