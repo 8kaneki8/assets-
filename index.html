@@ -221,7 +221,7 @@ function render(){ document.body.dataset.turn=state.turn===0?"red":"blue"; const
 let answerInterval=null,answerDeadline=0,remainingSeconds=30;
 function stopAnswerTimer(){if(answerInterval){clearInterval(answerInterval);answerInterval=null}}
 function paintTimer(){const left=Math.max(0,Math.ceil((answerDeadline-Date.now())/1000));remainingSeconds=left;$("timerText").textContent=left;$("timerBar").style.width=(left/30*100)+"%";$("timerWrap")?.classList.toggle("urgent",left<=10)}
-function startAnswerTimer(){stopAnswerTimer();answerDeadline=Date.now()+30000;paintTimer();answerInterval=setInterval(()=>{paintTimer();if(Date.now()>=answerDeadline){stopAnswerTimer();passSameQuestion("انتهى الوقت! انتقل نفس السؤال إلى "+state.names[state.turn]);}},200)}
+function startAnswerTimer(){stopAnswerTimer();answerDeadline=Date.now()+30000;paintTimer();answerInterval=setInterval(()=>{paintTimer();if(Date.now()>=answerDeadline){stopAnswerTimer();passSameQuestion("انتهى الوقت! انتقل نفس السؤال إلى "+state.names[1-state.turn]);}},200)}
 function updateQuestionTurn(){if(!state.current)return;$("qValue").textContent=state.current.v+" نقطة • "+state.names[state.turn];$("qAnswer").style.display="none";$("qAnswer").classList.remove("reveal");$("questionOverlay").classList.add("show");startAnswerTimer()}
 function openQuestion(ci,v){let q=state.categories[ci].questions.find(x=>x.v===v);if(!q||q.used)return;state.current={ci,v};$("qText").textContent=q.q;$("qAnswer").textContent="الإجابة: "+q.a;updateQuestionTurn()}
 function close(id){if(id==="questionOverlay")stopAnswerTimer();$(id).classList.remove("show")}
