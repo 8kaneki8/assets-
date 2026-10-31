@@ -158,6 +158,29 @@ body{background:linear-gradient(180deg,var(--team-soft) 0,#f8f7f2 360px,#f8f7f2 
 .draw-close{margin-top:18px}
 @media(max-width:600px){.nav{min-height:135px}.brand img{width:92px;height:92px}.nav button{top:0;left:0;padding:8px 10px;font-size:11px}.hero{margin-top:20px}}
 
+
+/* === IHYAA MOTION SYSTEM v2 === */
+:root{--motion-fast:cubic-bezier(.2,.8,.2,1);--motion-spring:cubic-bezier(.18,1.25,.35,1)}
+@keyframes ihyaaCardIn{from{opacity:0;transform:translateY(22px) scale(.975);filter:blur(5px)}to{opacity:1;transform:translateY(0) scale(1);filter:blur(0)}}
+@keyframes ihyaaCellIn{0%{opacity:0;transform:translateY(12px) scale(.88)}75%{transform:translateY(-2px) scale(1.025)}100%{opacity:1;transform:translateY(0) scale(1)}}
+@keyframes ihyaaScorePop{0%{transform:scale(1)}35%{transform:scale(1.28);text-shadow:0 0 22px var(--team-glow)}70%{transform:scale(.94)}100%{transform:scale(1)}}
+@keyframes ihyaaReveal{0%{opacity:0;transform:translateY(14px) scale(.97);clip-path:inset(0 0 100% 0)}100%{opacity:1;transform:translateY(0) scale(1);clip-path:inset(0 0 0 0)}}
+@keyframes ihyaaUsed{0%{transform:scale(1);filter:brightness(1)}45%{transform:scale(.92) rotateX(18deg);filter:brightness(1.2)}100%{transform:scale(.96);filter:grayscale(.7)}}
+@keyframes ihyaaToast{0%{opacity:0;transform:translate(-50%,18px) scale(.94)}15%,85%{opacity:1;transform:translate(-50%,0) scale(1)}100%{opacity:0;transform:translate(-50%,-8px) scale(.98)}}
+.category{animation:ihyaaCardIn .65s var(--motion-fast) both;transform-origin:50% 20%}
+.category:nth-child(2){animation-delay:.08s}.category:nth-child(3){animation-delay:.16s}.category:nth-child(4){animation-delay:.24s}.category:nth-child(5){animation-delay:.32s}
+.cell{animation:ihyaaCellIn .48s var(--motion-spring) both;transition:transform .22s var(--motion-spring),box-shadow .22s,border-color .22s,background .22s}
+.cell:hover:not(:disabled){transform:translateY(-5px) scale(1.045);box-shadow:0 12px 22px var(--team-glow)}
+.cell:active:not(:disabled){transform:translateY(1px) scale(.96)}
+.cell:disabled{animation:ihyaaUsed .42s ease both}
+.team .points.score-pop{animation:ihyaaScorePop .65s var(--motion-spring)}
+.modal{animation:modalIn .38s var(--motion-spring) both}
+.answer.reveal{animation:ihyaaReveal .55s var(--motion-spring) both}
+.toast.show{animation:ihyaaToast 2.3s ease both}
+button{transition:transform .2s var(--motion-spring),box-shadow .2s,border-color .2s,filter .2s}
+button:active{transform:translateY(1px) scale(.975)}
+@media(prefers-reduced-motion:reduce){.category,.cell,.cell:disabled,.team .points.score-pop,.answer.reveal,.toast.show{animation:none!important}button,.cell{transition:none!important}}
+
 </style></head>
 <body>
 <header class="top"><div class="nav"><div class="brand"><img src="4824b048-edb2-4204-9caf-d8b8e7a70e42%20(1).png" alt="شعار إحياء"><div><h1>مؤسسة إحياء</h1><p>جيل على خطى السابقين</p></div></div><button id="hostOpen">⚙ لوحة تحكم الهوست</button></div><div class="hero"><div class="eyebrow">مسابقة تفاعلية • علم ومتعة وتنافس</div><h2>تحدّي المعرفة يبدأ من هنا</h2><p>اختر الفئة والنقاط، وتعاون مع فريقك للوصول إلى القمة.</p></div></header>
@@ -174,11 +197,11 @@ const $=id=>document.getElementById(id);
 function save(){localStorage.setItem("ihyaaQuiz",JSON.stringify(state))}
 function load(){try{const s=JSON.parse(localStorage.getItem("ihyaaQuiz"));if(s&&s.categories)state=s}catch(e){}}
 function toast(t){$("toast").textContent=t;$("toast").classList.add("show");setTimeout(()=>$("toast").classList.remove("show"),2300)}
-function render(){ document.body.dataset.turn=state.turn===0?"red":"blue"; $("redName").textContent=state.names[0];$("blueName").textContent=state.names[1];$("redScore").textContent=state.scores[0];$("blueScore").textContent=state.scores[1];$("turnName").textContent=state.names[state.turn];let n=0;$("board").innerHTML="";state.categories.forEach((c,ci)=>{let card=document.createElement("article");card.className="category";let h=document.createElement("h3");h.textContent=c.name;card.append(h);let cells=document.createElement("div");cells.className="cells";c.questions.slice().sort((a,b)=>a.v-b.v).forEach(q=>{if(!q.used)n++;let b=document.createElement("button");b.className="cell";b.textContent=q.v;b.disabled=!!q.used;b.onclick=()=>openQuestion(ci,q.v);cells.append(b)});card.append(cells);$("board").append(card)});$("remaining").textContent=n+" سؤال متاح";save()}
-function openQuestion(ci,v){let q=state.categories[ci].questions.find(x=>x.v===v);if(!q||q.used)return;state.current={ci,v};$("qValue").textContent=v+" نقطة • "+state.names[state.turn];$("qText").textContent=q.q;$("qAnswer").textContent="الإجابة: "+q.a;$("qAnswer").style.display="none";$("questionOverlay").classList.add("show")}
+function render(){ document.body.dataset.turn=state.turn===0?"red":"blue"; const oldScores=window.__ihyaaScores||[state.scores[0],state.scores[1]]; $("redName").textContent=state.names[0];$("blueName").textContent=state.names[1];$("redScore").textContent=state.scores[0];$("blueScore").textContent=state.scores[1];[0,1].forEach(i=>{const el=$(i===0?"redScore":"blueScore");el.classList.remove("score-pop");if(state.scores[i]!==oldScores[i]){void el.offsetWidth;el.classList.add("score-pop")}});window.__ihyaaScores=[...state.scores];$("turnName").textContent=state.names[state.turn];let n=0;$("board").innerHTML="";state.categories.forEach((c,ci)=>{let card=document.createElement("article");card.className="category";let h=document.createElement("h3");h.textContent=c.name;card.append(h);let cells=document.createElement("div");cells.className="cells";c.questions.slice().sort((a,b)=>a.v-b.v).forEach(q=>{if(!q.used)n++;let b=document.createElement("button");b.className="cell";b.style.animationDelay=(ci*.07+cells.children.length*.045)+"s";b.textContent=q.v;b.disabled=!!q.used;b.onclick=()=>openQuestion(ci,q.v);cells.append(b)});card.append(cells);$("board").append(card)});$("remaining").textContent=n+" سؤال متاح";save()}
+function openQuestion(ci,v){let q=state.categories[ci].questions.find(x=>x.v===v);if(!q||q.used)return;state.current={ci,v};$("qValue").textContent=v+" نقطة • "+state.names[state.turn];$("qText").textContent=q.q;$("qAnswer").textContent="الإجابة: "+q.a;$("qAnswer").classList.remove("reveal");$("qAnswer").style.display="none";$("questionOverlay").classList.add("show")}
 function close(id){$(id).classList.remove("show")}
 document.querySelectorAll("[data-close]").forEach(b=>b.onclick=()=>close(b.dataset.close));
-$("showAnswer").onclick=()=>{$("qAnswer").style.display="block"};
+$("showAnswer").onclick=()=>{$("qAnswer").style.display="block";$("qAnswer").classList.remove("reveal");void $("qAnswer").offsetWidth;$("qAnswer").classList.add("reveal")};
 $("correctBtn").onclick=()=>{if(!state.current)return;let q=state.categories[state.current.ci].questions.find(x=>x.v===state.current.v);q.used=true;state.scores[state.turn]+=q.v;state.current=null;close("questionOverlay");render();toast("أحسنتم! تمت إضافة النقاط للفريق.")};
 $("wrongBtn").onclick=()=>{if(!state.current)return;let q=state.categories[state.current.ci].questions.find(x=>x.v===state.current.v);q.used=true;state.turn=1-state.turn;state.current=null;close("questionOverlay");render();toast("انتقل الدور إلى "+state.names[state.turn])};
 let drawTimer=null;
