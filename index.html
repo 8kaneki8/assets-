@@ -38,6 +38,81 @@
 .toast.show{animation:riseIn .25s ease both}
 @media(prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;scroll-behavior:auto!important;transition-duration:.01ms!important}}
 
+
+/* PREMIUM IHYAA REDESIGN */
+:root{--green:#073d32;--green2:#0b5a46;--gold:#c7a45b;--ink:#18382f;--muted:#77877e;--paper:#f6f4ec;--line:#e7e2d4;--red:#b94f59;--blue:#477bb8;--shadow:0 18px 48px #18382f12}
+html{scroll-behavior:smooth}
+body{background:radial-gradient(ellipse at 8% 18%,#e9e4d4 0,transparent 28%),radial-gradient(ellipse at 92% 58%,#e6eee5 0,transparent 30%),var(--paper);color:var(--ink)}
+.top{min-height:410px;padding:26px 5vw 64px;background:linear-gradient(135deg,#062f28 0%,#0a4939 48%,#12644c 100%);isolation:isolate}
+.top:before{content:"";position:absolute;inset:0;z-index:-1;opacity:.12;background-image: repeating-linear-gradient(45deg,transparent 0 34px,#e5d3a0 35px 36px,transparent 37px 70px),repeating-linear-gradient(-45deg,transparent 0 34px,#e5d3a0 35px 36px,transparent 37px 70px);mask-image:linear-gradient(90deg,#000,transparent 85%)}
+.top:after{width:470px;height:470px;left:-150px;top:-255px;border:1px solid #e4d09b35;box-shadow:0 0 0 22px #ffffff08,0 0 0 48px #ffffff07,0 0 0 76px #ffffff05}
+.nav{max-width:1240px}
+.brand{gap:16px}
+.brand img{width:76px;height:76px;border:2px solid #d4b66d;border-radius:22px;padding:4px;box-shadow:0 8px 28px #0003}
+.brand h1{font-size:25px;letter-spacing:.1px}
+.brand p{font-size:13px;color:#e5d5a9}
+.nav button{border-radius:14px;padding:11px 18px;background:#ffffff12;border-color:#d8c28a70;backdrop-filter:blur(8px)}
+.hero{max-width:900px;text-align:center;margin:58px auto 0}
+.eyebrow{display:inline-flex;align-items:center;gap:9px;border:1px solid #d8bd7c66;background:#ffffff0c;padding:8px 18px;border-radius:99px;color:#e8d19a;letter-spacing:.2px}
+.hero h2{font-size:clamp(32px,5vw,56px);line-height:1.35;margin:18px 0 12px;font-weight:900;text-shadow:0 5px 25px #001c16}
+.hero p{font-size:16px;color:#e0eae3;line-height:2}
+.wrap{max-width:1240px;margin:-34px auto 0;position:relative;z-index:2;padding:0 24px 70px}
+.scoreboard{gap:18px;margin-bottom:34px}
+.team{min-height:116px;padding:22px 26px;border:1px solid #e8e2d4;border-radius:22px;box-shadow:0 15px 38px #123b2b14;position:relative;overflow:hidden}
+.team:after{content:"";position:absolute;inset:auto 0 0;height:4px;opacity:.9}
+.team.red:after{background:linear-gradient(90deg,#e9a0a0,var(--red))}
+.team.blue:after{background:linear-gradient(90deg,#9bbce2,var(--blue))}
+.team h3{font-size:18px;font-weight:900}
+.team small{font-size:12px}
+.points{font-size:42px;line-height:1.1}
+.turn{min-width:160px;border-radius:20px;background:linear-gradient(145deg,#fffaf0,#f4ead1);border:1px solid #dfc98e;box-shadow:0 12px 28px #7c602014;padding:15px 20px}
+.turn small{font-size:12px}
+.turn strong{font-size:17px;color:#745a27}
+.section-head{margin:32px 0 18px;align-items:center}
+.section-head h2{font-size:25px;font-weight:900;color:#123f32}
+.section-head p{font-size:13px}
+#remaining{background:#e8eee6;color:#41614e;border:1px solid #d8e2d5;border-radius:99px;padding:7px 13px}
+.board{grid-template-columns:repeat(3,minmax(0,1fr));gap:18px}
+.category{padding:19px;border-radius:22px;border:1px solid #e5e2d7;background:linear-gradient(160deg,#fff 0%,#fcfbf7 100%);box-shadow:0 12px 32px #18382f0c}
+.category h3{font-size:18px;margin:0 0 16px;padding-bottom:12px;border-bottom:1px solid #eee9dc;position:relative}
+.category h3:after{content:"";position:absolute;bottom:-1px;right:calc(50% - 22px);width:44px;height:2px;background:var(--gold)}
+.cells{gap:10px}
+.cell{min-height:58px;border-radius:14px;background:linear-gradient(145deg,#f2f6f0,#eaf1e9);border:1px solid #dfe9dc;font-size:19px;color:#14533f}
+.cell:disabled{background:#f0efeb;color:#9b9d94;border-color:#ebe9e2}
+.hostbar{justify-content:center;gap:12px;margin-top:30px;padding:17px;background:#fffdf8;border:1px solid #e9e4d8;border-radius:20px;box-shadow:0 10px 28px #18382f09}
+.primary,.secondary,.gold{border-radius:14px;padding:13px 20px}
+.primary{background:linear-gradient(135deg,#0a4b3a,#147052);box-shadow:0 7px 18px #0b513b20}
+.secondary{background:#edf2ec;border-color:#dce6da;color:#24543f}
+.gold{background:linear-gradient(135deg,#f8f0dc,#efe2bd);border-color:#e5d4a6;color:#775d28}
+.modal{border:1px solid #e8e0cc;border-radius:26px;padding:28px;box-shadow:0 30px 100px #001b1545}
+.modal-head{padding-bottom:15px;border-bottom:1px solid #eee9dd}
+.modal h2{color:#123f32;font-size:23px}
+.question{font-size:25px;line-height:1.9;color:#183b30}
+.q-value{background:#f6efdE;border:1px solid #eadbb5;color:#82652b;padding:7px 16px}
+.answer{border:1px solid #dce8d9;background:#f0f6ef;color:#174b38;line-height:1.8;font-weight:800}
+.field input,.field textarea{border-color:#e1e4d9;border-radius:12px}
+.footer{padding-top:20px;border-top:1px solid #e7e2d4;color:#829087}
+.toast{border:1px solid #d8c28a;background:#103f32;padding:13px 22px}
+@media(max-width:720px){
+ .top{min-height:365px;padding-bottom:58px}
+ .brand img{width:60px;height:60px;border-radius:18px}
+ .brand h1{font-size:20px}
+ .hero{margin-top:45px}
+ .hero h2{font-size:32px}
+ .wrap{margin-top:-25px;padding-inline:14px}
+ .scoreboard{gap:9px}
+ .team{min-height:95px;padding:15px}
+ .team h3{font-size:15px}
+ .points{font-size:32px}
+ .turn{min-width:0}
+ .board{gap:11px}
+ .category{padding:13px;border-radius:17px}
+ .category h3{font-size:15px}
+ .cell{min-height:52px;font-size:17px}
+ .hostbar{padding:12px}
+}
+@media(max-width:440px){.hero h2{font-size:28px}.board{grid-template-columns:1fr 1fr}.nav button{font-size:11px;padding:8px 11px}.brand{gap:9px}}
+
 </style></head>
 <body>
 <header class="top"><div class="nav"><div class="brand"><img src="4824b048-edb2-4204-9caf-d8b8e7a70e42%20(1).png" alt="شعار إحياء"><div><h1>مؤسسة إحياء</h1><p>جيل على خطى السابقين</p></div></div><button id="hostOpen">⚙ لوحة تحكم الهوست</button></div><div class="hero"><div class="eyebrow">مسابقة تفاعلية • علم ومتعة وتنافس</div><h2>تحدّي المعرفة يبدأ من هنا</h2><p>اختر الفئة والنقاط، وتعاون مع فريقك للوصول إلى القمة.</p></div></header>
