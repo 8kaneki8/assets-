@@ -202,8 +202,38 @@ button:active{transform:translateY(1px) scale(.975)}
 @media(prefers-reduced-motion:reduce){.modal,.question{animation:none!important}#timerText{animation:none!important}}
 
 .rules-modal{max-width:560px}.rules-list{padding-right:24px;line-height:2.05;color:#43574b;margin:10px 0 22px}.rules-list li{padding:3px 0}.rules-modal>.primary{width:100%}
+
+/* THE IHYAA CHRONICLE — cinematic heritage motion */
+.top{position:relative;isolation:isolate;overflow:hidden}
+.top:before{animation:heritagePattern 32s linear infinite}
+.top:after{animation:haloDrift 18s ease-in-out infinite alternate}
+@keyframes heritagePattern{from{background-position:0 0,0 0}to{background-position:180px 180px,-180px 180px}}
+@keyframes haloDrift{from{transform:translate3d(0,0,0) scale(1)}to{transform:translate3d(65px,42px,0) scale(1.08)}}
+.brand img{position:relative;animation:emblemFloat 5s ease-in-out infinite;box-shadow:0 0 0 1px #e8d39a,0 0 24px #e8d39a35,0 12px 30px #0004}
+@keyframes emblemFloat{0%,100%{transform:translateY(0) rotate(-1deg)}50%{transform:translateY(-6px) rotate(1deg)}}
+.hero .eyebrow{animation:goldBreath 4s ease-in-out infinite}
+@keyframes goldBreath{0%,100%{box-shadow:0 0 0 0 #e8d19a00;border-color:#d8bd7c55}50%{box-shadow:0 0 28px #e8d19a20;border-color:#f0d99d}}
+.hero h2{background:linear-gradient(100deg,#fff 15%,#f0d99d 38%,#fff 58%);background-size:220% auto;color:transparent;background-clip:text;-webkit-background-clip:text;animation:titleGleam 9s ease-in-out infinite}
+@keyframes titleGleam{0%,100%{background-position:100% center}50%{background-position:0 center}}
+.top .hero:after{content:"";display:block;width:min(340px,65%);height:1px;margin:24px auto 0;background:linear-gradient(90deg,transparent,#e7cc8b,transparent);box-shadow:0 0 16px #e7cc8b;animation:lineGlow 4s ease-in-out infinite}
+@keyframes lineGlow{0%,100%{opacity:.45;transform:scaleX(.65)}50%{opacity:1;transform:scaleX(1)}}
+.category{transform-origin:center bottom}
+.category:hover{transform:translateY(-6px) scale(1.012)}
+.cell:not(:disabled){background:linear-gradient(120deg,#f2f6f0 20%,#fff8e8 48%,#eaf1e9 76%);background-size:220% 100%}
+.cell:hover:not(:disabled){background-position:100% 0}
+.team{overflow:hidden}
+.team:before{content:"";position:absolute;inset:-80% auto -80% -35%;width:28%;transform:rotate(24deg);background:linear-gradient(90deg,transparent,#ffffff55,transparent);animation:teamSweep 8s ease-in-out infinite;pointer-events:none}
+@keyframes teamSweep{0%,55%{left:-40%}100%{left:130%}}
+.points.bump{filter:drop-shadow(0 0 9px #c7a45b88)}
+.modal{border:1px solid #e8d9b3;box-shadow:0 30px 100px #061f19a8,0 0 0 1px #fff8 inset}
+.q-value{box-shadow:inset 0 0 0 1px #eadbb5}
+#drawStage.show .modal,#drawStage.show .draw-modal{animation:modalIn .45s cubic-bezier(.16,1,.3,1) both}
+.history-dust{position:fixed;inset:0;z-index:0;pointer-events:none;overflow:hidden;contain:strict}
+.history-dust i{position:absolute;bottom:-12px;width:3px;height:3px;border-radius:50%;background:#c7a45b;box-shadow:0 0 9px 2px #c7a45b70;opacity:0;animation:dustRise var(--dur,18s) linear infinite;animation-delay:var(--delay,0s)}
+@keyframes dustRise{0%{transform:translate3d(0,0,0) scale(.5);opacity:0}12%{opacity:.55}80%{opacity:.3}100%{transform:translate3d(var(--drift,30px),-105vh,0) scale(1.4);opacity:0}}
+@media(prefers-reduced-motion:reduce){.top:before,.top:after,.brand img,.hero .eyebrow,.hero h2,.top .hero:after,.team:before,.history-dust i{animation:none!important}.hero h2{color:#fff;background:none}}
 </style></head>
-<body>
+<body><div class="history-dust" aria-hidden="true"><i style="left:9%;--dur:14s;--delay:-0s;--drift:-45px"></i><i style="left:56%;--dur:16s;--delay:-3s;--drift:-14px"></i><i style="left:3%;--dur:18s;--delay:-6s;--drift:17px"></i><i style="left:50%;--dur:20s;--delay:-9s;--drift:-42px"></i><i style="left:97%;--dur:22s;--delay:-12s;--drift:-11px"></i><i style="left:44%;--dur:24s;--delay:-15s;--drift:20px"></i><i style="left:91%;--dur:26s;--delay:-18s;--drift:-39px"></i><i style="left:38%;--dur:28s;--delay:-2s;--drift:-8px"></i><i style="left:85%;--dur:14s;--delay:-5s;--drift:23px"></i><i style="left:32%;--dur:16s;--delay:-8s;--drift:-36px"></i><i style="left:79%;--dur:18s;--delay:-11s;--drift:-5px"></i><i style="left:26%;--dur:20s;--delay:-14s;--drift:26px"></i><i style="left:73%;--dur:22s;--delay:-17s;--drift:-33px"></i><i style="left:20%;--dur:24s;--delay:-1s;--drift:-2px"></i><i style="left:67%;--dur:26s;--delay:-4s;--drift:29px"></i><i style="left:14%;--dur:28s;--delay:-7s;--drift:-30px"></i><i style="left:61%;--dur:14s;--delay:-10s;--drift:1px"></i><i style="left:8%;--dur:16s;--delay:-13s;--drift:32px"></i><i style="left:55%;--dur:18s;--delay:-16s;--drift:-27px"></i><i style="left:2%;--dur:20s;--delay:-0s;--drift:4px"></i><i style="left:49%;--dur:22s;--delay:-3s;--drift:35px"></i><i style="left:96%;--dur:24s;--delay:-6s;--drift:-24px"></i></div>
 <header class="top"><div class="nav"><div class="brand"><img src="Arabic%20Calligraphy%20Emblem%20with%20Gold%20Accents.png" alt="شعار إحياء"><div><h1>مؤسسة إحياء</h1><p>جيل على خطى السابقين</p></div></div><button id="hostOpen">⚙ لوحة تحكم الهوست</button></div><div class="hero"><div class="eyebrow">مسابقة تفاعلية • علم ومتعة وتنافس</div><h2>تحدّي المعرفة يبدأ من هنا</h2><p>اختر الفئة والنقاط، وتعاون مع فريقك للوصول إلى القمة.</p></div></header>
 <div class="overlay show" id="rulesOverlay"><div class="modal rules-modal"><div class="modal-head"><h2>قوانين المسابقة</h2><span class="q-value">مؤسسة إحياء</span></div><ol class="rules-list"><li>تُجرى القرعة لتحديد الفريق الذي يبدأ.</li><li>لكل سؤال 30 ثانية للإجابة.</li><li>الإجابة الصحيحة تمنح الفريق نقاط السؤال ويُغلق السؤال.</li><li>الإجابة الخاطئة أو انتهاء الوقت يُغلقان السؤال دون نقاط.</li><li>بعد كل إجابة أو انتهاء الوقت ينتقل الدور للفريق الآخر ليختار سؤالًا جديدًا.</li><li>لا يمكن اختيار السؤال الذي تم استخدامه مرة أخرى.</li></ol><button class="primary" id="rulesStart">فهمت، ابدأ المسابقة</button></div></div>
 <main class="wrap"><section class="scoreboard"><div class="team red"><div><h3 id="redName">الفريق الأحمر</h3><small>الفريق الأول</small></div><div class="points" id="redScore">0</div></div><div class="turn"><small>الدور الحالي</small><strong id="turnName">الفريق الأحمر</strong></div><div class="team blue"><div><h3 id="blueName">الفريق الأزرق</h3><small>الفريق الثاني</small></div><div class="points" id="blueScore">0</div></div></section>
