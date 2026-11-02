@@ -238,3 +238,25 @@ end $$;
 grant execute on function public.ihyaa_host_assign_member(uuid,uuid,text) to authenticated;
 grant execute on function public.ihyaa_host_list_questions(uuid) to authenticated;
 grant execute on function public.ihyaa_host_submissions(uuid) to authenticated;
+
+create or replace function public.ihyaa_host_invite_player(p_room uuid,p_player_id text)
+returns jsonb language plpgsql security definer set search_path=public,auth as $$
+declare p ihyaa_profiles;
+begin
+ if not exists(select 1 from ihyaa_members where room_id=p_room and user_id=auth.uid() and role='host') then raise exception 'الهوست فقط يضيف اللاعبين'; end if;
+ select * into p from ihyaa_profiles where public_id=upper(trim(p_player_id));
+ if p.user_id is null then raise exception 'معرّف اللاعب غير موجود؛ اطلب منه تسجيل الدخول أولًا'; end if;
+ insert into ihyaa_members(room_id,user_id,role) values(p_room,p.user_id,'player') on conflict do nothing;
+ return jsonb_build_object('username',p.username,'player_id',p.public_id,'user_id',p.user_id);
+end $$;
+
+create or replace function public.ihyaa_host_list_rooms()
+returns jsonb language plpgsql security definer set search_path=public,auth as $$
+declare result jsonb;
+begin
+ select coalesce(jsonb_agg(jsonb_build_object('room_id',id,'code',code,'title',title,'status',status,'created_at',created_at) order by created_at desc),'[]'::jsonb)
+ into result from ihyaa_rooms where host_id=auth.uid();
+ return result;
+end $$;
+grant execute on function public.ihyaa_host_invite_player(uuid,text) to authenticated;
+grant execute on function public.ihyaa_host_list_rooms() to authenticated;
