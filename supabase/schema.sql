@@ -320,3 +320,22 @@ begin
  where id=p_room;
  return jsonb_build_object('correct',p_correct,'scores',scr,'turn_team',case when p_correct then tm else case when tm='red' then 'blue' else 'red' end end);
 end $$;
+
+create or replace function public.ihyaa_submit_answer(p_room uuid,p_answer text)
+returns uuid language plpgsql security definer set search_path=public,auth as $$
+declare r ihyaa_rooms; sid uuid; tm text;
+begin
+ if auth.uid() is null or not exists(select 1 from ihyaa_members where room_id=p_room and user_id=auth.uid() and role='player') then
+  raise exception 'هذه الخاصية للاعبين داخل الغرفة فقط';
+ end if;
+ if char_length(trim(coalesce(p_answer,''))) not between 1 and 500 then raise exception 'الإجابة مطلوبة وبحد أقصى 500 حرف'; end if;
+ select * into r from ihyaa_rooms where id=p_room for update;
+ if r.id is null or r.status<>'live' or r.current_question_id is null then raise exception 'لا يوجد سؤال مفتوح'; end if;
+ select team into tm from ihyaa_members where room_id=p_room and user_id=auth.uid() and role='player';
+ if tm is null or tm<>r.turn_team then raise exception 'ليس دور فريقك الآن أو لم يحدد الهوست فريقك'; end if;
+ insert into ihyaa_submissions(room_id,question_id,user_id,answer_text)
+ values(p_room,r.current_question_id,auth.uid(),trim(p_answer)) returning id into sid;
+ return sid;
+exception when unique_violation then
+ raise exception 'لقد أرسلت إجابتك بالفعل لهذا السؤال';
+end $$;
