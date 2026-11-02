@@ -262,3 +262,61 @@ begin
 end $$;
 grant execute on function public.ihyaa_host_invite_player(uuid,text) to authenticated;
 grant execute on function public.ihyaa_host_list_rooms() to authenticated;
+
+-- Hardening pass: validate team setup and serialize question judging.
+create unique index if not exists ihyaa_one_submission_per_player_question
+  on public.ihyaa_submissions(room_id,question_id,user_id);
+
+create or replace function public.ihyaa_host_start(p_room uuid,p_red_name text default 'الفريق الأحمر',p_blue_name text default 'الفريق الأزرق')
+returns boolean language plpgsql security definer set search_path=public,auth as $$
+declare red_count integer; blue_count integer;
+begin
+ if not exists(select 1 from ihyaa_members where room_id=p_room and user_id=auth.uid() and role='host') then
+  raise exception 'الهوست فقط يمكنه بدء المسابقة';
+ end if;
+ select count(*) filter(where team='red'),count(*) filter(where team='blue')
+ into red_count,blue_count from ihyaa_members where room_id=p_room and role='player';
+ if red_count=0 or blue_count=0 then raise exception 'وزّع اللاعبين على الفريقين قبل بدء المسابقة'; end if;
+ update ihyaa_rooms set status='live',settings=settings||jsonb_build_object('red_name',coalesce(nullif(trim(p_red_name),''),'الفريق الأحمر'),'blue_name',coalesce(nullif(trim(p_blue_name),''),'الفريق الأزرق')),turn_team='red',updated_at=now()
+ where id=p_room and status='lobby';
+ if not found then raise exception 'الغرفة بدأت بالفعل أو لم تعد متاحة'; end if;
+ return true;
+end $$;
+
+create or replace function public.ihyaa_host_pick_question(p_room uuid,p_question uuid)
+returns jsonb language plpgsql security definer set search_path=public,auth as $$
+declare q ihyaa_questions; r ihyaa_rooms;
+begin
+ if not exists(select 1 from ihyaa_members where room_id=p_room and user_id=auth.uid() and role='host') then raise exception 'الهوست فقط يختار السؤال'; end if;
+ select * into r from ihyaa_rooms where id=p_room for update;
+ if r.status<>'live' then raise exception 'ابدأ المسابقة أولًا'; end if;
+ if r.current_question_id is not null then raise exception 'أغلق السؤال الحالي قبل فتح سؤال جديد'; end if;
+ select * into q from ihyaa_questions where id=p_question and room_id=p_room and used=false;
+ if q.id is null then raise exception 'السؤال غير متاح'; end if;
+ update ihyaa_rooms set current_question_id=q.id,current_question_text=q.question_text,current_question_points=q.points,current_question_time=q.seconds,updated_at=now() where id=p_room;
+ return jsonb_build_object('id',q.id,'category',q.category,'points',q.points,'question',q.question_text,'answer',q.answer_text,'seconds',q.seconds);
+end $$;
+
+create or replace function public.ihyaa_host_judge(p_room uuid,p_submission uuid,p_correct boolean)
+returns jsonb language plpgsql security definer set search_path=public,auth as $$
+declare s ihyaa_submissions; q ihyaa_questions; tm text; pts int; scr jsonb; r ihyaa_rooms;
+begin
+ if not exists(select 1 from ihyaa_members where room_id=p_room and user_id=auth.uid() and role='host') then raise exception 'الهوست فقط يصحح الإجابات'; end if;
+ select * into r from ihyaa_rooms where id=p_room for update;
+ if r.id is null or r.status<>'live' then raise exception 'المسابقة ليست جارية'; end if;
+ select * into s from ihyaa_submissions where id=p_submission and room_id=p_room and verdict='pending' for update;
+ if s.id is null then raise exception 'الإجابة غير متاحة أو تم تصحيحها'; end if;
+ if r.current_question_id is null or r.current_question_id<>s.question_id then raise exception 'تم إغلاق هذا السؤال بالفعل'; end if;
+ select * into q from ihyaa_questions where id=s.question_id;
+ select team into tm from ihyaa_members where room_id=p_room and user_id=s.user_id and role='player';
+ if tm is null then raise exception 'لم يحدد الهوست فريق هذا اللاعب'; end if;
+ update ihyaa_submissions set verdict=case when id=s.id and p_correct then 'correct' when id=s.id then 'wrong' else 'wrong' end
+ where room_id=p_room and question_id=s.question_id and verdict='pending';
+ update ihyaa_questions set used=true where id=q.id;
+ scr:=r.scores;
+ if p_correct then scr:=jsonb_set(scr,array[tm],to_jsonb(coalesce((scr->>tm)::int,0)+q.points)); end if;
+ update ihyaa_rooms set scores=scr,current_question_id=null,current_question_text=null,current_question_points=null,current_question_time=null,
+ turn_team=case when p_correct then tm else case when tm='red' then 'blue' else 'red' end end,updated_at=now()
+ where id=p_room;
+ return jsonb_build_object('correct',p_correct,'scores',scr,'turn_team',case when p_correct then tm else case when tm='red' then 'blue' else 'red' end end);
+end $$;
