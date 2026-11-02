@@ -507,8 +507,8 @@ load();render();
 const startScreen=$("ihyaaStart");
 $("startLocal").onclick=()=>{startScreen.classList.add("is-hidden");playUiSound("click")};
 $("startRules").onclick=()=>{startScreen.classList.add("is-hidden");$("rulesOverlay").classList.add("show");playUiSound("click")};
-$("startHostSettings").onclick=()=>{startScreen.classList.add("is-hidden");$("hostOpen").click()};
-$("startOnline").onclick=()=>{startScreen.classList.add("is-hidden");const online=$("onlineOpen");if(online)online.click();else toast("حمّل الصفحة مرة أخرى لفتح بوابة الأونلاين")};
+$("startHostSettings").onclick=()=>{startScreen.classList.add("is-hidden");close("rulesOverlay");$("hostOpen").click()};
+$("startOnline").onclick=()=>{startScreen.classList.add("is-hidden");close("rulesOverlay");const online=$("onlineOpen");if(online)online.click();else toast("حمّل الصفحة مرة أخرى لفتح بوابة الأونلاين")};
 $("rulesStart").onclick=()=>{close("rulesOverlay");playUiSound("click");toast("المسابقة بدأت! اختاروا أول سؤال من لوحة التحدي أو ابدأوا بقرعة البداية.")};
 </script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
