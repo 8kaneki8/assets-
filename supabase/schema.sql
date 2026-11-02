@@ -66,11 +66,13 @@ create policy "profile own insert" on public.ihyaa_profiles for insert to authen
 drop policy if exists "profile own update" on public.ihyaa_profiles;
 create policy "profile own update" on public.ihyaa_profiles for update to authenticated using (user_id=auth.uid()) with check (user_id=auth.uid());
 
+-- All room and roster reads go through SECURITY DEFINER RPCs so answer data
+-- and non-member records are never exposed through direct table queries.
 drop policy if exists "room members can read room" on public.ihyaa_rooms;
-create policy "room members can read room" on public.ihyaa_rooms for select to authenticated using (exists(select 1 from public.ihyaa_members m where m.room_id=id and m.user_id=auth.uid()));
 drop policy if exists "members can read roster" on public.ihyaa_members;
-create policy "members can read roster" on public.ihyaa_members for select to authenticated using (exists(select 1 from public.ihyaa_members mine where mine.room_id=room_id and mine.user_id=auth.uid()));
 -- Questions and submissions are intentionally RPC-only. Players must never SELECT answer_text.
+revoke all on public.ihyaa_rooms from anon, authenticated;
+revoke all on public.ihyaa_members from anon, authenticated;
 revoke all on public.ihyaa_questions from anon, authenticated;
 revoke all on public.ihyaa_submissions from anon, authenticated;
 revoke insert, update, delete on public.ihyaa_rooms from anon, authenticated;
@@ -123,7 +125,7 @@ begin
  select role into myrole from ihyaa_members where room_id=p_room and user_id=auth.uid();
  if myrole is null then raise exception 'ليس لديك تصريح لهذه الغرفة'; end if;
  select * into r from ihyaa_rooms where id=p_room;
- select jsonb_agg(jsonb_build_object('username',p.username,'player_id',p.public_id,'role',m.role,'team',m.team) order by m.joined_at) into roster from ihyaa_members m join ihyaa_profiles p on p.user_id=m.user_id where m.room_id=p_room;
+ select jsonb_agg(jsonb_build_object('username',p.username,'player_id',p.public_id,'user_id',m.user_id,'role',m.role,'team',m.team) order by m.joined_at) into roster from ihyaa_members m join ihyaa_profiles p on p.user_id=m.user_id where m.room_id=p_room;
  q:=null;
  if r.current_question_id is not null then
   if myrole='host' then
