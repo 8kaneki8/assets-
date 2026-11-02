@@ -204,3 +204,35 @@ grant execute on function public.ihyaa_host_archive(uuid) to authenticated;
 alter publication supabase_realtime add table public.ihyaa_rooms;
 alter publication supabase_realtime add table public.ihyaa_members;
 alter publication supabase_realtime add table public.ihyaa_submissions;
+
+create or replace function public.ihyaa_host_assign_member(p_room uuid,p_user uuid,p_team text)
+returns boolean language plpgsql security definer set search_path=public,auth as $$
+begin
+ if not exists(select 1 from ihyaa_members where room_id=p_room and user_id=auth.uid() and role='host') then raise exception 'الهوست فقط يوزع الفرق'; end if;
+ if p_team not in ('red','blue') then raise exception 'الفريق غير صالح'; end if;
+ update ihyaa_members set team=p_team where room_id=p_room and user_id=p_user and role='player';
+ return found;
+end $$;
+
+create or replace function public.ihyaa_host_list_questions(p_room uuid)
+returns jsonb language plpgsql security definer set search_path=public,auth as $$
+declare result jsonb;
+begin
+ if not exists(select 1 from ihyaa_members where room_id=p_room and user_id=auth.uid() and role='host') then raise exception 'الهوست فقط يعرض الأسئلة'; end if;
+ select coalesce(jsonb_agg(jsonb_build_object('id',id,'category',category,'points',points,'question',question_text,'answer',answer_text,'seconds',seconds,'used',used) order by category,points),'[]'::jsonb) into result from ihyaa_questions where room_id=p_room;
+ return result;
+end $$;
+
+create or replace function public.ihyaa_host_submissions(p_room uuid)
+returns jsonb language plpgsql security definer set search_path=public,auth as $$
+declare result jsonb;
+begin
+ if not exists(select 1 from ihyaa_members where room_id=p_room and user_id=auth.uid() and role='host') then raise exception 'الهوست فقط يعرض الإجابات'; end if;
+ select coalesce(jsonb_agg(jsonb_build_object('id',s.id,'username',p.username,'player_id',p.public_id,'answer',s.answer_text,'verdict',s.verdict,'created_at',s.created_at) order by s.created_at desc),'[]'::jsonb) into result
+ from ihyaa_submissions s join ihyaa_profiles p on p.user_id=s.user_id where s.room_id=p_room and s.verdict='pending';
+ return result;
+end $$;
+
+grant execute on function public.ihyaa_host_assign_member(uuid,uuid,text) to authenticated;
+grant execute on function public.ihyaa_host_list_questions(uuid) to authenticated;
+grant execute on function public.ihyaa_host_submissions(uuid) to authenticated;
