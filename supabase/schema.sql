@@ -175,8 +175,10 @@ begin
  if not exists(select 1 from ihyaa_members where room_id=p_room and user_id=auth.uid() and role='host') then raise exception 'الهوست فقط يصحح الإجابات'; end if;
  select * into s from ihyaa_submissions where id=p_submission and room_id=p_room and verdict='pending';
  if s.id is null then raise exception 'الإجابة غير متاحة'; end if;
+ if not exists(select 1 from ihyaa_rooms where id=p_room and current_question_id=s.question_id and status='live') then raise exception 'تم إغلاق هذا السؤال بالفعل'; end if;
  select * into q from ihyaa_questions where id=s.question_id;
  select team into tm from ihyaa_members where room_id=p_room and user_id=s.user_id;
+ if tm is null then raise exception 'لم يحدد الهوست فريق هذا اللاعب'; end if;
  update ihyaa_submissions set verdict=case when p_correct then 'correct' else 'wrong' end where id=s.id;
  update ihyaa_questions set used=true where id=q.id;
  select scores into scr from ihyaa_rooms where id=p_room;
