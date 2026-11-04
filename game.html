@@ -1,0 +1,487 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#0d4b3c"><title>مسابقة إحياء | جيل على خطى السابقين</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800;900&display=swap');
+:root{--green:#0d5946;--green2:#16745a;--gold:#c6a45b;--ink:#17352d;--muted:#718078;--paper:#faf9f4;--line:#e8e7de;--red:#c85b62;--blue:#5685c5;--shadow:0 12px 35px #153c2d12}
+*{box-sizing:border-box}body{margin:0;background:var(--paper);color:var(--ink);font-family:'Cairo',Tahoma,sans-serif;min-height:100vh}button,input,textarea{font:inherit}button{cursor:pointer;border:0}.top{background:linear-gradient(115deg,#0b4034,#12634c);color:#fff;padding:20px 5vw 26px;position:relative;overflow:hidden}.top:after{content:"";position:absolute;width:340px;height:340px;border:1px solid #ffffff18;border-radius:50%;left:-100px;top:-220px;box-shadow:0 0 0 35px #ffffff08,0 0 0 70px #ffffff06}.nav{max-width:1200px;margin:auto;display:flex;align-items:center;justify-content:space-between;gap:16px;position:relative;z-index:1}.brand{display:flex;align-items:center;gap:14px}.brand img{width:64px;height:64px;object-fit:cover;border-radius:16px;background:#fff}.brand h1{font-size:22px;margin:0;font-weight:900}.brand p{margin:2px 0 0;color:#d6e7dd;font-size:12px}.nav button{background:#ffffff18;color:white;border:1px solid #ffffff45;border-radius:12px;padding:10px 16px}.hero{max-width:1200px;margin:28px auto 0;position:relative;z-index:1}.eyebrow{color:#e7cc8b;font-size:13px;font-weight:800}.hero h2{font-size:clamp(25px,4vw,42px);margin:8px 0}.hero p{color:#d8e8df;margin:0;font-size:15px}.wrap{max-width:1200px;margin:26px auto;padding:0 22px 60px}.scoreboard{display:grid;grid-template-columns:1fr auto 1fr;gap:14px;align-items:stretch;margin-bottom:22px}.team{background:white;border:1px solid var(--line);border-radius:20px;padding:18px 22px;box-shadow:var(--shadow);display:flex;align-items:center;justify-content:space-between;gap:10px}.team.red{border-top:4px solid var(--red)}.team.blue{border-top:4px solid var(--blue)}.team h3{margin:0;font-size:16px}.team small{color:var(--muted)}.points{font-size:34px;font-weight:900}.red .points{color:var(--red)}.blue .points{color:var(--blue)}.turn{background:#fff8e8;border:1px solid #ead9ad;border-radius:18px;padding:12px 18px;display:flex;flex-direction:column;justify-content:center;text-align:center;min-width:130px}.turn small{color:#94783b}.turn strong{font-size:15px}.section-head{display:flex;justify-content:space-between;align-items:end;gap:10px;margin:25px 0 14px}.section-head h2{font-size:20px;margin:0}.section-head p{margin:3px 0 0;color:var(--muted);font-size:12px}.board{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}.category{background:#fff;border:1px solid var(--line);border-radius:18px;padding:14px;box-shadow:var(--shadow)}.category h3{margin:0 0 12px;text-align:center;font-size:16px;color:var(--green)}.cells{display:grid;grid-template-columns:repeat(2,1fr);gap:8px}.cell{background:#f1f5f0;color:var(--green);border:1px solid #e0e9df;border-radius:12px;padding:14px 5px;font-size:17px;font-weight:900;transition:.18s}.cell:hover:not(:disabled){transform:translateY(-2px);background:#e4f0e7}.cell:disabled{opacity:.35;text-decoration:line-through;cursor:not-allowed}.empty{padding:40px;text-align:center;color:var(--muted);background:#fff;border:1px dashed #d7d9ce;border-radius:18px;grid-column:1/-1}.hostbar{display:flex;gap:10px;flex-wrap:wrap;margin-top:22px}.primary{background:var(--green);color:#fff;border-radius:12px;padding:12px 18px;font-weight:800}.secondary{background:#edf2ed;color:var(--green);border:1px solid #dce6dc;border-radius:12px;padding:11px 16px;font-weight:800}.gold{background:#f6efdc;color:#80652d;border:1px solid #eadbb5;border-radius:12px;padding:11px 16px;font-weight:800}.overlay{position:fixed;inset:0;background:#102a22a8;display:none;align-items:center;justify-content:center;padding:18px;z-index:10}.overlay.show{display:flex}.modal{width:min(650px,100%);max-height:90vh;overflow:auto;background:#fff;border-radius:22px;padding:24px;box-shadow:0 25px 80px #0003}.modal-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:15px}.modal h2{margin:0;font-size:21px}.close{background:#f1f2ed;border-radius:10px;width:38px;height:38px;font-size:22px;color:#52645a}.q-value{display:inline-block;background:#f8f0dc;color:#8a6b2e;padding:5px 13px;border-radius:30px;font-weight:900;margin:5px 0 12px}.question{font-size:23px;line-height:1.8;font-weight:800;margin:5px 0 22px}.answer{background:#f2f6f1;border-radius:14px;padding:14px;display:none;margin:12px 0}.actions{display:flex;gap:9px;flex-wrap:wrap}.field{display:grid;gap:6px;margin:12px 0}.field label{font-size:13px;font-weight:800;color:#53675d}.field input,.field textarea{width:100%;border:1px solid #dfe4dc;border-radius:11px;padding:11px;background:#fcfcf9;outline-color:var(--green)}.field textarea{min-height:78px;resize:vertical}.formrow{display:grid;grid-template-columns:1fr 1fr;gap:12px}.list{display:flex;gap:8px;align-items:center;margin:7px 0}.list input{flex:1}.list button{background:#f9e9e9;color:#a34249;border-radius:9px;padding:8px 12px}.hint{font-size:12px;color:var(--muted);line-height:1.7}.toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:#183d31;color:#fff;padding:11px 18px;border-radius:12px;box-shadow:var(--shadow);display:none;z-index:20}.toast.show{display:block}.footer{text-align:center;color:#8b958e;font-size:12px;margin-top:32px}
+@media(max-width:720px){.scoreboard{grid-template-columns:1fr 1fr}.turn{grid-column:1/-1;grid-row:1;min-height:65px}.team{padding:13px}.points{font-size:27px}.board{grid-template-columns:1fr 1fr}.brand img{width:52px;height:52px}.hero{margin-top:22px}.wrap{padding-inline:14px}}@media(max-width:440px){.board{grid-template-columns:1fr}.formrow{grid-template-columns:1fr}.nav button{padding:8px 10px;font-size:12px}}
+
+/* Ihyaa motion layer */
+@keyframes riseIn{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:translateY(0)}}
+@keyframes softPop{0%{transform:scale(.92)}65%{transform:scale(1.06)}100%{transform:scale(1)}}
+@keyframes glowPulse{0%,100%{box-shadow:0 0 0 0 #d4b66a00}50%{box-shadow:0 0 0 7px #d4b66a20}}
+@keyframes modalIn{from{opacity:0;transform:translateY(22px) scale(.97)}to{opacity:1;transform:translateY(0) scale(1)}}
+@keyframes shimmer{0%{background-position:150% 0}100%{background-position:-150% 0}}
+.top{background-size:180% 180%;animation:shimmer 16s ease-in-out infinite alternate}
+.hero{animation:riseIn .75s cubic-bezier(.2,.8,.2,1) both}
+.scoreboard{animation:riseIn .65s .08s both}
+.team{transition:transform .25s,box-shadow .25s}
+.team:hover{transform:translateY(-3px);box-shadow:0 16px 38px #153c2d18}
+.points.bump{animation:softPop .42s ease}
+.category{animation:riseIn .5s both;transition:transform .25s,box-shadow .25s,border-color .25s}
+.category:hover{transform:translateY(-4px);box-shadow:0 18px 42px #153c2d18;border-color:#cbdccf}
+.category:nth-child(2){animation-delay:.06s}.category:nth-child(3){animation-delay:.12s}.category:nth-child(4){animation-delay:.18s}.category:nth-child(5){animation-delay:.24s}.category:nth-child(6){animation-delay:.30s}
+.cell{position:relative;overflow:hidden;transition:transform .2s,background .2s,box-shadow .2s}
+.cell:hover:not(:disabled){transform:translateY(-3px) scale(1.025);box-shadow:0 7px 16px #145b3b18}
+.cell:active:not(:disabled){transform:scale(.96)}
+.cell:before{content:"";position:absolute;inset:0;background:linear-gradient(110deg,transparent 25%,#ffffffa8 48%,transparent 70%);transform:translateX(120%);transition:transform .55s}
+.cell:hover:before{transform:translateX(-120%)}
+.primary,.secondary,.gold,.nav button{transition:transform .2s,filter .2s,box-shadow .2s}
+.primary:hover,.secondary:hover,.gold:hover,.nav button:hover{transform:translateY(-2px);filter:brightness(1.035);box-shadow:0 8px 18px #17352d18}
+.primary:active,.secondary:active,.gold:active{transform:scale(.97)}
+.overlay{backdrop-filter:blur(5px)}
+.overlay.show .modal{animation:modalIn .32s cubic-bezier(.2,.8,.2,1) both}
+.turn{animation:glowPulse 3.5s ease-in-out infinite}
+.toast.show{animation:riseIn .25s ease both}
+@media(prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;scroll-behavior:auto!important;transition-duration:.01ms!important}}
+
+
+/* PREMIUM IHYAA REDESIGN */
+:root{--green:#073d32;--green2:#0b5a46;--gold:#c7a45b;--ink:#18382f;--muted:#77877e;--paper:#f6f4ec;--line:#e7e2d4;--red:#b94f59;--blue:#477bb8;--shadow:0 18px 48px #18382f12}
+html{scroll-behavior:smooth}
+body{background:radial-gradient(ellipse at 8% 18%,#e9e4d4 0,transparent 28%),radial-gradient(ellipse at 92% 58%,#e6eee5 0,transparent 30%),var(--paper);color:var(--ink)}
+.top{min-height:410px;padding:26px 5vw 64px;background:linear-gradient(135deg,#062f28 0%,#0a4939 48%,#12644c 100%);isolation:isolate}
+.top:before{content:"";position:absolute;inset:0;z-index:-1;opacity:.12;background-image: repeating-linear-gradient(45deg,transparent 0 34px,#e5d3a0 35px 36px,transparent 37px 70px),repeating-linear-gradient(-45deg,transparent 0 34px,#e5d3a0 35px 36px,transparent 37px 70px);mask-image:linear-gradient(90deg,#000,transparent 85%)}
+.top:after{width:470px;height:470px;left:-150px;top:-255px;border:1px solid #e4d09b35;box-shadow:0 0 0 22px #ffffff08,0 0 0 48px #ffffff07,0 0 0 76px #ffffff05}
+.nav{max-width:1240px}
+.brand{gap:16px}
+.brand img{width:76px;height:76px;border:2px solid #d4b66d;border-radius:22px;padding:4px;box-shadow:0 8px 28px #0003}
+.brand h1{font-size:25px;letter-spacing:.1px}
+.brand p{font-size:13px;color:#e5d5a9}
+.nav button{border-radius:14px;padding:11px 18px;background:#ffffff12;border-color:#d8c28a70;backdrop-filter:blur(8px)}
+.hero{max-width:900px;text-align:center;margin:58px auto 0}
+.eyebrow{display:inline-flex;align-items:center;gap:9px;border:1px solid #d8bd7c66;background:#ffffff0c;padding:8px 18px;border-radius:99px;color:#e8d19a;letter-spacing:.2px}
+.hero h2{font-size:clamp(32px,5vw,56px);line-height:1.35;margin:18px 0 12px;font-weight:900;text-shadow:0 5px 25px #001c16}
+.hero p{font-size:16px;color:#e0eae3;line-height:2}
+.wrap{max-width:1240px;margin:-34px auto 0;position:relative;z-index:2;padding:0 24px 70px}
+.scoreboard{gap:18px;margin-bottom:34px}
+.team{min-height:116px;padding:22px 26px;border:1px solid #e8e2d4;border-radius:22px;box-shadow:0 15px 38px #123b2b14;position:relative;overflow:hidden}
+.team:after{content:"";position:absolute;inset:auto 0 0;height:4px;opacity:.9}
+.team.red:after{background:linear-gradient(90deg,#e9a0a0,var(--red))}
+.team.blue:after{background:linear-gradient(90deg,#9bbce2,var(--blue))}
+.team h3{font-size:18px;font-weight:900}
+.team small{font-size:12px}
+.points{font-size:42px;line-height:1.1}
+.turn{min-width:160px;border-radius:20px;background:linear-gradient(145deg,#fffaf0,#f4ead1);border:1px solid #dfc98e;box-shadow:0 12px 28px #7c602014;padding:15px 20px}
+.turn small{font-size:12px}
+.turn strong{font-size:17px;color:#745a27}
+.section-head{margin:32px 0 18px;align-items:center}
+.section-head h2{font-size:25px;font-weight:900;color:#123f32}
+.section-head p{font-size:13px}
+#remaining{background:#e8eee6;color:#41614e;border:1px solid #d8e2d5;border-radius:99px;padding:7px 13px}
+.board{grid-template-columns:repeat(3,minmax(0,1fr));gap:18px}
+.category{padding:19px;border-radius:22px;border:1px solid #e5e2d7;background:linear-gradient(160deg,#fff 0%,#fcfbf7 100%);box-shadow:0 12px 32px #18382f0c}
+.category h3{font-size:18px;margin:0 0 16px;padding-bottom:12px;border-bottom:1px solid #eee9dc;position:relative}
+.category h3:after{content:"";position:absolute;bottom:-1px;right:calc(50% - 22px);width:44px;height:2px;background:var(--gold)}
+.cells{gap:10px}
+.cell{min-height:58px;border-radius:14px;background:linear-gradient(145deg,#f2f6f0,#eaf1e9);border:1px solid #dfe9dc;font-size:19px;color:#14533f}
+.cell:disabled{background:#f0efeb;color:#9b9d94;border-color:#ebe9e2}
+.hostbar{justify-content:center;gap:12px;margin-top:30px;padding:17px;background:#fffdf8;border:1px solid #e9e4d8;border-radius:20px;box-shadow:0 10px 28px #18382f09}
+.primary,.secondary,.gold{border-radius:14px;padding:13px 20px}
+.primary{background:linear-gradient(135deg,#0a4b3a,#147052);box-shadow:0 7px 18px #0b513b20}
+.secondary{background:#edf2ec;border-color:#dce6da;color:#24543f}
+.gold{background:linear-gradient(135deg,#f8f0dc,#efe2bd);border-color:#e5d4a6;color:#775d28}
+.modal{border:1px solid #e8e0cc;border-radius:26px;padding:28px;box-shadow:0 30px 100px #001b1545}
+.modal-head{padding-bottom:15px;border-bottom:1px solid #eee9dd}
+.modal h2{color:#123f32;font-size:23px}
+.question{font-size:25px;line-height:1.9;color:#183b30}
+.q-value{background:#f6efdE;border:1px solid #eadbb5;color:#82652b;padding:7px 16px}
+.answer{border:1px solid #dce8d9;background:#f0f6ef;color:#174b38;line-height:1.8;font-weight:800}
+.field input,.field textarea{border-color:#e1e4d9;border-radius:12px}
+.footer{padding-top:20px;border-top:1px solid #e7e2d4;color:#829087}
+.toast{border:1px solid #d8c28a;background:#103f32;padding:13px 22px}
+@media(max-width:720px){
+ .top{min-height:365px;padding-bottom:58px}
+ .brand img{width:60px;height:60px;border-radius:18px}
+ .brand h1{font-size:20px}
+ .hero{margin-top:45px}
+ .hero h2{font-size:32px}
+ .wrap{margin-top:-25px;padding-inline:14px}
+ .scoreboard{gap:9px}
+ .team{min-height:95px;padding:15px}
+ .team h3{font-size:15px}
+ .points{font-size:32px}
+ .turn{min-width:0}
+ .board{gap:11px}
+ .category{padding:13px;border-radius:17px}
+ .category h3{font-size:15px}
+ .cell{min-height:52px;font-size:17px}
+ .hostbar{padding:12px}
+}
+@media(max-width:440px){.hero h2{font-size:28px}.board{grid-template-columns:1fr 1fr}.nav button{font-size:11px;padding:8px 11px}.brand{gap:9px}}
+
+
+/* TEAM-DRIVEN IHYAA THEME + CENTERED BRAND */
+:root{--team:#a9434d;--team-soft:#faeeee;--team-line:#edc9cc;--team-glow:#a9434d35}
+body[data-turn="blue"]{--team:#376fae;--team-soft:#edf4fc;--team-line:#c8dbf1;--team-glow:#376fae35}
+body[data-turn="red"]{--team:#a9434d;--team-soft:#faeeee;--team-line:#edc9cc;--team-glow:#a9434d35}
+body{background:linear-gradient(180deg,var(--team-soft) 0,#f8f7f2 360px,#f8f7f2 100%);transition:background .45s ease}
+.top{background:linear-gradient(135deg,color-mix(in srgb,var(--team) 92%,#172b36),var(--team));transition:background .5s ease;min-height:0;padding:24px 5vw 54px}
+.top:before{opacity:.07}
+.top:after{display:none}
+.nav{justify-content:center;min-height:150px}
+.brand{flex-direction:column;gap:7px;text-align:center}
+.brand img{width:112px;height:112px;object-fit:contain;padding:0;border:0;border-radius:0;background:transparent;box-shadow:none;mix-blend-mode:multiply}
+.brand h1{font-size:25px}
+.brand p{font-size:13px}
+.nav button{position:absolute;left:0;top:8px}
+.hero{margin:24px auto 0;text-align:center}
+.eyebrow{border-color:#ffffff55;background:#ffffff14}
+.wrap{margin:-25px auto 0}
+.team{transition:border-color .4s,box-shadow .4s}
+.team.red{border-color:color-mix(in srgb,var(--red) 32%,white)}
+.team.blue{border-color:color-mix(in srgb,var(--blue) 32%,white)}
+.turn{border-color:var(--team-line);background:var(--team-soft);box-shadow:0 10px 30px var(--team-glow);transition:all .4s ease}
+.turn small,.turn strong{color:var(--team)}
+.section-head h2{color:var(--team);transition:color .4s}
+.category h3{color:var(--team);transition:color .4s}
+.cell{color:var(--team);background:var(--team-soft);border-color:var(--team-line)}
+.cell:hover:not(:disabled){background:color-mix(in srgb,var(--team-soft) 70%,white);box-shadow:0 8px 22px var(--team-glow)}
+.primary{background:var(--team);transition:background .4s}
+.q-value{color:var(--team);background:var(--team-soft);border-color:var(--team-line)}
+.draw-stage{position:fixed;inset:0;z-index:30;display:none;align-items:center;justify-content:center;padding:20px;background:#071b19d9;backdrop-filter:blur(9px)}
+.draw-stage.show{display:flex}
+.draw-card{width:min(460px,100%);padding:34px 24px;text-align:center;background:#fff;border-radius:28px;border:1px solid #e7dfca;box-shadow:0 30px 100px #0005;animation:modalIn .35s ease both}
+.draw-emblem{width:116px;height:116px;margin:0 auto 18px;border-radius:50%;display:grid;place-items:center;border:5px solid var(--team);background:var(--team-soft);color:var(--team);font-size:42px;font-weight:900;box-shadow:0 0 0 10px var(--team-glow);transition:all .3s}
+.draw-emblem.spinning{animation:drawSpin .65s linear infinite}
+@keyframes drawSpin{to{transform:rotate(360deg)}}
+.draw-title{font-size:24px;font-weight:900;color:#18382f;margin:0 0 8px}
+.draw-sub{color:#7b887f;margin:0 0 20px}
+.draw-result{font-size:25px;font-weight:900;color:var(--team);min-height:42px;margin:12px 0}
+.draw-track{height:8px;border-radius:20px;background:#edf0e9;overflow:hidden}
+.draw-track span{display:block;height:100%;width:0;background:var(--team);border-radius:20px}
+.draw-track.running span{animation:drawProgress 2.8s ease forwards}
+@keyframes drawProgress{to{width:100%}}
+.draw-close{margin-top:18px}
+@media(max-width:600px){.nav{min-height:135px}.brand img{width:92px;height:92px}.nav button{top:0;left:0;padding:8px 10px;font-size:11px}.hero{margin-top:20px}}
+
+
+/* === IHYAA MOTION SYSTEM v2 === */
+:root{--motion-fast:cubic-bezier(.2,.8,.2,1);--motion-spring:cubic-bezier(.18,1.25,.35,1)}
+@keyframes ihyaaCardIn{from{opacity:0;transform:translateY(22px) scale(.975);filter:blur(5px)}to{opacity:1;transform:translateY(0) scale(1);filter:blur(0)}}
+@keyframes ihyaaCellIn{0%{opacity:0;transform:translateY(12px) scale(.88)}75%{transform:translateY(-2px) scale(1.025)}100%{opacity:1;transform:translateY(0) scale(1)}}
+@keyframes ihyaaScorePop{0%{transform:scale(1)}35%{transform:scale(1.28);text-shadow:0 0 22px var(--team-glow)}70%{transform:scale(.94)}100%{transform:scale(1)}}
+@keyframes ihyaaReveal{0%{opacity:0;transform:translateY(14px) scale(.97);clip-path:inset(0 0 100% 0)}100%{opacity:1;transform:translateY(0) scale(1);clip-path:inset(0 0 0 0)}}
+@keyframes ihyaaUsed{0%{transform:scale(1);filter:brightness(1)}45%{transform:scale(.92) rotateX(18deg);filter:brightness(1.2)}100%{transform:scale(.96);filter:grayscale(.7)}}
+@keyframes ihyaaToast{0%{opacity:0;transform:translate(-50%,18px) scale(.94)}15%,85%{opacity:1;transform:translate(-50%,0) scale(1)}100%{opacity:0;transform:translate(-50%,-8px) scale(.98)}}
+.category{animation:ihyaaCardIn .65s var(--motion-fast) both;transform-origin:50% 20%}
+.category:nth-child(2){animation-delay:.08s}.category:nth-child(3){animation-delay:.16s}.category:nth-child(4){animation-delay:.24s}.category:nth-child(5){animation-delay:.32s}
+.cell{animation:ihyaaCellIn .48s var(--motion-spring) both;transition:transform .22s var(--motion-spring),box-shadow .22s,border-color .22s,background .22s}
+.cell:hover:not(:disabled){transform:translateY(-5px) scale(1.045);box-shadow:0 12px 22px var(--team-glow)}
+.cell:active:not(:disabled){transform:translateY(1px) scale(.96)}
+.cell:disabled{animation:ihyaaUsed .42s ease both}
+.team .points.score-pop{animation:ihyaaScorePop .65s var(--motion-spring)}
+.modal{animation:modalIn .38s var(--motion-spring) both}
+.answer.reveal{animation:ihyaaReveal .55s var(--motion-spring) both}
+.toast.show{animation:ihyaaToast 2.3s ease both}
+button{transition:transform .2s var(--motion-spring),box-shadow .2s,border-color .2s,filter .2s}
+button:active{transform:translateY(1px) scale(.975)}
+@media(prefers-reduced-motion:reduce){.category,.cell,.cell:disabled,.team .points.score-pop,.answer.reveal,.toast.show{animation:none!important}button,.cell{transition:none!important}}
+
+
+/* IHYAA GAME SHOW MOTION */
+.timer-wrap{margin:0 auto 20px;max-width:520px;padding:12px 15px;border:1px solid #e5e9df;border-radius:16px;background:linear-gradient(135deg,#f8faf5,#fff);transition:border-color .25s,background .25s}
+.timer-meta{display:flex;align-items:center;justify-content:space-between;margin-bottom:9px;color:#52665a;font-weight:800}
+#timerText{font-size:27px;line-height:1;color:#16734f;font-variant-numeric:tabular-nums;min-width:36px;text-align:center}
+.timer-track{height:10px;border-radius:20px;background:#e5ebe3;overflow:hidden}
+.timer-track span{display:block;width:100%;height:100%;border-radius:20px;background:linear-gradient(90deg,#20a36e,#b5b94a);transform-origin:right;transition:width 1s linear,background .3s}
+.timer-wrap.urgent{border-color:#e8a2a2;background:#fff7f6}
+.timer-wrap.urgent #timerText{color:#c43e49}
+.timer-wrap.urgent .timer-track span{background:linear-gradient(90deg,#ef9b45,#d83e4e)}
+@keyframes questionSpotlight{0%{opacity:0;transform:translateY(28px) scale(.94);filter:blur(8px)}65%{opacity:1;transform:translateY(-3px) scale(1.01);filter:blur(0)}100%{transform:translateY(0) scale(1)}}
+@keyframes teamHandoff{0%{transform:translateX(0);opacity:1}45%{transform:translateX(-24px);opacity:0}55%{transform:translateX(24px);opacity:0}100%{transform:translateX(0);opacity:1}}
+@keyframes clockPulse{0%,100%{transform:scale(1)}50%{transform:scale(1.12)}}
+.modal{animation:questionSpotlight .55s cubic-bezier(.2,.9,.25,1) both}
+.question{animation:questionSpotlight .65s .08s both}
+.q-value{transition:background .3s,color .3s,transform .3s}
+.timer-wrap.urgent #timerText{animation:clockPulse .8s ease-in-out infinite}
+.score-pop{filter:drop-shadow(0 0 9px #d4ae4b)}
+@media(prefers-reduced-motion:reduce){.modal,.question{animation:none!important}#timerText{animation:none!important}}
+
+.rules-modal{max-width:560px}.rules-list{padding-right:24px;line-height:2.05;color:#43574b;margin:10px 0 22px}.rules-list li{padding:3px 0}.rules-modal>.primary{width:100%}
+
+/* THE IHYAA CHRONICLE — cinematic heritage motion */
+.top{position:relative;isolation:isolate;overflow:hidden}
+.top:before{animation:heritagePattern 32s linear infinite}
+.top:after{animation:haloDrift 18s ease-in-out infinite alternate}
+@keyframes heritagePattern{from{background-position:0 0,0 0}to{background-position:180px 180px,-180px 180px}}
+@keyframes haloDrift{from{transform:translate3d(0,0,0) scale(1)}to{transform:translate3d(65px,42px,0) scale(1.08)}}
+.brand img{position:relative;animation:emblemFloat 5s ease-in-out infinite;box-shadow:0 0 0 1px #e8d39a,0 0 24px #e8d39a35,0 12px 30px #0004}
+@keyframes emblemFloat{0%,100%{transform:translateY(0) rotate(-1deg)}50%{transform:translateY(-6px) rotate(1deg)}}
+.hero .eyebrow{animation:goldBreath 4s ease-in-out infinite}
+@keyframes goldBreath{0%,100%{box-shadow:0 0 0 0 #e8d19a00;border-color:#d8bd7c55}50%{box-shadow:0 0 28px #e8d19a20;border-color:#f0d99d}}
+.hero h2{background:linear-gradient(100deg,#fff 15%,#f0d99d 38%,#fff 58%);background-size:220% auto;color:transparent;background-clip:text;-webkit-background-clip:text;animation:titleGleam 9s ease-in-out infinite}
+@keyframes titleGleam{0%,100%{background-position:100% center}50%{background-position:0 center}}
+.top .hero:after{content:"";display:block;width:min(340px,65%);height:1px;margin:24px auto 0;background:linear-gradient(90deg,transparent,#e7cc8b,transparent);box-shadow:0 0 16px #e7cc8b;animation:lineGlow 4s ease-in-out infinite}
+@keyframes lineGlow{0%,100%{opacity:.45;transform:scaleX(.65)}50%{opacity:1;transform:scaleX(1)}}
+.category{transform-origin:center bottom}
+.category:hover{transform:translateY(-6px) scale(1.012)}
+.cell:not(:disabled){background:linear-gradient(120deg,#f2f6f0 20%,#fff8e8 48%,#eaf1e9 76%);background-size:220% 100%}
+.cell:hover:not(:disabled){background-position:100% 0}
+.team{overflow:hidden}
+.team:before{content:"";position:absolute;inset:-80% auto -80% -35%;width:28%;transform:rotate(24deg);background:linear-gradient(90deg,transparent,#ffffff55,transparent);animation:teamSweep 8s ease-in-out infinite;pointer-events:none}
+@keyframes teamSweep{0%,55%{left:-40%}100%{left:130%}}
+.points.bump{filter:drop-shadow(0 0 9px #c7a45b88)}
+.modal{border:1px solid #e8d9b3;box-shadow:0 30px 100px #061f19a8,0 0 0 1px #fff8 inset}
+.q-value{box-shadow:inset 0 0 0 1px #eadbb5}
+#drawStage.show .modal,#drawStage.show .draw-modal{animation:modalIn .45s cubic-bezier(.16,1,.3,1) both}
+.history-dust{position:fixed;inset:0;z-index:0;pointer-events:none;overflow:hidden;contain:strict}
+.history-dust i{position:absolute;bottom:-12px;width:3px;height:3px;border-radius:50%;background:#c7a45b;box-shadow:0 0 9px 2px #c7a45b70;opacity:0;animation:dustRise var(--dur,18s) linear infinite;animation-delay:var(--delay,0s)}
+@keyframes dustRise{0%{transform:translate3d(0,0,0) scale(.5);opacity:0}12%{opacity:.55}80%{opacity:.3}100%{transform:translate3d(var(--drift,30px),-105vh,0) scale(1.4);opacity:0}}
+@media(prefers-reduced-motion:reduce){.top:before,.top:after,.brand img,.hero .eyebrow,.hero h2,.top .hero:after,.team:before,.history-dust i{animation:none!important}.hero h2{color:#fff;background:none}}
+
+/* Premium heritage theme refinement + team lifelines */
+.lifelines{margin:18px 0 14px;padding:16px;border:1px solid rgba(190,151,75,.38);border-radius:18px;background:linear-gradient(135deg,rgba(18,63,48,.07),rgba(194,157,82,.10));box-shadow:inset 0 1px rgba(255,255,255,.8),0 12px 30px rgba(31,54,42,.07)}
+.lifelines-title{display:flex;flex-direction:column;gap:5px;font-weight:800;color:var(--ink,#173c30);margin-bottom:12px}.lifelines-title small{font-size:.78rem;font-weight:500;opacity:.72}.lifelines-actions{display:flex;flex-wrap:wrap;gap:9px}.lifelines-actions button{flex:1 1 155px;min-height:44px;border:1px solid rgba(176,139,66,.38);background:linear-gradient(145deg,#fffdf7,#f3eddf);color:#284c3c;box-shadow:0 5px 14px rgba(30,53,39,.08);transition:transform .22s,box-shadow .22s,border-color .22s}.lifelines-actions button:not(:disabled):hover{transform:translateY(-3px);box-shadow:0 10px 22px rgba(30,53,39,.15);border-color:#b58b3c}.lifelines-actions button:disabled{opacity:.48;filter:grayscale(.35);cursor:not-allowed;transform:none;box-shadow:none}
+.modal{border:1px solid rgba(191,157,91,.32);box-shadow:0 28px 90px rgba(9,31,23,.28),inset 0 1px rgba(255,255,255,.65)}.category{transition:transform .25s,box-shadow .25s,border-color .25s}.category:hover{transform:translateY(-4px);box-shadow:0 18px 38px rgba(20,54,39,.13);border-color:rgba(180,143,66,.5)}.cell{transition:transform .2s,filter .2s,box-shadow .2s}.cell:not(:disabled):hover{transform:translateY(-3px) scale(1.035);filter:brightness(1.05);box-shadow:0 9px 20px rgba(27,61,43,.18)}
+@media(max-width:560px){.lifelines{padding:12px}.lifelines-actions button{flex-basis:100%}}
+
+/* Clear team contrast and persistent lifeline cards */
+.team.red{background:linear-gradient(135deg,#7f2632 0%,#a83b49 100%);border:1px solid #70202b;border-top:5px solid #d99a72;color:#fff;box-shadow:0 12px 28px rgba(111,31,43,.20)}
+.team.blue{background:linear-gradient(135deg,#173b68 0%,#285b91 100%);border:1px solid #102e52;border-top:5px solid #83b8df;color:#fff;box-shadow:0 12px 28px rgba(20,55,96,.20)}
+.team h3,.team small{color:#fff}.team small{opacity:.82}.team .points,.red .points,.blue .points{color:#fff;text-shadow:0 2px 12px rgba(0,0,0,.22)}
+.lifeline-dashboard{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:0 0 26px}.lifeline-team{padding:15px 17px;border-radius:17px;background:#fff;border:1px solid var(--line);box-shadow:var(--shadow);min-width:0}.red-lifeline{border-inline-start:5px solid #a83b49}.blue-lifeline{border-inline-start:5px solid #285b91}.lifeline-team-head{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:11px;color:#203a30}.lifeline-team-head strong{font-size:15px}.lifeline-team-head span{font-size:11px;color:#78847d}.life-pills{display:flex;flex-wrap:wrap;gap:7px}.life-pill{display:inline-flex;align-items:center;padding:7px 10px;border-radius:999px;background:#e8f2eb;color:#24543d;border:1px solid #c8dfce;font-size:12px;font-weight:800}.life-pill.used{background:#f0f1ef;color:#858b86;border-color:#dfe2de;text-decoration:line-through;opacity:.8}
+@media(max-width:680px){.lifeline-dashboard{grid-template-columns:1fr}.scoreboard{grid-template-columns:1fr 1fr}.turn{grid-column:1/-1;grid-row:1;min-width:0}.team{padding:14px}.team h3{font-size:14px}.team .points{font-size:29px}}
+
+/* CINEMATIC IHYAA GAME EXPERIENCE */
+:root{--gold-bright:#f5d98c;--night:#081d19;--emerald:#0b4b3c}
+body{background:radial-gradient(ellipse at 50% -15%,#fffdf5 0%,#f5f1e5 48%,#e9eee7 100%);background-attachment:fixed}
+header,.hero{isolation:isolate}
+header:after{content:"";position:absolute;inset:0;pointer-events:none;background:linear-gradient(115deg,transparent 15%,#ffffff12 48%,transparent 75%);animation:headerSheen 9s ease-in-out infinite}
+@keyframes headerSheen{0%,100%{transform:translateX(-35%)}50%{transform:translateX(35%)}}
+.category{transition:transform .35s cubic-bezier(.2,.8,.2,1),box-shadow .35s,border-color .35s;overflow:hidden;position:relative}
+.category:before{content:"";position:absolute;inset:0 0 auto;height:3px;background:linear-gradient(90deg,transparent,var(--gold),transparent);transform:scaleX(.25);opacity:.45;transition:.35s}
+.category:hover{transform:translateY(-5px);box-shadow:0 20px 42px #183b2b18;border-color:#d4bd82}
+.category:hover:before{transform:scaleX(1);opacity:1}
+.cell{position:relative;overflow:hidden;transition:transform .22s,box-shadow .22s,filter .22s;animation:cellArrive .55s both}
+.cell:after{content:"";position:absolute;inset:-50%;background:linear-gradient(110deg,transparent 40%,#ffffff75 50%,transparent 60%);transform:translateX(-130%) rotate(12deg);transition:transform .65s}
+.cell:not(:disabled):hover{transform:translateY(-4px) scale(1.035);box-shadow:0 12px 25px #b18b3e35;filter:brightness(1.07)}
+.cell:not(:disabled):hover:after{transform:translateX(130%) rotate(12deg)}
+@keyframes cellArrive{from{opacity:0;transform:translateY(18px) scale(.94)}to{opacity:1;transform:translateY(0) scale(1)}}
+.team{transition:transform .3s,box-shadow .3s}
+.team:hover{transform:translateY(-3px);box-shadow:0 18px 36px #102e5225}
+.score-pop{animation:scoreImpact .75s cubic-bezier(.16,1.4,.3,1)!important}
+@keyframes scoreImpact{0%{transform:scale(1)}35%{transform:scale(1.45);text-shadow:0 0 22px #f5d98c}65%{transform:scale(.92)}100%{transform:scale(1)}}
+.overlay.show{animation:overlayIn .3s ease both}
+.overlay.show .modal{animation:modalCinematic .62s cubic-bezier(.16,1,.3,1) both}
+@keyframes overlayIn{from{opacity:0}to{opacity:1}}
+@keyframes modalCinematic{0%{opacity:0;transform:translateY(35px) scale(.91);filter:blur(7px)}65%{opacity:1;transform:translateY(-4px) scale(1.015);filter:blur(0)}100%{transform:translateY(0) scale(1)}}
+.q-value{box-shadow:0 5px 18px #c6a45b30;animation:valueGlow 2.8s ease-in-out infinite}
+@keyframes valueGlow{50%{box-shadow:0 5px 25px #c6a45b70}}
+.question{animation:questionReveal .65s cubic-bezier(.2,.8,.2,1) both}
+@keyframes questionReveal{from{opacity:0;transform:translateY(16px);filter:blur(5px)}to{opacity:1;transform:none;filter:blur(0)}}
+.lifeline-team{transition:transform .3s,box-shadow .3s}
+.lifeline-team:hover{transform:translateY(-3px);box-shadow:0 15px 30px #183b2b18}
+.life-pill{transition:transform .25s,background .25s}
+.life-pill:not(.used){animation:pillPulse 3.8s ease-in-out infinite}
+@keyframes pillPulse{50%{box-shadow:0 0 0 4px #d4e9d755}}
+.lifeline-flash{animation:lifeFlash .65s cubic-bezier(.2,.8,.2,1)}
+@keyframes lifeFlash{0%{transform:scale(.96);filter:brightness(1)}40%{transform:scale(1.045);filter:brightness(1.12);box-shadow:0 0 0 8px #d7b96735,0 16px 34px #b18b3e35}100%{transform:scale(1);filter:none}}
+.reward-fx{position:fixed;z-index:100;left:50%;top:48%;transform:translate(-50%,-50%);pointer-events:none;text-align:center;font-weight:900;animation:rewardBurst 1.35s cubic-bezier(.16,1,.3,1) forwards;text-shadow:0 5px 25px #0005}
+.reward-fx strong{display:block;font-size:clamp(58px,12vw,112px);line-height:1;color:#f8d878;-webkit-text-stroke:1px #79551c;filter:drop-shadow(0 8px 0 #704b1c)}
+.reward-fx span{display:block;color:#fff;font-size:clamp(17px,3vw,25px);margin-top:12px;letter-spacing:1px}
+.reward-fx.bad strong{color:#ff7777;-webkit-text-stroke-color:#702b32}
+@keyframes rewardBurst{0%{opacity:0;transform:translate(-50%,-35%) scale(.25) rotate(-8deg)}18%{opacity:1;transform:translate(-50%,-55%) scale(1.16) rotate(2deg)}38%{transform:translate(-50%,-50%) scale(.96)}70%{opacity:1;transform:translate(-50%,-85%) scale(1)}100%{opacity:0;transform:translate(-50%,-145%) scale(.88)}}
+body:after{content:"";position:fixed;inset:0;pointer-events:none;z-index:80;opacity:0;background:radial-gradient(circle,#f5d98c55,transparent 65%)}
+body.fx-correct:after{animation:screenFlash .7s ease}
+body.fx-wrong:after{background:radial-gradient(circle,#d94d5c35,transparent 65%);animation:screenFlash .55s ease}
+@keyframes screenFlash{0%{opacity:0}25%{opacity:1}100%{opacity:0}}
+@media(prefers-reduced-motion:reduce){*,*:before,*:after{animation-duration:.01ms!important;animation-iteration-count:1!important;scroll-behavior:auto!important;transition-duration:.01ms!important}}
+
+
+/* GRAND CHAMPION FINALE */
+.winner-overlay{position:fixed;inset:0;z-index:150;display:none;align-items:center;justify-content:center;padding:18px;background:radial-gradient(circle at 50% 35%,#174d3deF 0%,#071d18f5 68%);overflow:hidden}
+.winner-overlay.show{display:flex;animation:winnerFade .7s ease both}
+.winner-card{position:relative;z-index:2;width:min(680px,100%);padding:clamp(25px,5vw,48px);text-align:center;border:1px solid #e7cc8b;border-radius:30px;background:linear-gradient(145deg,#fffdf5,#f2ead6);box-shadow:0 35px 110px #0008,inset 0 0 0 7px #c6a45b18;animation:championRise 1s cubic-bezier(.16,1,.3,1) both}
+.winner-crown{font-size:clamp(58px,10vw,94px);line-height:1;filter:drop-shadow(0 9px 8px #b78b3b55);animation:crownFloat 2.6s ease-in-out infinite}
+.winner-kicker{margin:14px 0 5px;color:#987331;font-weight:900;letter-spacing:4px;font-size:13px}
+.winner-title{margin:0;color:#174b3b;font-size:clamp(30px,6vw,52px);font-weight:900}
+.winner-name{margin:18px auto 10px;padding:15px 20px;border-radius:18px;background:linear-gradient(110deg,#0d5946,#1d765a);color:#fff;font-size:clamp(25px,5vw,42px);font-weight:900;box-shadow:0 12px 28px #0d594638}
+.winner-score{font-size:clamp(19px,3vw,27px);font-weight:900;color:#896b30}
+.winner-sub{color:#64746b;margin:12px 0 24px}
+.winner-actions{display:flex;justify-content:center;gap:10px;flex-wrap:wrap}
+.winner-confetti{position:absolute;inset:0;pointer-events:none;overflow:hidden}
+.winner-confetti i{position:absolute;top:-12%;left:var(--x);width:9px;height:16px;background:var(--c);opacity:.9;transform:rotate(var(--r));animation:confettiFall var(--d) linear var(--delay) infinite}
+.winner-rays{position:absolute;inset:-50%;background:repeating-conic-gradient(from 0deg at 50% 50%,#f5d98c10 0deg 8deg,transparent 8deg 16deg);animation:raysSpin 36s linear infinite}
+.winner-tie .winner-name{background:linear-gradient(110deg,#8a692c,#c6a45b)}
+@keyframes winnerFade{from{opacity:0}to{opacity:1}}
+@keyframes championRise{0%{opacity:0;transform:translateY(70px) scale(.8) rotateX(15deg);filter:blur(10px)}65%{opacity:1;transform:translateY(-8px) scale(1.02);filter:blur(0)}100%{transform:none}}
+@keyframes crownFloat{50%{transform:translateY(-10px) rotate(4deg)}}
+@keyframes confettiFall{to{transform:translate3d(30px,115vh,0) rotate(720deg)}}
+@keyframes raysSpin{to{transform:rotate(360deg)}}
+@media(prefers-reduced-motion:reduce){.winner-card,.winner-crown,.winner-confetti i,.winner-rays{animation:none!important}}
+
+/* TEAM-COLORED CHAMPION + LIFELINE SPOTLIGHT */
+.winner-overlay.winner-red{background:radial-gradient(circle at 50% 34%,#8c2634 0%,#3a101b 52%,#13080d 100%)}
+.winner-overlay.winner-blue{background:radial-gradient(circle at 50% 34%,#2865a0 0%,#102d50 52%,#07111f 100%)}
+.winner-overlay.winner-red .winner-name{background:linear-gradient(110deg,#7f2632,#c94e5d);box-shadow:0 12px 32px #8c263455}
+.winner-overlay.winner-blue .winner-name{background:linear-gradient(110deg,#173b68,#3679b8);box-shadow:0 12px 32px #2865a055}
+.winner-overlay.winner-red .winner-card{border-color:#d58a8e}
+.winner-overlay.winner-blue .winner-card{border-color:#8dbce5}
+.winner-overlay.winner-red .winner-rays{background:repeating-conic-gradient(from 0deg at 50% 50%,#f28b9515 0deg 8deg,transparent 8deg 16deg)}
+.winner-overlay.winner-blue .winner-rays{background:repeating-conic-gradient(from 0deg at 50% 50%,#8bc8ff18 0deg 8deg,transparent 8deg 16deg)}
+.winner-overlay.winner-tie{background:radial-gradient(circle at 50% 34%,#80632b 0%,#382b16 58%,#120e08 100%)}
+.lifelines{position:relative;overflow:hidden;isolation:isolate}
+.lifelines:after{content:"استخدم المساعدة قبل إظهار الإجابة";display:block;width:max-content;max-width:100%;margin:12px auto 0;padding:6px 13px;border-radius:99px;background:#fff8e6;border:1px solid #e4ce91;color:#85652b;font-size:12px;font-weight:900;animation:helpHint 2.4s ease-in-out infinite}
+.lifelines.life-activated{animation:helpPanel 1s ease}
+.lifelines.life-activated:before{content:"";position:absolute;z-index:-1;inset:-60%;background:conic-gradient(transparent,#e9c66c55,transparent 30%);animation:helpSweep 1s ease}
+.lifelines-actions button.life-activated{animation:helpButton .8s cubic-bezier(.16,1,.3,1);border-color:#c29a43;background:linear-gradient(145deg,#fff4cc,#f3dfaa);color:#684d1d;box-shadow:0 0 0 5px #e8cb7b35,0 12px 28px #a77c2c35}
+@keyframes helpHint{0%,100%{transform:scale(1);box-shadow:0 0 0 0 #e4ce9100}50%{transform:scale(1.035);box-shadow:0 0 0 5px #e4ce9130}}
+@keyframes helpPanel{0%,100%{transform:scale(1)}35%{transform:scale(1.012);box-shadow:0 0 0 7px #d9b85a30,0 16px 38px #8d6b2930}}
+@keyframes helpSweep{to{transform:rotate(360deg)}}
+@keyframes helpButton{0%{transform:scale(.92)}45%{transform:translateY(-5px) scale(1.08)}100%{transform:scale(1)}}
+.preselect-help{position:relative;margin:0 0 28px;padding:clamp(16px,2.5vw,26px);border:1px solid #c8a65e;border-radius:24px;background:linear-gradient(130deg,#fffdf6 0%,#f5efdf 48%,#fffaf0 100%);box-shadow:0 18px 48px #253e301c,inset 0 1px #fff;overflow:hidden;isolation:isolate;animation:preHelpEntrance .95s cubic-bezier(.16,1,.3,1) both}
+.preselect-help:before{content:"";position:absolute;inset:-60%;z-index:-1;background:conic-gradient(from 0deg,transparent 0 34%,#d4b15a26 42%,transparent 52% 100%);animation:preHelpOrbit 13s linear infinite;pointer-events:none}
+.preselect-head{display:flex;align-items:center;justify-content:space-between;gap:16px;margin-bottom:17px}.preselect-kicker{font-size:10px;letter-spacing:2px;font-weight:1000;color:#a17b2e}.preselect-head h2{margin:5px 0;color:#173c30;font-size:clamp(20px,3vw,27px)}.preselect-head p{margin:0;color:#65756b;font-size:13px}.preselect-turn{flex:none;padding:10px 15px;border-radius:999px;background:#173c30;color:#fff7df;font-weight:900;box-shadow:0 7px 20px #173c3030;animation:turnGlow 2.4s ease-in-out infinite}
+.preselect-help .lifelines{margin:0 0 15px;padding:15px;border:1px solid #d8c28c;border-radius:18px;background:#ffffffb8}.preselect-help .lifelines:after{content:"فعّل المساعدة الآن — ثم اختر السؤال";background:#173c30;color:#fff5d8;border-color:#173c30}.preselect-help .lifelines-actions button{min-height:54px;font-weight:900}.preselect-help .lifeline-dashboard{margin:0}.preselect-help .lifeline-team{background:#ffffffd9}
+@keyframes preHelpEntrance{0%{opacity:0;transform:translateY(35px) scale(.96);filter:blur(5px)}70%{opacity:1;transform:translateY(-4px) scale(1.005);filter:blur(0)}100%{opacity:1;transform:none;filter:none}}
+@keyframes preHelpOrbit{to{transform:rotate(360deg)}}@keyframes turnGlow{50%{box-shadow:0 0 0 6px #c7a85a25,0 7px 20px #173c3030}}
+@media(max-width:600px){.preselect-head{align-items:flex-start;flex-direction:column}.preselect-turn{align-self:flex-start}}
+
+
+/* TEAM-COLORED POWER-UP TILES */
+.preselect-help .lifelines-actions{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:13px}
+.preselect-help .lifelines-actions button.lifeline-tile{position:relative;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:9px;min-width:0;min-height:112px;padding:15px 10px;border:1px solid #c8b47e;border-radius:15px;background:linear-gradient(150deg,#fffef9,#f2ecdc);color:#244638;font-size:14px;font-weight:1000;line-height:1.5;box-shadow:0 7px 0 #d8ceb7,0 12px 22px #203c2b12;overflow:hidden;isolation:isolate;transition:transform .25s,box-shadow .25s,border-color .25s,background .25s}
+.preselect-help .lifelines-actions button.lifeline-tile:before{content:"";position:absolute;inset:0;z-index:-1;opacity:.14;background:radial-gradient(circle at 50% 0%,var(--team-glow),transparent 68%);transition:opacity .25s}
+.preselect-help .lifelines[data-team="red"] .lifeline-tile{--team-glow:#c43d50;--team-main:#a83243;--team-light:#f8dfe2;border-color:#d7a0a6}
+.preselect-help .lifelines[data-team="blue"] .lifeline-tile{--team-glow:#347dbd;--team-main:#245d96;--team-light:#deedfb;border-color:#9bbddd}
+.preselect-help .lifelines-actions button.lifeline-tile:not(:disabled){animation:tileFloat 3.8s ease-in-out infinite}
+.preselect-help .lifelines-actions button.lifeline-tile:nth-child(2){animation-delay:.22s}
+.preselect-help .lifelines-actions button.lifeline-tile:nth-child(3){animation-delay:.44s}
+.preselect-help .lifelines-actions button.lifeline-tile:not(:disabled):hover{transform:translateY(-5px);border-color:var(--team-main);background:linear-gradient(150deg,#fff,var(--team-light));box-shadow:0 4px 0 var(--team-main),0 15px 28px color-mix(in srgb,var(--team-glow) 24%,transparent)}
+.preselect-help .lifelines-actions button.lifeline-tile:disabled{opacity:.48;filter:grayscale(.65);box-shadow:0 3px 0 #c9c9c3;animation:none}
+.preselect-help .lifelines-actions button.lifeline-tile.life-activated{animation:teamTileBurst .85s cubic-bezier(.16,1,.3,1);border:2px solid var(--team-main);background:linear-gradient(145deg,#fff,var(--team-light));color:var(--team-main);box-shadow:0 0 0 5px color-mix(in srgb,var(--team-glow) 18%,transparent),0 5px 0 var(--team-main),0 18px 32px color-mix(in srgb,var(--team-glow) 30%,transparent)}
+.lifelines[data-team="red"] .lifelines-actions button.lifeline-tile.life-activated{--team-glow:#c43d50;--team-main:#a83243;--team-light:#f8dfe2}
+.lifelines[data-team="blue"] .lifelines-actions button.lifeline-tile.life-activated{--team-glow:#347dbd;--team-main:#245d96;--team-light:#deedfb}
+@keyframes tileFloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-3px)}}
+@keyframes teamTileBurst{0%{transform:scale(.88) rotate(-2deg);filter:brightness(1.2)}45%{transform:scale(1.08) rotate(1deg)}72%{transform:scale(.98)}100%{transform:scale(1)}}
+.preselect-help .lifelines-actions button.lifeline-tile.choice-burst:after{content:"";position:absolute;inset:5px;border:3px solid var(--team-main);border-radius:11px;pointer-events:none;animation:choiceRing 1.05s cubic-bezier(.16,1,.3,1) both}
+.preselect-help .lifelines-actions button.lifeline-tile.choice-burst{z-index:2;animation:choiceReveal 1.05s cubic-bezier(.16,1,.3,1) both}
+@keyframes choiceReveal{0%{transform:scale(.78) rotate(-4deg);filter:brightness(1.35);box-shadow:0 0 0 0 color-mix(in srgb,var(--team-glow) 0%,transparent)}35%{transform:scale(1.13) rotate(2deg);box-shadow:0 0 0 11px color-mix(in srgb,var(--team-glow) 22%,transparent),0 0 35px color-mix(in srgb,var(--team-glow) 48%,transparent)}65%{transform:scale(.97) rotate(-1deg)}100%{transform:scale(1);filter:none}}
+@keyframes choiceRing{0%{opacity:0;transform:scale(.55)}30%{opacity:1}100%{opacity:0;transform:scale(1.18)}}
+@media(max-width:560px){.preselect-help .lifelines-actions{grid-template-columns:1fr 1fr}.preselect-help .lifelines-actions button.lifeline-tile{min-height:100px;padding:12px 7px;font-size:12px}.preselect-help .lifelines-actions button.lifeline-tile:last-child{grid-column:1/-1}}
+@media(prefers-reduced-motion:reduce){.preselect-help .lifelines-actions button.lifeline-tile{animation:none!important}}
+
+/* EPIC THEMES + CINEMATIC POWER REVEAL */
+.theme-control select{width:100%;padding:12px;border:1px solid #d8cba8;border-radius:12px;background:#fffdf7;color:#203d31;font-weight:800}
+.theme-control small{color:#718078;font-size:11px}
+body[data-theme="midnight"]{--green:#14243d;--green2:#294d78;--ink:#e8eef8;--muted:#aab8ca;--paper:#0b1424;--line:#2b3c55;--shadow:0 14px 40px #0005;background:radial-gradient(ellipse at 50% -10%,#243958,#0b1424 65%);color:var(--ink)}
+body[data-theme="midnight"] .top{background:linear-gradient(120deg,#081426,#1b3457 55%,#263f69)}
+body[data-theme="midnight"] .category,body[data-theme="midnight"] .team,body[data-theme="midnight"] .lifeline-team,body[data-theme="midnight"] .modal{background:#14243a;color:#edf3fb;border-color:#344a68}
+body[data-theme="midnight"] .category h3,body[data-theme="midnight"] .section-head h2,body[data-theme="midnight"] .lifeline-team-head{color:#e9d49b}
+body[data-theme="midnight"] .cell{background:#203653;color:#f3d995;border-color:#3b5575}
+body[data-theme="midnight"] .turn{background:#26334a;border-color:#9c8149;color:#fff}
+body[data-theme="midnight"] .question,body[data-theme="midnight"] .modal h2{color:#f5f0e4}
+body[data-theme="midnight"] .field input,body[data-theme="midnight"] .field textarea{background:#0e1b2d;color:#fff;border-color:#3a506c}
+body[data-theme="royal"]{--green:#542b78;--green2:#7543a0;--ink:#342044;--muted:#81728d;--paper:#f7f1fb;--line:#e6d9ef;--shadow:0 14px 38px #3c1c5018;background:radial-gradient(ellipse at 50% -15%,#fffaff,#f1e7f8 75%)}
+body[data-theme="royal"] .top{background:linear-gradient(120deg,#32154e,#5b2e7c 58%,#75439a)}
+body[data-theme="royal"] .category h3{color:#63358a}
+body[data-theme="royal"] .cell{background:#f0e5f8;color:#5c3180;border-color:#e0cbea}
+body[data-theme="royal"] .primary{background:#542b78}
+.power-reveal{position:fixed;inset:0;z-index:80;display:grid;place-items:center;padding:22px;visibility:hidden;pointer-events:none}
+.power-reveal.show{visibility:visible}
+.power-reveal-backdrop{position:absolute;inset:0;background:radial-gradient(circle,#071b18bb,#030b0add 78%);opacity:0;transition:opacity .25s}
+.power-reveal.show .power-reveal-backdrop{opacity:1}
+.power-reveal-card{--power:#c6a45b;--power-soft:#f8e9bd;position:relative;width:min(520px,94vw);padding:42px 24px 34px;border-radius:28px;text-align:center;color:#fff;background:linear-gradient(145deg,#102d27f5,#071914f7);border:1px solid color-mix(in srgb,var(--power) 75%,white);box-shadow:0 0 0 1px #ffffff18,0 30px 100px #0009,0 0 75px color-mix(in srgb,var(--power) 40%,transparent);overflow:hidden;opacity:0;transform:translateY(35px) scale(.72) rotateX(12deg)}
+.power-reveal.show .power-reveal-card{animation:powerCardIn .72s cubic-bezier(.16,1,.3,1) forwards}
+.power-reveal-card:before{content:"";position:absolute;inset:-80%;background:conic-gradient(transparent 0 35%,color-mix(in srgb,var(--power) 35%,transparent) 43%,transparent 53% 100%);animation:powerSpin 5s linear infinite;pointer-events:none}
+.power-reveal-card:after{content:"";position:absolute;inset:8px;border:1px solid color-mix(in srgb,var(--power) 45%,transparent);border-radius:22px;pointer-events:none}
+.power-reveal-card>*{position:relative;z-index:1}
+.power-reveal[data-team="red"] .power-reveal-card{--power:#ff5267;--power-soft:#ffd5dc;background:linear-gradient(145deg,#481724,#180b14)}
+.power-reveal[data-team="blue"] .power-reveal-card{--power:#55b6ff;--power-soft:#d2edff;background:linear-gradient(145deg,#102c50,#071522)}
+.power-reveal-icon{width:100px;height:100px;margin:0 auto 18px;display:grid;place-items:center;border:2px solid var(--power);border-radius:28px;color:var(--power-soft);font-size:46px;background:color-mix(in srgb,var(--power) 16%,transparent);box-shadow:0 0 0 9px color-mix(in srgb,var(--power) 10%,transparent),0 0 45px color-mix(in srgb,var(--power) 35%,transparent);animation:powerIcon 1.4s ease-in-out infinite}
+.power-reveal-kicker{font-size:11px;letter-spacing:3px;color:var(--power);font-weight:1000}
+.power-reveal-card h2{margin:10px 0;color:#fff;font-size:clamp(25px,5vw,36px)}
+.power-reveal-card p{margin:0;color:var(--power-soft);font-weight:800;font-size:16px}
+.power-reveal-line{width:65%;height:3px;margin:24px auto 0;border-radius:9px;background:linear-gradient(90deg,transparent,var(--power),transparent);box-shadow:0 0 18px var(--power)}
+@keyframes powerCardIn{0%{opacity:0;transform:translateY(35px) scale(.72) rotateX(12deg)}65%{opacity:1;transform:translateY(-7px) scale(1.035) rotateX(0)}100%{opacity:1;transform:none}}
+@keyframes powerSpin{to{transform:rotate(360deg)}}@keyframes powerIcon{50%{transform:translateY(-6px) scale(1.045);box-shadow:0 0 0 13px color-mix(in srgb,var(--power) 8%,transparent),0 0 60px color-mix(in srgb,var(--power) 45%,transparent)}}
+@media(prefers-reduced-motion:reduce){.power-reveal-card,.power-reveal-icon{animation:none!important}.power-reveal-card{opacity:1;transform:none}}
+.power-reveal{pointer-events:none}.power-reveal.show{animation:powerBackdropIn .55s ease both}.power-reveal.exit{animation:powerBackdropOut .9s ease both}.power-reveal-card{animation:powerCardIn .75s cubic-bezier(.16,1,.3,1) both}.power-reveal.exit .power-reveal-card{animation:powerCardOut .9s cubic-bezier(.7,0,.84,0) both}.power-reveal-title{letter-spacing:.2px}@keyframes powerBackdropIn{from{opacity:0}to{opacity:1}}@keyframes powerBackdropOut{to{opacity:0;visibility:hidden}}@keyframes powerCardIn{0%{opacity:0;transform:translateY(70px) scale(.72) rotateX(14deg);filter:blur(12px)}65%{opacity:1;transform:translateY(-8px) scale(1.025);filter:blur(0)}100%{transform:translateY(0) scale(1)}}@keyframes powerCardOut{0%{opacity:1;transform:translateY(0) scale(1)}35%{opacity:1;transform:translateY(-18px) scale(1.04)}100%{opacity:0;transform:translateY(-110px) scale(.82);filter:blur(8px)}}.host-settings-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:12px;padding:14px;border:1px solid var(--line);border-radius:18px;background:color-mix(in srgb,var(--paper) 88%,var(--gold) 12%);margin:12px 0}.sound-toggle{display:flex;align-items:center;gap:10px;padding:12px;border:1px solid var(--line);border-radius:12px;background:var(--paper);font-weight:800}.sound-toggle input{width:20px;height:20px;accent-color:var(--green)}body[data-theme="sand"]{--green:#75502d;--green2:#a97842;--gold:#d6a94d;--ink:#49341f;--paper:#fbf3e4;--line:#ead9bb;background:radial-gradient(ellipse at top,#fff8e9,#e9d7b5)}body[data-theme="sand"] .top{background:linear-gradient(120deg,#54381f,#89613a 55%,#b28a54)}body[data-theme="obsidian"]{--green:#171717;--green2:#34302a;--gold:#d6ad55;--ink:#f4ead3;--muted:#b7aa91;--paper:#171614;--line:#40392d;background:radial-gradient(ellipse at top,#393124,#111 68%);color:var(--ink)}body[data-theme="obsidian"] .top{background:linear-gradient(120deg,#090909,#29251d 55%,#544329)}body[data-theme="obsidian"] .category,body[data-theme="obsidian"] .team,body[data-theme="obsidian"] .lifeline-team,body[data-theme="obsidian"] .modal{background:#211f1a;color:#f4ead3;border-color:#55472e}body[data-theme="obsidian"] .cell{background:#343027;color:#f5d990;border-color:#5c4a2a}body[data-theme="obsidian"] .question,body[data-theme="obsidian"] .modal h2{color:#f5ead3}body[data-theme="obsidian"] .field input,body[data-theme="obsidian"] .field textarea,body[data-theme="obsidian"] .theme-control select{background:#171614;color:#fff;border-color:#55472e}@media(max-width:650px){.host-settings-grid{grid-template-columns:1fr}.hostbar{gap:8px}.hostbar button{flex:1}}
+body[data-turn="red"]{--green:#a93645;--green2:#cf5968}body[data-turn="blue"]{--green:#285f9b;--green2:#4388c8}body[data-turn="red"] .top{background:linear-gradient(115deg,#4a1420,#9f2f40)}body[data-turn="blue"] .top{background:linear-gradient(115deg,#102b4d,#245f99)}.theme-dock{position:fixed;left:16px;bottom:16px;z-index:90;direction:rtl}.theme-dock>button{background:#17392e;color:#f8e5ae;border:1px solid #c6a45b;border-radius:30px;padding:12px 17px;font-weight:900;box-shadow:0 8px 28px #0003}.theme-menu{display:none;position:absolute;left:0;bottom:55px;width:190px;padding:9px;background:#fff;border-radius:14px;box-shadow:0 12px 35px #0003}.theme-menu.open{display:grid;gap:6px}.theme-menu button{padding:9px;border:0;border-radius:9px;text-align:right;background:#f4f0e6;color:#26372e}.theme-menu button[aria-current="true"]{outline:2px solid #c6a45b}.duel-clock,.event-banner{display:none;margin:9px 0;padding:10px;border-radius:12px;text-align:center;font-weight:900}.duel-clock{background:#fff0d1;color:#79520d}.event-banner{background:#f9e6b4;color:#65450d}@media(max-width:650px){.theme-dock{left:9px;bottom:9px}}\n
+</style></head>
+<body>
+<div class="history-dust" aria-hidden="true"><i style="left:9%;--dur:14s;--delay:-0s;--drift:-45px"></i><i style="left:56%;--dur:16s;--delay:-3s;--drift:-14px"></i><i style="left:3%;--dur:18s;--delay:-6s;--drift:17px"></i><i style="left:50%;--dur:20s;--delay:-9s;--drift:-42px"></i><i style="left:97%;--dur:22s;--delay:-12s;--drift:-11px"></i><i style="left:44%;--dur:24s;--delay:-15s;--drift:20px"></i><i style="left:91%;--dur:26s;--delay:-18s;--drift:-39px"></i><i style="left:38%;--dur:28s;--delay:-2s;--drift:-8px"></i><i style="left:85%;--dur:14s;--delay:-5s;--drift:23px"></i><i style="left:32%;--dur:16s;--delay:-8s;--drift:-36px"></i><i style="left:79%;--dur:18s;--delay:-11s;--drift:-5px"></i><i style="left:26%;--dur:20s;--delay:-14s;--drift:26px"></i><i style="left:73%;--dur:22s;--delay:-17s;--drift:-33px"></i><i style="left:20%;--dur:24s;--delay:-1s;--drift:-2px"></i><i style="left:67%;--dur:26s;--delay:-4s;--drift:29px"></i><i style="left:14%;--dur:28s;--delay:-7s;--drift:-30px"></i><i style="left:61%;--dur:14s;--delay:-10s;--drift:1px"></i><i style="left:8%;--dur:16s;--delay:-13s;--drift:32px"></i><i style="left:55%;--dur:18s;--delay:-16s;--drift:-27px"></i><i style="left:2%;--dur:20s;--delay:-0s;--drift:4px"></i><i style="left:49%;--dur:22s;--delay:-3s;--drift:35px"></i><i style="left:96%;--dur:24s;--delay:-6s;--drift:-24px"></i></div>
+<header class="top"><div class="nav"><div class="brand"><img src="Arabic%20Calligraphy%20Emblem%20with%20Gold%20Accents.png" alt="شعار إحياء"><div><h1>مؤسسة إحياء</h1><p>جيل على خطى السابقين</p></div></div><button id="hostOpen">⚙ لوحة تحكم الهوست</button></div><div class="hero"><div class="eyebrow">مسابقة تفاعلية • علم ومتعة وتنافس</div><h2>تحدّي المعرفة يبدأ من هنا</h2><p>اختر الفئة والنقاط، وتعاون مع فريقك للوصول إلى القمة.</p></div></header>
+<div class="overlay" id="rulesOverlay"><div class="modal rules-modal"><div class="modal-head"><h2>قوانين المسابقة</h2><span class="q-value">مؤسسة إحياء</span></div><ol class="rules-list"><li>تُجرى القرعة لتحديد الفريق الذي يبدأ.</li><li>لكل سؤال 30 ثانية للإجابة.</li><li>الإجابة الصحيحة تمنح الفريق نقاط السؤال ويُغلق السؤال.</li><li>الإجابة الخاطئة أو انتهاء الوقت يُغلقان السؤال دون نقاط.</li><li>بعد كل إجابة أو انتهاء الوقت ينتقل الدور للفريق الآخر ليختار سؤالًا جديدًا.</li><li>لا يمكن اختيار السؤال الذي تم استخدامه مرة أخرى.</li></ol><button class="primary" id="rulesStart">فهمت، ابدأ المسابقة</button></div></div>
+<main class="wrap"><section class="scoreboard"><div class="team red"><div><h3 id="redName">الفريق الأحمر</h3><small>الفريق الأول</small></div><div class="points" id="redScore">0</div></div><div class="turn"><small>الدور الحالي</small><strong id="turnName">الفريق الأحمر</strong></div><div class="team blue"><div><h3 id="blueName">الفريق الأزرق</h3><small>الفريق الثاني</small></div><div class="points" id="blueScore">0</div></div></section>
+<section class="preselect-help" id="preselectHelp" aria-label="وسائل المساعدة قبل اختيار السؤال"><div class="preselect-head"><div><span class="preselect-kicker">POWER UPS • قبل اختيار السؤال</span><h2>جهّز فريقك للمواجهة</h2><p>وسائل المساعدة تظهر هنا قبل اختيار أي سؤال — اختر خطتك أولًا!</p></div><div class="preselect-turn" id="helpTurn">دور الفريق الأحمر</div></div><div class="lifelines"><div class="lifelines-title">وسائل مساعدة الفريق الحالي <small>كل وسيلة تُستخدم مرة واحدة طوال المسابقة وتُطبّق على السؤال القادم</small></div><div class="lifelines-actions"><button class="secondary lifeline-tile" id="supervisorBtn">🧑‍🏫 الاستعانة بمشرف</button><button class="secondary lifeline-tile" id="doubleBtn">✨ دبل النقاط</button><button class="secondary lifeline-tile" id="blockBtn">🛡️ منع دور المنافس</button></div></div><section class="lifeline-dashboard" aria-label="حالة وسائل المساعدة للفريقين"><div class="lifeline-team red-lifeline"><div class="lifeline-team-head"><strong id="redLifeName">الفريق الأحمر</strong><span>وسائل المساعدة</span></div><div class="life-pills" id="redLifePills"></div></div><div class="lifeline-team blue-lifeline"><div class="lifeline-team-head"><strong id="blueLifeName">الفريق الأزرق</strong><span>وسائل المساعدة</span></div><div class="life-pills" id="blueLifePills"></div></div></section></section>
+<div class="section-head"><div><h2>لوحة التحدّي</h2><p>اختر سؤالًا متاحًا لبدء الجولة</p></div><span class="hint" id="remaining">— سؤال متاح</span></div><section class="board" id="board"></section>
+<div class="hostbar"><button class="secondary" id="duelBtn">⚔️ ابدأ مواجهة 1 ضد 1</button><button class="secondary" id="drawBtn">🎲 قرعة البداية</button><button class="secondary" id="switchBtn">⇄ تبديل الدور</button><button class="gold" id="resetBtn">↻ إعادة ضبط النقاط</button></div><div class="footer">مؤسسة إحياء • جيل على خطى السابقين</div></main>
+<div class="theme-dock"><button id="themeDockBtn">🎨 الثيم</button><div class="theme-menu" id="themeMenu"><button data-theme-choice="emerald">الزمردي الذهبي</button><button data-theme-choice="midnight">ليلة ملكية</button><button data-theme-choice="royal">ملكي بنفسجي</button><button data-theme-choice="sand">رمال تاريخية</button><button data-theme-choice="obsidian">العقيق الأسود</button></div></div><div class="overlay" id="questionOverlay"><div class="modal"><div class="modal-head"><h2>سؤال المسابقة</h2><button class="close" data-close="questionOverlay">×</button></div><div class="q-value" id="qValue"></div><div class="duel-clock" id="duelClock"></div><div class="event-banner" id="eventBanner"></div><button class="gold" id="resumeTimerBtn" style="display:none;margin:10px 0">▶ استئناف المؤقت</button><div class="timer-wrap" id="timerWrap"><div class="timer-meta"><span>الوقت المتبقي</span><strong id="timerText">30</strong></div><div class="timer-track"><span id="timerBar"></span></div></div><div class="question" id="qText"></div><div class="answer" id="qAnswer"></div><div class="actions"><button class="secondary" id="showAnswer">إظهار الإجابة</button><button class="primary" id="correctBtn">✓ إجابة صحيحة</button><button class="secondary" id="wrongBtn">✕ إجابة غير صحيحة</button></div><p class="hint">الإجابة الصحيحة تمنح الفريق نقاط السؤال ويُغلق السؤال. عند الإجابة الخاطئة أو انتهاء الوقت يُغلق السؤال دون نقاط، وينتقل الدور للفريق المنافس ليختار سؤالًا جديدًا من اللوحة.</p></div></div>
+<div class="overlay" id="hostOverlay"><div class="modal"><div class="modal-head"><h2>إعداد وإدارة المسابقة</h2><button class="close" data-close="hostOverlay">×</button></div><div class="formrow"><div class="field"><label>اسم الفريق الأحمر</label><input id="editRed" value="الفريق الأحمر"></div><div class="field"><label>اسم الفريق الأزرق</label><input id="editBlue" value="الفريق الأزرق"></div></div><div class="host-settings-grid"><div class="field theme-control"><label for="themeSelect">ثيم المسابقة</label><select id="themeSelect"><option value="emerald">الزمردي الذهبي</option><option value="midnight">ليلة ملكية</option><option value="royal">ملكي بنفسجي</option><option value="sand">رمال تاريخية</option><option value="obsidian">العقيق الأسود والذهب</option></select><small>معاينة فورية وحفظ تلقائي.</small></div><div class="field"><label for="modeSelect">نمط اللعب</label><select id="modeSelect"><option value="classic">المسابقة الكلاسيكية</option><option value="duel">مواجهة 1 ضد 1 • خمس أسئلة</option></select><small>في المواجهة: 10 ثوانٍ لكل سؤال، والفائز يحصل على 1000 نقطة.</small></div><div class="field"><label>المؤثرات الصوتية</label><label class="sound-toggle"><input id="soundToggle" type="checkbox"> مؤثرات قصيرة فقط — بدون موسيقى</label></div><div class="field"><label>الأحداث العشوائية</label><label class="sound-toggle"><input id="eventsToggle" type="checkbox"> تفعيل أحداث المفاجأة</label></div><div class="field"><label>مدة مواجهة 1 ضد 1 بالدقائق</label><input id="duelTotalMinutes" type="number" min="1" max="30" value="7"></div></div><div class="field"><label>الفئات والأسئلة</label><div id="categoryEditor"></div><button class="secondary" id="addCategory">＋ إضافة فئة</button></div><div class="actions"><button class="secondary" id="testDuelBtn">🧪 تجربة 1 ضد 1 بدون نقاط</button><button class="primary" id="saveSettings">حفظ الإعدادات</button><button class="gold" id="newGame">بدء مسابقة جديدة</button></div><p class="hint">تُحفظ الإعدادات والنقاط على هذا الجهاز فقط. أضف سؤالًا وإجابة لكل قيمة نقاط. يمكنك تعديل الأسئلة قبل بدء المسابقة.</p></div></div>
+<div class="draw-stage" id="drawStage"><div class="draw-card"><div class="draw-emblem" id="drawEmblem">؟</div><h2 class="draw-title">قرعة البداية</h2><p class="draw-sub" id="drawSub">يتم اختيار الفريق الذي سيبدأ المسابقة...</p><div class="draw-result" id="drawResult">استعدوا!</div><div class="draw-track" id="drawTrack"><span></span></div><button class="primary draw-close" id="drawClose" style="display:none">ابدأ المسابقة</button></div></div><div class="power-reveal" id="powerReveal" aria-live="assertive"><div class="power-reveal-backdrop"></div><div class="power-reveal-card"><div class="power-reveal-orbit"></div><div class="power-reveal-icon" id="powerRevealIcon">✦</div><div class="power-reveal-kicker">POWER UP ACTIVATED</div><h2 id="powerRevealTitle">تم تفعيل المساعدة</h2><p id="powerRevealTeam"></p><div class="power-reveal-line"></div></div></div><div class="toast" id="toast"></div><div class="winner-overlay" id="winnerOverlay" role="dialog" aria-modal="true" aria-labelledby="winnerTitle"><div class="winner-rays"></div><div class="winner-confetti" id="winnerConfetti"></div><div class="winner-card" id="winnerCard"><div class="winner-crown">👑</div><div class="winner-kicker">مؤسسة إحياء • جيل على خطى السابقين</div><h2 class="winner-title" id="winnerTitle">بطل المسابقة</h2><div class="winner-name" id="winnerName"></div><div class="winner-score" id="winnerScore"></div><p class="winner-sub" id="winnerSub">أداء رائع.. تستحقون التتويج!</p><div class="winner-actions"><button class="primary" id="winnerClose">عرض النتيجة</button><button class="gold" id="winnerNewGame">🏆 مسابقة جديدة</button></div></div></div>
+<script>
+const DEFAULT=[{name:"القرآن والتفسير",questions:[{v:100,q:"ما السورة التي تُسمّى أمّ الكتاب؟",a:"سورة الفاتحة"},{v:200,q:"كم عدد أجزاء القرآن الكريم؟",a:"ثلاثون جزءًا"},{v:300,q:"ما أطول سورة في القرآن الكريم؟",a:"سورة البقرة"},{v:400,q:"ما السورة التي لا تبدأ بالبسملة؟",a:"سورة التوبة"},{v:500,q:"ما السورة التي وردت فيها سجدتان؟",a:"سورة الحج"}]},{name:"الحديث والسيرة",questions:[{v:100,q:"من هو أول مؤذن في الإسلام؟",a:"بلال بن رباح رضي الله عنه"},{v:200,q:"في أي مدينة وُلد النبي ﷺ؟",a:"مكة المكرمة"},{v:300,q:"ما اسم مرضعة النبي ﷺ؟",a:"حليمة السعدية"},{v:400,q:"كم سنة استمرت الدعوة في مكة قبل الهجرة؟",a:"ثلاث عشرة سنة"},{v:500,q:"ما اسم الغار الذي نزل فيه الوحي أول مرة؟",a:"غار حراء"}]},{name:"الفقه والعبادات",questions:[{v:100,q:"كم عدد الصلوات المفروضة في اليوم والليلة؟",a:"خمس صلوات"},{v:200,q:"ما قبلة المسلمين؟",a:"الكعبة المشرفة"},{v:300,q:"في أي شهر يصوم المسلمون؟",a:"شهر رمضان"},{v:400,q:"كم عدد أركان الإسلام؟",a:"خمسة"},{v:500,q:"ما العبادة التي تكون في وقت مخصوص من يوم عرفة؟",a:"الوقوف بعرفة"}]}];
+let state={categories:DEFAULT.map(c=>({...c,questions:c.questions.map(x=>({...x,used:false}))})),names:["الفريق الأحمر","الفريق الأزرق"],scores:[0,0],turn:0,current:null,theme:"emerald",mode:"classic",duel:{active:false,questions:[],index:0,correct:[0,0]},sound:true,events:true,duelTotalMinutes:7,lifelines:[{supervisor:false,double:false,block:false},{supervisor:false,double:false,block:false}],pending:[{supervisor:false,double:false,block:false},{supervisor:false,double:false,block:false}]};
+const $=id=>document.getElementById(id);
+function save(){localStorage.setItem("ihyaaQuiz",JSON.stringify(state))}
+function load(){try{const s=JSON.parse(localStorage.getItem("ihyaaQuiz"));if(s&&s.categories)state={...state,...s};if(!["emerald","midnight","royal","sand","obsidian"].includes(state.theme))state.theme="emerald";if(!["classic","duel"].includes(state.mode))state.mode="classic";if(!state.duel)state.duel={active:false,questions:[],index:0,correct:[0,0]};if(typeof state.sound!=="boolean")state.sound=true;if(typeof state.events!=="boolean")state.events=true;if(!Number.isFinite(+state.duelTotalMinutes))state.duelTotalMinutes=7;state.categories.forEach(c=>c.questions.forEach(q=>{if(!Number.isFinite(+q.time))q.time=30}));applyTheme();if(!Array.isArray(state.lifelines)||state.lifelines.length!==2)state.lifelines=[{supervisor:false,double:false,block:false},{supervisor:false,double:false,block:false}];state.lifelines=state.lifelines.map(x=>({supervisor:!!x.supervisor,double:!!x.double,block:!!x.block}));if(!Array.isArray(state.pending)||state.pending.length!==2)state.pending=[{supervisor:false,double:false,block:false},{supervisor:false,double:false,block:false}];state.pending=state.pending.map(x=>({supervisor:!!x.supervisor,double:!!x.double,block:!!x.block}))}catch(e){}}
+function showWinner(){const a=state.scores[0],b=state.scores[1],tie=a===b,winnerIndex=tie?-1:(a>b?0:1),winner=tie?"تعادل الأبطال":state.names[winnerIndex],overlay=$("winnerOverlay");$("winnerName").textContent=winner;$("winnerScore").textContent=tie?`الفريقان متعادلان • ${a} نقطة`:`${Math.max(a,b)} نقطة`;$("winnerTitle").textContent=tie?"مباراة متكافئة!":"🏆 البطل المتوّج";$("winnerSub").textContent=tie?"منافسة قوية.. كلا الفريقين يستحق التقدير!":"أداء رائع.. تستحقون التتويج!";$("winnerCard").classList.toggle("winner-tie",tie);overlay.classList.remove("winner-red","winner-blue","winner-tie");overlay.classList.add(tie?"winner-tie":(winnerIndex===0?"winner-red":"winner-blue"));const palette=tie?["#f5d98c","#fff0c2","#d8a94f","#ffffff"]:winnerIndex===0?["#c94e5d","#f3a0a6","#f5d98c","#ffffff"]:["#3679b8","#9bd2ff","#f5d98c","#ffffff"];const confetti=$("winnerConfetti");confetti.innerHTML="";for(let i=0;i<100;i++){const bit=document.createElement("i");bit.style.setProperty("--x",Math.random()*100+"%");bit.style.setProperty("--c",palette[i%palette.length]);bit.style.setProperty("--r",Math.random()*180+"deg");bit.style.setProperty("--d",3.5+Math.random()*4+"s");bit.style.setProperty("--delay",-Math.random()*7+"s");confetti.append(bit)}overlay.classList.add("show");try{playResultSound(true)}catch(e){}}
+$("winnerClose").onclick=()=> $("winnerOverlay").classList.remove("show");$("winnerNewGame").onclick=()=>{if(confirm("بدء مسابقة جديدة وتصفير النتائج؟")){$("winnerOverlay").classList.remove("show");state.scores=[0,0];state.turn=0;state.winnerShown=false;state.lifelines=[{supervisor:false,double:false,block:false},{supervisor:false,double:false,block:false}];state.pending=[{supervisor:false,double:false,block:false},{supervisor:false,double:false,block:false}];state.categories.forEach(c=>c.questions.forEach(q=>q.used=false));render();toast("المسابقة الجديدة جاهزة!")}};
+function toast(t){$("toast").textContent=t;$("toast").classList.add("show");setTimeout(()=>$("toast").classList.remove("show"),2300)}
+function render(){ document.body.dataset.turn=state.turn===0?"red":"blue"; const oldScores=window.__ihyaaScores||[state.scores[0],state.scores[1]]; $("redName").textContent=state.names[0];$("blueName").textContent=state.names[1];$("redScore").textContent=state.scores[0];$("blueScore").textContent=state.scores[1];[0,1].forEach(i=>{const el=$(i===0?"redScore":"blueScore");el.classList.remove("score-pop");if(state.scores[i]!==oldScores[i]){void el.offsetWidth;el.classList.add("score-pop")}});window.__ihyaaScores=[...state.scores];$("turnName").textContent=state.names[state.turn];$("helpTurn").textContent="دور "+state.names[state.turn];renderLifelineDashboard();renderLifelines();let n=0;$("board").innerHTML="";state.categories.forEach((c,ci)=>{let card=document.createElement("article");card.className="category";let h=document.createElement("h3");h.textContent=c.name;card.append(h);let cells=document.createElement("div");cells.className="cells";c.questions.slice().sort((a,b)=>a.v-b.v).forEach(q=>{if(!q.used)n++;let b=document.createElement("button");b.className="cell";b.style.animationDelay=(ci*.07+cells.children.length*.045)+"s";b.textContent=q.v;b.disabled=!!q.used;b.onclick=()=>openQuestion(ci,q.v);cells.append(b)});card.append(cells);$("board").append(card)});$("remaining").textContent=n+" سؤال متاح";save();if(n===0&&state.categories.some(cat=>cat.questions.length)&&!state.winnerShown){state.winnerShown=true;save();setTimeout(showWinner,1650)}}
+let answerInterval=null,answerDeadline=0,remainingSeconds=30,timerDuration=30;
+function stopAnswerTimer(){if(answerInterval){clearInterval(answerInterval);answerInterval=null}}
+function paintTimer(){const exact=Math.max(0,(answerDeadline-Date.now())/1000),left=Math.ceil(exact);remainingSeconds=exact;$("timerText").textContent=left;$("timerBar").style.width=(exact/Math.max(1,timerDuration)*100)+"%";$("timerWrap")?.classList.toggle("urgent",left<=10)}
+function startDuelClock(){clearInterval(window.__ihyaaDuelClock);const tick=()=>{const d=state.duel;if(!d.active)return;const left=Math.max(0,d.deadline-Date.now());$("duelClock").style.display="block";$("duelClock").textContent="الوقت الإجمالي للمواجهة: "+Math.floor(left/60000)+":"+String(Math.ceil(left%60000/1000)).padStart(2,"0");if(left<=0){clearInterval(window.__ihyaaDuelClock);finishDuelEarly()}};tick();window.__ihyaaDuelClock=setInterval(tick,250)}function finishDuelEarly(){const d=state.duel;if(!d.active)return;stopAnswerTimer();clearInterval(window.__ihyaaDuelClock);d.active=false;const winner=d.correct[0]===d.correct[1]?-1:(d.correct[0]>d.correct[1]?0:1);if(winner>=0&&!d.test)state.scores[winner]+=1000;state.current=null;close("questionOverlay");state.mode="classic";render();$("winnerTitle").textContent=d.test?"انتهى الاختبار التجريبي":"انتهى وقت المواجهة!";$("winnerName").textContent=winner<0?"تعادل":state.names[winner];$("winnerScore").textContent=d.correct[0]+" - "+d.correct[1]+(d.test?" • دون نقاط":winner>=0?" • +1000 نقطة":"");$("winnerSub").textContent=d.test?"اختبار فقط؛ لم تُستهلك الأسئلة ولم تُحتسب نقاط.":"انتهت مدة المواجهة وتم إعلان النتيجة."; $("winnerOverlay").classList.add("show");save()}function showRandomEvent(){const el=$("eventBanner");if(!el)return;el.style.display="none";el.textContent="";if(!state.events||Math.random()>.3||!state.current)return;const list=[{title:"سؤال البرق ⚡",desc:"مكافأة 100 نقطة",bonus:100},{title:"كنز النقاط 💎",desc:"مضاعفة نقاط السؤال",double:true},{title:"فرصة الحسم 🎯",desc:"مكافأة 150 نقطة",bonus:150}];const e=list[Math.floor(Math.random()*list.length)];state.current.eventBonus=e.bonus||0;if(e.double)state.current.doublePoints=true;el.textContent=e.title+" — "+e.desc;el.style.display="block"}function startAnswerTimer(seconds=30){stopAnswerTimer();const duration=seconds;timerDuration=Math.max(1,duration);answerDeadline=Date.now()+Math.max(0,duration)*1000;paintTimer();$("timerBar").style.width="100%";answerInterval=setInterval(()=>{paintTimer();if(Date.now()>=answerDeadline){stopAnswerTimer();finishQuestion(false,"انتهى الوقت دون إجابة!");}},50)}
+function updateQuestionTurn(){if(!state.current)return;$("qValue").textContent=state.current.v*(state.current.doublePoints?2:1)+" نقطة"+(state.current.doublePoints?" (مضاعفة)":"")+" • "+state.names[state.turn];$("qAnswer").style.display="none";$("qAnswer").classList.remove("reveal");$("questionOverlay").classList.add("show");renderLifelines();if(state.current.timerPaused){remainingSeconds=state.current.time||30;$("timerText").textContent=String(state.current.time||30);$("timerBar").style.width="100%";}else startAnswerTimer(state.current.time||30)}
+function openQuestion(ci,v){let q=state.categories[ci].questions.find(x=>x.v===v);if(!q||q.used)return;const prep=state.pending[state.turn]||{supervisor:false,double:false,block:false};state.current={ci,v,doublePoints:!!prep.double,blockOpponent:!!prep.block,timerPaused:!!prep.supervisor,answerRevealed:false,time:q.time||30,eventBonus:0};state.pending[state.turn]={supervisor:false,double:false,block:false};$("qText").textContent=q.q;$("qAnswer").textContent="الإجابة: "+q.a;$("qAnswer").style.display="none";$("qValue").textContent=v+" نقطة • "+state.names[state.turn];const modal=$("questionOverlay");modal.classList.remove("show");void modal.offsetWidth;modal.classList.add("show");updateQuestionTurn();showRandomEvent()}
+function close(id){if(id==="questionOverlay")stopAnswerTimer();$(id).classList.remove("show")}
+document.querySelectorAll("[data-close]").forEach(b=>b.onclick=()=>close(b.dataset.close));
+$("showAnswer").onclick=()=>{if(state.current)state.current.answerRevealed=true;$("qAnswer").style.display="block";$("qAnswer").classList.remove("reveal");void $("qAnswer").offsetWidth;$("qAnswer").classList.add("reveal");renderLifelines()};
+function renderLifelineDashboard(){[0,1].forEach(i=>{const team=state.lifelines[i],name=$(i===0?"redLifeName":"blueLifeName"),pills=$(i===0?"redLifePills":"blueLifePills");if(!name||!pills)return;name.textContent=state.names[i];pills.innerHTML="";[["supervisor","🧑‍🏫 مشرف"],["double","✨ دبل النقاط"],["block","🛡️ منع الدور"]].forEach(([key,label])=>{const pill=document.createElement("span");pill.className="life-pill"+(team[key]?" used":"");pill.textContent=(team[key]?"✓ ":"○ ")+label;pills.append(pill)})})}
+function applyTheme(){document.body.dataset.theme=state.theme||"emerald";document.querySelectorAll("[data-theme-choice]").forEach(b=>b.setAttribute("aria-current",b.dataset.themeChoice===state.theme?"true":"false"));const meta=document.querySelector('meta[name="theme-color"]');if(meta)meta.content=state.theme==="midnight"?"#14243d":state.theme==="royal"?"#542b78":"#0d5946"}
+function playUiSound(kind="click"){if(!state.sound)return;try{const C=window.AudioContext||window.webkitAudioContext;if(!C)return;const ctx=window.__ihyaaAudio||(window.__ihyaaAudio=new C());if(ctx.state==="suspended")ctx.resume();const notes={click:[520,.055,"sine"],power:[660,.12,"triangle"],correct:[740,.12,"sine"],wrong:[190,.16,"triangle"],win:[523,.18,"sine"]}[kind]||[440,.08,"sine"];const osc=ctx.createOscillator(),gain=ctx.createGain();osc.type=notes[2];osc.frequency.setValueAtTime(notes[0],ctx.currentTime);if(kind==="win")osc.frequency.exponentialRampToValueAtTime(1046,ctx.currentTime+.42);gain.gain.setValueAtTime(.0001,ctx.currentTime);gain.gain.exponentialRampToValueAtTime(.12,ctx.currentTime+.012);gain.gain.exponentialRampToValueAtTime(.0001,ctx.currentTime+(kind==="win"?.48:notes[1]));osc.connect(gain);gain.connect(ctx.destination);osc.start();osc.stop(ctx.currentTime+(kind==="win"?.5:notes[1]+.02))}catch(e){}}
+function showPowerReveal(id){const key=({supervisorBtn:"supervisor",doubleBtn:"double",blockBtn:"block"})[id]||id;const data={supervisor:["🧑‍🏫","الاستعانة بمشرف"],double:["✦","دبل النقاط"],block:["🛡️","منع دور المنافس"]}[key]||["✦","تم تفعيل المساعدة"];const box=$("powerReveal");box.dataset.team=state.turn===0?"red":"blue";$("powerRevealIcon").textContent=data[0];$("powerRevealTitle").textContent=data[1];$("powerRevealTeam").textContent="تم تفعيلها بواسطة "+state.names[state.turn];box.classList.remove("show","exit");void box.offsetWidth;box.classList.add("show");playUiSound("power");clearTimeout(window.__powerRevealTimer);clearTimeout(window.__powerRevealExit);window.__powerRevealTimer=setTimeout(()=>{box.classList.add("exit");window.__powerRevealExit=setTimeout(()=>box.classList.remove("show","exit"),950)},4200)}
+function flashLifeline(id){const el=$(id),panel=document.querySelector(".lifelines");if(!el)return;el.classList.remove("lifeline-flash","life-activated","choice-burst");void el.offsetWidth;el.classList.add("lifeline-flash","life-activated","choice-burst");panel?.classList.remove("life-activated");void panel?.offsetWidth;panel?.classList.add("life-activated");showPowerReveal(id);setTimeout(()=>{el.classList.remove("lifeline-flash","life-activated","choice-burst");panel?.classList.remove("life-activated")},1350)}
+function renderLifelines(){const used=state.lifelines[state.turn],pending=state.pending[state.turn]||{},active=state.current;const panel=document.querySelector(".lifelines");if(panel)panel.dataset.team=state.turn===0?"red":"blue";const locked=!!(active&&active.answerRevealed);$("supervisorBtn").disabled=used.supervisor||!!pending.supervisor||!!(active&&active.timerPaused)||locked;$("doubleBtn").disabled=used.double||!!pending.double||!!(active&&active.doublePoints)||locked;$("blockBtn").disabled=used.block||!!pending.block||!!(active&&active.blockOpponent)||locked;$("resumeTimerBtn").style.display=active&&active.timerPaused?"inline-flex":"none";$("supervisorBtn").textContent=used.supervisor?"✓ تم استخدام المشرف":pending.supervisor?"✓ المشرف جاهز للسؤال القادم":"🧑‍🏫 الاستعانة بمشرف";$("doubleBtn").textContent=used.double?"✓ تم استخدام دبل النقاط":pending.double?"✓ دبل النقاط جاهز":"✨ دبل النقاط";$("blockBtn").textContent=used.block?"✓ تم استخدام منع الدور":pending.block?"✓ منع الدور جاهز":"🛡️ منع دور المنافس"}
+$("supervisorBtn").onclick=()=>{const used=state.lifelines[state.turn],pending=state.pending[state.turn];if(used.supervisor||pending.supervisor)return;used.supervisor=true;if(state.current){remainingSeconds=Math.max(0,(answerDeadline-Date.now())/1000);stopAnswerTimer();state.current.timerPaused=true}else pending.supervisor=true;renderLifelines();save();flashLifeline("supervisorBtn");toast(state.current?"تم إيقاف المؤقت للاستعانة بالمشرف":"تم تجهيز المشرف — سيبدأ السؤال القادم والمؤقت متوقفًا")};
+$("resumeTimerBtn").onclick=()=>{if(!state.current||!state.current.timerPaused)return;state.current.timerPaused=false;startAnswerTimer(remainingSeconds);renderLifelines();save()};
+$("doubleBtn").onclick=()=>{if(state.lifelines[state.turn].double)return;state.lifelines[state.turn].double=true;if(state.current){state.current.doublePoints=true;$("qValue").textContent=state.current.v*2+" نقطة (مضاعفة) • "+state.names[state.turn]}else state.pending[state.turn].double=true;renderLifelines();save();flashLifeline("doubleBtn");toast(state.current?"تم تفعيل دبل النقاط لهذا السؤال":"تم تجهيز دبل النقاط للسؤال القادم")};
+$("blockBtn").onclick=()=>{if(state.lifelines[state.turn].block)return;state.lifelines[state.turn].block=true;if(state.current)state.current.blockOpponent=true;else state.pending[state.turn].block=true;renderLifelines();save();flashLifeline("blockBtn");toast(state.current?"تم تفعيل منع دور الفريق المنافس":"تم تجهيز منع الدور — لن يأخذ المنافس الدور بعد السؤال القادم")};
+function playResultSound(correct){try{const C=window.AudioContext||window.webkitAudioContext;if(!C)return;const ctx=new C();const now=ctx.currentTime;const notes=correct?[523.25,659.25,783.99,1046.5]:[330,247,196];notes.forEach((freq,i)=>{const osc=ctx.createOscillator(),gain=ctx.createGain();osc.type=correct?"sine":"triangle";osc.frequency.setValueAtTime(freq,now+i*(correct?.105:.14));gain.gain.setValueAtTime(.0001,now+i*(correct?.105:.14));gain.gain.exponentialRampToValueAtTime(correct?.16:.12,now+i*(correct?.105:.14)+.025);gain.gain.exponentialRampToValueAtTime(.0001,now+i*(correct?.105:.14)+.24);osc.connect(gain);gain.connect(ctx.destination);osc.start(now+i*(correct?.105:.14));osc.stop(now+i*(correct?.105:.14)+.26)});setTimeout(()=>ctx.close(),1200)}catch(e){}}
+function showResultFx(correct,points,team){document.body.classList.remove("fx-correct","fx-wrong");void document.body.offsetWidth;document.body.classList.add(correct?"fx-correct":"fx-wrong");const fx=document.createElement("div");fx.className="reward-fx"+(correct?"":" bad");fx.innerHTML=correct?`<strong>+${points}</strong><span>إجابة صحيحة • ${team}</span>`:`<strong>✕</strong><span>إجابة غير صحيحة</span>`;document.body.append(fx);setTimeout(()=>fx.remove(),1450);playResultSound(correct)}
+function finishQuestion(correct,message){if(!state.current)return;if(state.current.duel){finishDuelQuestion(correct);return;}if(state.current.timerPaused){toast("استأنف المؤقت أولًا قبل إنهاء السؤال");return}stopAnswerTimer();const q=state.categories[state.current.ci].questions.find(x=>x.v===state.current.v);const blocked=!!state.current.blockOpponent;const points=q?q.v*(state.current.doublePoints?2:1)+(state.current.eventBonus||0):0;const answeringTeam=state.turn;const teamName=state.names[answeringTeam];if(q)q.used=true;state.current=null;state.turn=blocked?answeringTeam:1-answeringTeam;close("questionOverlay");showResultFx(correct,points,teamName);playUiSound(correct?"correct":"wrong");if(correct){setTimeout(()=>{state.scores[answeringTeam]+=points;render();save();toast(message+(blocked?" تم منع دور الفريق المنافس، ويستمر الدور مع "+state.names[state.turn]+".":" الدور الآن للفريق "+state.names[state.turn]+" لاختيار سؤال جديد."))},1050)}else{render();save();setTimeout(()=>toast(message+(blocked?" تم منع دور الفريق المنافس، ويستمر الدور مع "+state.names[state.turn]+".":" الدور الآن للفريق "+state.names[state.turn]+" لاختيار سؤال جديد.")),850)}}
+$("correctBtn").onclick=()=>finishQuestion(true,"إجابة صحيحة! تمت إضافة النقاط للفريق.");
+$("wrongBtn").onclick=()=>finishQuestion(false,"إجابة غير صحيحة! لم تُحتسب نقاط.");
+function startDuel(testMode=false){const pool=[];state.categories.forEach((cat,ci)=>cat.questions.forEach((q,qi)=>{if((testMode||!q.used)&&q.q&&q.a)pool.push({ci,qi,v:q.v,q:q.q,a:q.a,time:q.time||30})}));if(pool.length<5){toast("تحتاج المواجهة إلى 5 أسئلة متاحة على الأقل");return}for(let i=pool.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[pool[i],pool[j]]=[pool[j],pool[i]]}state.mode="duel";state.duel={active:true,test:!!testMode,questions:pool.slice(0,5),index:0,correct:[0,0],deadline:Date.now()+(Math.max(1,Math.min(30,+state.duelTotalMinutes||7))*60000)};startDuelClock();state.turn=Math.random()<.5?0:1;state.duel.questions.forEach((q,i)=>{q.team=i%2===0?state.turn:1-state.turn});save();render();openDuelQuestion()}
+function openDuelQuestion(){const d=state.duel;if(!d.active||d.index>=5)return;const q=d.questions[d.index];state.turn=q.team;state.current={ci:q.ci,v:q.v,doublePoints:false,blockOpponent:false,timerPaused:false,answerRevealed:false,duel:true,time:q.time||30,eventBonus:0};$("qText").textContent=q.q;$("qAnswer").textContent="الإجابة: "+q.a;$("qValue").textContent="مواجهة 1 ضد 1 • السؤال "+(d.index+1)+" من 5 • "+state.names[state.turn];$("showAnswer").disabled=true;$("resumeTimerBtn").style.display="none";$("preselectHelp").style.display="none";$("timerWrap").querySelector(".timer-meta span").textContent="الوقت المحدد لهذا السؤال";$("questionOverlay").classList.add("show");showRandomEvent();startAnswerTimer(q.time||30)}
+$("duelBtn").onclick=()=>{if(confirm("بدء مواجهة 1 ضد 1؟ المدة الإجمالية "+(state.duelTotalMinutes||7)+" دقائق، ولكل سؤال مدته المحددة في لوحة الهوست.")){close("hostOverlay");startDuel(false)}};$("testDuelBtn").onclick=()=>{if(confirm("بدء تجربة 1 ضد 1؟ لن تُحتسب نقاط ولن تُستهلك الأسئلة.")){close("hostOverlay");startDuel(true)}};
+function finishDuelQuestion(correct){const d=state.duel,q=d.questions[d.index],team=q.team;if(correct)d.correct[team]++;const source=state.categories[q.ci].questions[q.qi];if(source&&!d.test)source.used=true;state.current=null;close("questionOverlay");playUiSound(correct?"correct":"wrong");d.index++;render();if(d.index<5){toast(correct?"إجابة صحيحة!":"انتهى السؤال دون نقطة.");setTimeout(openDuelQuestion,950)}else{clearInterval(window.__ihyaaDuelClock);$("duelClock").style.display="none";d.active=false;state.mode="classic";const winner=d.correct[0]===d.correct[1]?-1:(d.correct[0]>d.correct[1]?0:1);if(winner>=0&&!d.test)state.scores[winner]+=1000;save();render();$("winnerTitle").textContent=d.test?"انتهى الاختبار التجريبي":winner<0?"تعادل المواجهة!":"🏆 بطل مواجهة 1 ضد 1";$("winnerName").textContent=winner<0?"لا فائز هذه المرة":state.names[winner];$("winnerScore").textContent=d.test?`نتيجة تجريبية: ${d.correct[0]} - ${d.correct[1]} • بدون نقاط`:(winner<0?`تعادل ${d.correct[0]} - ${d.correct[1]}`:`${d.correct[winner]} إجابات صحيحة • +1000 نقطة`); $("winnerSub").textContent=d.test?"لم تُحتسب نقاط ولم تُستهلك الأسئلة.":winner<0?"يمكن إعادة المواجهة بخمسة أسئلة جديدة.":"تمت إضافة 1000 نقطة إلى رصيد الفائز!";$("winnerOverlay").classList.add("show");playUiSound("win");$("preselectHelp").style.display="";$("timerWrap").querySelector(".timer-meta span").textContent="الوقت المتبقي";}}
+let drawTimer=null;
+$("drawBtn").onclick=()=>{
+ if(drawTimer)return;
+ const stage=$("drawStage"),emblem=$("drawEmblem"),result=$("drawResult"),sub=$("drawSub"),track=$("drawTrack"),closeBtn=$("drawClose");
+ stage.classList.add("show");closeBtn.style.display="none";emblem.classList.add("spinning");result.textContent="جاري إجراء القرعة...";sub.textContent="لحظات ويتم تحديد الفريق صاحب البداية";track.classList.add("running");
+ let ticks=0;const preview=setInterval(()=>{const i=ticks++%2;emblem.style.color=i?"#376fae":"#a9434d";emblem.style.borderColor=i?"#376fae":"#a9434d";result.textContent=state.names[i];},130);
+ drawTimer=setTimeout(()=>{clearInterval(preview);state.turn=Math.random()<.5?0:1;emblem.classList.remove("spinning");emblem.style.color=state.turn===0?"#a9434d":"#376fae";emblem.style.borderColor=state.turn===0?"#a9434d":"#376fae";result.textContent="🎉 "+state.names[state.turn];sub.textContent="هذا هو الفريق الذي سيبدأ المسابقة";render();closeBtn.style.display="inline-block";track.classList.remove("running");drawTimer=null;},2900);
+};
+$("drawClose").onclick=()=>{$("drawStage").classList.remove("show")};
+$("switchBtn").onclick=()=>{state.turn=1-state.turn;render();toast("الدور الآن: "+state.names[state.turn])};
+$("resetBtn").onclick=()=>{if(confirm("هل تريد تصفير النقاط وإعادة جميع الأسئلة؟")){state.scores=[0,0];state.turn=0;state.winnerShown=false;state.lifelines=[{supervisor:false,double:false,block:false},{supervisor:false,double:false,block:false}];state.categories.forEach(c=>c.questions.forEach(q=>q.used=false));render();toast("تم تجهيز لوحة جديدة")}};
+$("hostOpen").onclick=()=>{buildEditor();$("editRed").value=state.names[0];$("editBlue").value=state.names[1];$("themeSelect").value=state.theme||"emerald";$("modeSelect").value=state.mode||"classic";$("soundToggle").checked=state.sound!==false;$("eventsToggle").checked=state.events!==false;$("duelTotalMinutes").value=state.duelTotalMinutes||7;$("hostOverlay").classList.add("show")};
+function buildEditor(){let root=$("categoryEditor");root.innerHTML="";state.categories.forEach((c,ci)=>{let box=document.createElement("div");box.style.cssText="border:1px solid #e5e9e1;border-radius:14px;padding:12px;margin:10px 0";let name=document.createElement("input");name.value=c.name;name.placeholder="اسم الفئة";name.dataset.cat=ci;name.style.cssText="width:100%;padding:10px;border:1px solid #dfe4dc;border-radius:9px;margin-bottom:8px";box.append(name);c.questions.forEach((q,qi)=>{if(!Number.isFinite(+q.time))q.time=30;let row=document.createElement("div");row.className="field";row.innerHTML='<label>'+q.v+' نقطة</label><input data-q="'+ci+','+qi+'" placeholder="نص السؤال" value="'+esc(q.q)+'"><input data-a="'+ci+','+qi+'" placeholder="الإجابة الصحيحة" value="'+esc(q.a)+'"><label>مدة السؤال بالثواني</label><input type="number" min="5" max="300" data-time="'+ci+','+qi+'" value="'+Math.max(5,Math.min(300,+q.time||30))+'">';box.append(row)});let del=document.createElement("button");del.className="secondary";del.textContent="حذف الفئة";del.onclick=()=>{if(state.categories.length>1){state.categories.splice(ci,1);buildEditor()}else toast("يجب أن تبقى فئة واحدة على الأقل")};box.append(del);root.append(box)})}
+function esc(s){return String(s).replaceAll("&","&amp;").replaceAll('"',"&quot;").replaceAll("<","&lt;").replaceAll(">","&gt;")}
+$("addCategory").onclick=()=>{state.categories.push({name:"فئة جديدة",questions:[100,200,300,400,500].map(v=>({v,q:"",a:"",used:false}))});buildEditor()};
+$("themeSelect").onchange=()=>{state.theme=$("themeSelect").value;applyTheme();save();playUiSound("click");toast("تم تطبيق الثيم الجديد")};$("modeSelect").onchange=()=>{state.mode=$("modeSelect").value;save();toast(state.mode==="duel"?"تم اختيار نمط المواجهة 1 ضد 1":"تم اختيار المسابقة الكلاسيكية")};$("soundToggle").onchange=()=>{state.sound=$("soundToggle").checked;save();if(state.sound)playUiSound("correct");toast(state.sound?"تم تشغيل المؤثرات الصوتية":"تم إيقاف المؤثرات الصوتية")};$("eventsToggle").onchange=()=>{state.events=$("eventsToggle").checked;save();toast(state.events?"تم تفعيل الأحداث العشوائية":"تم إيقاف الأحداث العشوائية")};$("duelTotalMinutes").onchange=()=>{state.duelTotalMinutes=Math.max(1,Math.min(30,+$("duelTotalMinutes").value||7));$("duelTotalMinutes").value=state.duelTotalMinutes;save()};$("themeDockBtn").onclick=()=>$("themeMenu").classList.toggle("open");document.querySelectorAll("[data-theme-choice]").forEach(b=>b.onclick=()=>{state.theme=b.dataset.themeChoice;applyTheme();save();$("themeMenu").classList.remove("open")});document.addEventListener("click",e=>{if(!e.target.closest(".theme-dock"))$("themeMenu").classList.remove("open")});
+$("saveSettings").onclick=()=>{state.names=[$("editRed").value.trim()||"الفريق الأحمر",$("editBlue").value.trim()||"الفريق الأزرق"];document.querySelectorAll("[data-cat]").forEach(x=>state.categories[+x.dataset.cat].name=x.value.trim()||"فئة");document.querySelectorAll("[data-q]").forEach(x=>{let [c,q]=x.dataset.q.split(",").map(Number);state.categories[c].questions[q].q=x.value.trim()});document.querySelectorAll("[data-a]").forEach(x=>{let [c,q]=x.dataset.a.split(",").map(Number);state.categories[c].questions[q].a=x.value.trim()});document.querySelectorAll("[data-time]").forEach(x=>{let [c,q]=x.dataset.time.split(",").map(Number);state.categories[c].questions[q].time=Math.max(5,Math.min(300,+x.value||30))});state.duelTotalMinutes=Math.max(1,Math.min(30,+$("duelTotalMinutes").value||7));render();close("hostOverlay");toast("تم حفظ إعدادات المسابقة")};
+$("newGame").onclick=()=>{if(confirm("بدء مسابقة جديدة؟ سيتم تصفير النقاط وإعادة الأسئلة.")){state.scores=[0,0];state.turn=0;state.winnerShown=false;state.lifelines=[{supervisor:false,double:false,block:false},{supervisor:false,double:false,block:false}];state.categories.forEach(c=>c.questions.forEach(q=>q.used=false));render();close("hostOverlay");toast("المسابقة جاهزة!")}};
+load();render();
+$("rulesStart").onclick=()=>{close("rulesOverlay");playUiSound("click");toast("المسابقة بدأت! اختاروا أول سؤال من لوحة التحدي أو ابدأوا بقرعة البداية.")};
+</script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="supabase-config.js"></script>
+<script src="multiplayer.js"></script>
+<script>
+document.addEventListener("DOMContentLoaded",()=>{
+ const mode=new URLSearchParams(location.search).get("open")||location.hash.slice(1);
+ if(mode==="online"){const b=document.getElementById("onlineOpen");if(b)b.click();}
+ else if(mode==="host"){const b=document.getElementById("hostOpen");if(b)b.click();}
+ else if(mode==="rules"){const r=document.getElementById("rulesOverlay");if(r)r.classList.add("show");}
+});
+</script>
+</body></html>
