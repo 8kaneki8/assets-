@@ -28,7 +28,7 @@ const q=$("ihyQuestion");if(q){const questionId=v.question?.id||null;const rende
 const score=$("ihyScores");if(score)score.textContent=(v.settings?.red_name||"الفريق الأحمر")+": "+(v.scores.red||0)+" | "+(v.settings?.blue_name||"الفريق الأزرق")+": "+(v.scores.blue||0);
 const status=$("ihyStatus");if(status)status.textContent=v.status==="live"?"المسابقة جارية":v.status==="archived"?"المسابقة مؤرشفة":"غرفة الانتظار";
 const clock=$("ihyClock");
-if(clock){const left=Number(v.remaining_seconds);clock.textContent=Number.isFinite(left)?("الوقت المتبقي: "+Math.max(0,left)+" ثانية"):"بانتظار السؤال";clock.dataset.deadline=v.question_deadline_at||"";}
+if(clock){const left=v.remaining_seconds===null||v.remaining_seconds===undefined?NaN:Number(v.remaining_seconds);clock.textContent=Number.isFinite(left)?("الوقت المتبقي: "+Math.max(0,left)+" ثانية"):"بانتظار السؤال";clock.dataset.deadline=v.question_deadline_at||"";}
 if(role==="host"&&!readOnly&&v.status==="live"&&v.question&&Number(v.remaining_seconds)===0&&!timeoutBusy){
  timeoutBusy=true;try{await rpc("ihyaa_host_timeout",{p_room:room.room_id});await refresh()}catch(e){if(!String(e.message||e).includes("لم ينته"))fail(e)}finally{timeoutBusy=false}
 }
