@@ -606,7 +606,60 @@ $("drawClose").onclick=()=>{$("drawStage").classList.remove("show")};
 $("switchBtn").onclick=()=>{state.turn=1-state.turn;render();toast("الدور الآن: "+state.names[state.turn])};
 $("resetBtn").onclick=()=>{if(confirm("هل تريد تصفير النقاط وإعادة جميع الأسئلة؟")){state.scores=[0,0];state.turn=0;state.winnerShown=false;state.lifelines=[{supervisor:false,double:false,block:false},{supervisor:false,double:false,block:false}];state.categories.forEach(c=>c.questions.forEach(q=>q.used=false));render();toast("تم تجهيز لوحة جديدة")}};
 $("hostOpen").onclick=()=>{buildEditor();$("editRed").value=state.names[0];$("editBlue").value=state.names[1];$("themeSelect").value=state.theme||"green";$("modeSelect").value=state.mode||"classic";$("soundToggle").checked=state.sound!==false;$("eventsToggle").checked=state.events!==false;$("duelTotalMinutes").value=state.duelTotalMinutes||7;$("hostOverlay").classList.add("show")};
-function buildEditor(){const root=$("categoryEditor");root.innerHTML="";state.categories.forEach((c,ci)=>{const box=document.createElement("section");box.className="question-category-editor";const head=document.createElement("div");head.className="question-category-head";const name=document.createElement("input");name.value=c.name||"";name.placeholder="اسم الفئة";name.dataset.cat=ci;name.setAttribute("aria-label","اسم الفئة");head.append(name);const del=document.createElement("button");del.type="button";del.className="secondary";del.textContent="حذف الفئة";del.onclick=()=>{if(state.categories.length<=1){toast("يجب أن تبقى فئة واحدة على الأقل");return}if(!confirm("حذف فئة "+(c.name||"هذه الفئة")+" بكل أسئلتها؟"))return;state.categories.splice(ci,1);buildEditor()};head.append(del);box.append(head);c.questions.forEach((q,qi)=>{if(!Number.isFinite(+q.time))q.time=30;const row=document.createElement("div");row.className="question-edit-row";const title=document.createElement("div");title.className="question-edit-title";title.textContent="السؤال "+(qi+1);row.append(title);const points=document.createElement("input");points.type="number";points.min="1";points.max="10000";points.value=String(q.v||100);points.dataset.v=ci+","+qi;points.setAttribute("aria-label","نقاط السؤال "+(qi+1));const question=document.createElement("textarea");question.placeholder="اكتب نص السؤال";question.value=q.q||"";question.dataset.q=ci+","+qi;question.setAttribute("aria-label","نص السؤال "+(qi+1));const answer=document.createElement("input");answer.placeholder="الإجابة الصحيحة";answer.value=q.a||"";answer.dataset.a=ci+","+qi;answer.setAttribute("aria-label","الإجابة الصحيحة "+(qi+1));const seconds=document.createElement("input");seconds.type="number";seconds.min="5";seconds.max="300";seconds.value=String(Math.max(5,Math.min(300,+q.time||30)));seconds.dataset.time=ci+","+qi;seconds.setAttribute("aria-label","مدة السؤال بالثواني");const labels=document.createElement("div");labels.className="question-edit-grid";[[points,"النقاط"],[seconds,"الوقت بالثواني"]].forEach(([input,label])=>{const wrap=document.createElement("label");wrap.textContent=label;wrap.append(input);labels.append(wrap)});row.append(question,answer,labels);const remove=document.createElement("button");remove.type="button";remove.className="secondary question-remove";remove.textContent="إزالة السؤال";remove.onclick=()=>{if(c.questions.length<=1){toast("أضف سؤالًا آخر قبل إزالة السؤال الأخير");return}c.questions.splice(qi,1);buildEditor()};row.append(remove);box.append(row)});const add=document.createElement("button");add.type="button";add.className="secondary question-add";add.textContent="＋ إضافة سؤال لهذه الفئة";add.onclick=()=>{c.questions.push({v:100,q:"",a:"",time:30,used:false});buildEditor()};box.append(add);root.append(box)})}
+let editorRenderToken=0;
+function buildEditor(){
+ const token=++editorRenderToken,root=$("categoryEditor"),saveBtn=$("saveSettings"),addBtn=$("addCategory");
+ root.replaceChildren();
+ const loading=document.createElement("div");
+ loading.className="editor-loading";
+ loading.textContent="جارٍ تجهيز الأسئلة…";
+ loading.style.cssText="padding:18px;text-align:center;color:var(--muted);font-weight:800";
+ root.append(loading);
+ if(saveBtn)saveBtn.disabled=true;
+ if(addBtn)addBtn.disabled=true;
+ const jobs=[];
+ state.categories.forEach((c,ci)=>{
+  const box=document.createElement("section");box.className="question-category-editor";
+  const head=document.createElement("div");head.className="question-category-head";
+  const name=document.createElement("input");name.value=c.name||"";name.placeholder="اسم الفئة";name.dataset.cat=ci;name.setAttribute("aria-label","اسم الفئة");head.append(name);
+  const del=document.createElement("button");del.type="button";del.className="secondary";del.textContent="حذف الفئة";
+  del.onclick=()=>{if(state.categories.length<=1){toast("يجب أن تبقى فئة واحدة على الأقل");return}if(!confirm("حذف فئة "+(c.name||"هذه الفئة")+" بكل أسئلتها؟"))return;state.categories.splice(ci,1);buildEditor()};
+  head.append(del);box.append(head);root.append(box);
+  c.questions.forEach((q,qi)=>jobs.push(()=>{
+   if(!Number.isFinite(+q.time))q.time=30;
+   const row=document.createElement("div");row.className="question-edit-row";
+   const title=document.createElement("div");title.className="question-edit-title";title.textContent="السؤال "+(qi+1);row.append(title);
+   const points=document.createElement("input");points.type="number";points.min="1";points.max="10000";points.value=String(q.v||100);points.dataset.v=ci+","+qi;points.setAttribute("aria-label","نقاط السؤال "+(qi+1));
+   const question=document.createElement("textarea");question.placeholder="اكتب نص السؤال";question.value=q.q||"";question.dataset.q=ci+","+qi;question.setAttribute("aria-label","نص السؤال "+(qi+1));
+   const answer=document.createElement("input");answer.placeholder="الإجابة الصحيحة";answer.value=q.a||"";answer.dataset.a=ci+","+qi;answer.setAttribute("aria-label","الإجابة الصحيحة "+(qi+1));
+   const seconds=document.createElement("input");seconds.type="number";seconds.min="5";seconds.max="300";seconds.value=String(Math.max(5,Math.min(300,+q.time||30)));seconds.dataset.time=ci+","+qi;seconds.setAttribute("aria-label","مدة السؤال بالثواني");
+   const labels=document.createElement("div");labels.className="question-edit-grid";
+   [[points,"النقاط"],[seconds,"الوقت بالثواني"]].forEach(([input,label])=>{const wrap=document.createElement("label");wrap.textContent=label;wrap.append(input);labels.append(wrap)});
+   row.append(question,answer,labels);
+   const remove=document.createElement("button");remove.type="button";remove.className="secondary question-remove";remove.textContent="إزالة السؤال";
+   remove.onclick=()=>{if(c.questions.length<=1){toast("أضف سؤالًا آخر قبل إزالة السؤال الأخير");return}c.questions.splice(qi,1);buildEditor()};
+   row.append(remove);box.append(row);
+  }));
+  jobs.push(()=>{
+   const add=document.createElement("button");add.type="button";add.className="secondary question-add";add.textContent="＋ إضافة سؤال لهذه الفئة";
+   add.onclick=()=>{c.questions.push({v:100,q:"",a:"",time:30,used:false});buildEditor()};
+   box.append(add);
+  });
+ });
+ if(!jobs.length){loading.textContent="لا توجد أسئلة بعد. أضف سؤالًا للبدء."}
+ let cursor=0;
+ function renderBatch(){
+  if(token!==editorRenderToken)return;
+  const fragment=document.createDocumentFragment();
+  const stop=Math.min(cursor+12,jobs.length);
+  while(cursor<stop){const holder=document.createElement("div");jobs[cursor++]();/* DOM writes are kept to a small batch per frame. */}
+  if(cursor<jobs.length){requestAnimationFrame(renderBatch);return}
+  loading.remove();
+  if(saveBtn)saveBtn.disabled=false;
+  if(addBtn)addBtn.disabled=false;
+ }
+ requestAnimationFrame(renderBatch);
+}
 function esc(s){return String(s).replaceAll("&","&amp;").replaceAll('"',"&quot;").replaceAll("<","&lt;").replaceAll(">","&gt;")}
 $("addCategory").onclick=()=>{state.categories.push({name:"فئة جديدة",questions:[100,200,300,400,500].map(v=>({v,q:"",a:"",used:false}))});buildEditor()};
 $("themeSelect").onchange=()=>{state.theme=$("themeSelect").value;applyTheme();save();playUiSound("click");toast("تم تطبيق الثيم الجديد")};$("modeSelect").onchange=()=>{state.mode=$("modeSelect").value;save();toast(state.mode==="duel"?"تم اختيار نمط المواجهة 1 ضد 1":"تم اختيار المسابقة الكلاسيكية")};$("soundToggle").onchange=()=>{state.sound=$("soundToggle").checked;save();if(state.sound)playUiSound("correct");toast(state.sound?"تم تشغيل المؤثرات الصوتية":"تم إيقاف المؤثرات الصوتية")};$("eventsToggle").onchange=()=>{state.events=$("eventsToggle").checked;save();toast(state.events?"تم تفعيل الأحداث العشوائية":"تم إيقاف الأحداث العشوائية")};$("duelTotalMinutes").onchange=()=>{state.duelTotalMinutes=Math.max(1,Math.min(30,+$("duelTotalMinutes").value||7));$("duelTotalMinutes").value=state.duelTotalMinutes;save()};document.querySelectorAll("[data-theme-choice]").forEach(b=>b.onclick=()=>{state.theme=b.dataset.themeChoice;applyTheme();save();playUiSound("click");toast("تم تغيير ثيم المسابقة")});
