@@ -582,8 +582,41 @@ const DEFAULT=[{name:"القرآن والتفسير",questions:[{v:100,q:"ما �
 let state={categories:DEFAULT.map(c=>({...c,questions:c.questions.map(x=>({...x,used:false}))})),names:["الفريق الأحمر","الفريق الأزرق"],scores:[0,0],turn:0,current:null,theme:"emerald",mode:"classic",duel:{active:false,questions:[],index:0,correct:[0,0]},sound:true,events:true,duelTotalMinutes:7,lifelines:[{supervisor:false,double:false,block:false},{supervisor:false,double:false,block:false}],pending:[{supervisor:false,double:false,block:false},{supervisor:false,double:false,block:false}]};
 const $=id=>document.getElementById(id);
 let setupGateActive=false;
-function save(){localStorage.setItem("ihyaaQuiz",JSON.stringify(state))}
-function load(){try{const s=JSON.parse(localStorage.getItem("ihyaaQuiz"));if(s&&s.categories)state={...state,...s};state.categories.forEach(c=>{if(Array.isArray(c.questions))c.questions.forEach(q=>{if(!Number.isFinite(+q.v))q.v=100})});const legacyThemes={emerald:"green",midnight:"blue",royal:"blue",sand:"yellow",obsidian:"blue"};if(legacyThemes[state.theme])state.theme=legacyThemes[state.theme];if(!["green","blue","red","yellow"].includes(state.theme))state.theme="green";if(!["classic","duel"].includes(state.mode))state.mode="classic";if(!state.duel)state.duel={active:false,questions:[],index:0,correct:[0,0]};if(typeof state.sound!=="boolean")state.sound=true;if(typeof state.events!=="boolean")state.events=true;if(!Number.isFinite(+state.duelTotalMinutes))state.duelTotalMinutes=7;state.categories.forEach(c=>c.questions.forEach(q=>{if(!Number.isFinite(+q.time))q.time=30}));applyTheme();if(!Array.isArray(state.lifelines)||state.lifelines.length!==2)state.lifelines=[{supervisor:false,double:false,block:false},{supervisor:false,double:false,block:false}];state.lifelines=state.lifelines.map(x=>({supervisor:!!x.supervisor,double:!!x.double,block:!!x.block}));if(!Array.isArray(state.pending)||state.pending.length!==2)state.pending=[{supervisor:false,double:false,block:false},{supervisor:false,double:false,block:false}];state.pending=state.pending.map(x=>({supervisor:!!x.supervisor,double:!!x.double,block:!!x.block}))}catch(e){}}
+function save(){try{localStorage.setItem("ihyaaQuiz",JSON.stringify(state));return true}catch(error){console.error("Ihyaa save failed:",error);return false}}
+function load(){
+ try{
+  const raw=localStorage.getItem("ihyaaQuiz"),stored=raw?JSON.parse(raw):null;
+  if(stored&&typeof stored==="object")state={...state,...stored};
+ }catch(error){console.warn("Ihyaa saved data could not be read; defaults will be used.",error)}
+ const fallback=()=>DEFAULT.map(c=>({...c,questions:c.questions.map(q=>({...q,used:false,time:30}))}));
+ if(!Array.isArray(state.categories))state.categories=fallback();
+ state.categories=state.categories.filter(c=>c&&typeof c==="object").map(c=>({
+  name:String(c.name||"فئة"),
+  questions:(Array.isArray(c.questions)?c.questions:[]).filter(q=>q&&typeof q==="object").map(q=>({
+   ...q,v:Number.isFinite(Number(q.v))&&Number(q.v)>0?Math.min(10000,Math.round(Number(q.v))):100,
+   q:String(q.q??""),a:String(q.a??""),time:Math.max(5,Math.min(300,Number.isFinite(Number(q.time))?Math.round(Number(q.time)):30)),used:!!q.used
+  }))
+ }));
+ if(!state.categories.length)state.categories=fallback();
+ if(!Array.isArray(state.names)||state.names.length!==2)state.names=["الفريق الأحمر","الفريق الأزرق"];
+ state.names=state.names.map((n,i)=>String(n||("الفريق "+(i===0?"الأحمر":"الأزرق"))));
+ if(!Array.isArray(state.scores)||state.scores.length!==2)state.scores=[0,0];
+ state.scores=state.scores.map(n=>Number.isFinite(Number(n))?Number(n):0);
+ state.turn=Number(state.turn)===1?1:0;
+ const legacyThemes={emerald:"green",midnight:"blue",royal:"blue",sand:"yellow",obsidian:"blue"};
+ if(legacyThemes[state.theme])state.theme=legacyThemes[state.theme];
+ if(!["green","blue","red","yellow"].includes(state.theme))state.theme="green";
+ if(!["classic","duel"].includes(state.mode))state.mode="classic";
+ if(!state.duel||typeof state.duel!=="object")state.duel={active:false,questions:[],index:0,correct:[0,0]};
+ if(!Array.isArray(state.duel.questions))state.duel.questions=[];
+ if(!Array.isArray(state.duel.correct)||state.duel.correct.length!==2)state.duel.correct=[0,0];
+ if(typeof state.sound!=="boolean")state.sound=true;
+ if(typeof state.events!=="boolean")state.events=true;
+ state.duelTotalMinutes=Math.max(1,Math.min(30,Number(state.duelTotalMinutes)||7));
+ const cleanFlags=value=>Array.isArray(value)&&value.length===2?value.map(x=>({supervisor:!!x?.supervisor,double:!!x?.double,block:!!x?.block})):[{supervisor:false,double:false,block:false},{supervisor:false,double:false,block:false}];
+ state.lifelines=cleanFlags(state.lifelines);state.pending=cleanFlags(state.pending);
+ applyTheme();
+}
 function showWinner(){const a=state.scores[0],b=state.scores[1],tie=a===b,winnerIndex=tie?-1:(a>b?0:1),winner=tie?"تعادل الأبطال":state.names[winnerIndex],overlay=$("winnerOverlay");$("winnerName").textContent=winner;$("winnerScore").textContent="النتيجة النهائية: "+state.names[0]+" "+a+" — "+b+" "+state.names[1]+" • "+(tie?"تعادل":"فارق "+Math.abs(a-b)+" نقطة");$("winnerTitle").textContent=tie?"مباراة متكافئة!":"🏆 البطل المتوّج";$("winnerSub").textContent=tie?"منافسة قوية.. كلا الفريقين يستحق التقدير!":"أداء رائع.. تستحقون التتويج!";$("winnerCard").classList.toggle("winner-tie",tie);overlay.classList.remove("winner-red","winner-blue","winner-tie");overlay.classList.add(tie?"winner-tie":(winnerIndex===0?"winner-red":"winner-blue"));const palette=tie?["#f5d98c","#fff0c2","#d8a94f","#ffffff"]:winnerIndex===0?["#c94e5d","#f3a0a6","#f5d98c","#ffffff"]:["#3679b8","#9bd2ff","#f5d98c","#ffffff"];const confetti=$("winnerConfetti");confetti.innerHTML="";for(let i=0;i<100;i++){const bit=document.createElement("i");bit.style.setProperty("--x",Math.random()*100+"%");bit.style.setProperty("--c",palette[i%palette.length]);bit.style.setProperty("--r",Math.random()*180+"deg");bit.style.setProperty("--d",3.5+Math.random()*4+"s");bit.style.setProperty("--delay",-Math.random()*7+"s");confetti.append(bit)}overlay.classList.add("show");try{playResultSound(true)}catch(e){}}
 $("winnerClose").onclick=()=> $("winnerOverlay").classList.remove("show");$("winnerNewGame").onclick=()=>{if(confirm("بدء مسابقة جديدة وتصفير النتائج؟")){$("winnerOverlay").classList.remove("show");state.scores=[0,0];state.turn=0;state.winnerShown=false;state.lifelines=[{supervisor:false,double:false,block:false},{supervisor:false,double:false,block:false}];state.pending=[{supervisor:false,double:false,block:false},{supervisor:false,double:false,block:false}];state.categories.forEach(c=>c.questions.forEach(q=>q.used=false));render();toast("المسابقة الجديدة جاهزة!")}};
 function toast(t){$("toast").textContent=t;$("toast").classList.add("show");setTimeout(()=>$("toast").classList.remove("show"),2300)}
