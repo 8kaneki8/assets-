@@ -650,9 +650,8 @@ function buildEditor(){
  let cursor=0;
  function renderBatch(){
   if(token!==editorRenderToken)return;
-  const fragment=document.createDocumentFragment();
   const stop=Math.min(cursor+12,jobs.length);
-  while(cursor<stop){const holder=document.createElement("div");jobs[cursor++]();/* DOM writes are kept to a small batch per frame. */}
+  while(cursor<stop){jobs[cursor++]();/* Keep DOM work small so the browser can repaint between batches. */}
   if(cursor<jobs.length){requestAnimationFrame(renderBatch);return}
   loading.remove();
   if(saveBtn)saveBtn.disabled=false;
