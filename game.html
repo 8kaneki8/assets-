@@ -609,55 +609,70 @@ $("hostOpen").onclick=()=>{buildEditor();$("editRed").value=state.names[0];$("ed
 let editorRenderToken=0;
 function buildEditor(){
  const token=++editorRenderToken,root=$("categoryEditor"),saveBtn=$("saveSettings"),addBtn=$("addCategory");
+ if(!root)return;
  root.replaceChildren();
  const loading=document.createElement("div");
  loading.className="editor-loading";
- loading.textContent="جارٍ تجهيز الأسئلة…";
- loading.style.cssText="padding:18px;text-align:center;color:var(--muted);font-weight:800";
+ loading.textContent="جارٍ تجهيز محرر الأسئلة…";
+ loading.style.cssText="display:block;grid-column:1/-1;min-height:56px;padding:18px;text-align:center;color:#315b8d;background:#edf4fc;border:1px solid #d5e2f1;border-radius:14px;font-weight:800";
  root.append(loading);
  if(saveBtn)saveBtn.disabled=true;
  if(addBtn)addBtn.disabled=true;
- const jobs=[];
- state.categories.forEach((c,ci)=>{
-  const box=document.createElement("section");box.className="question-category-editor";
-  const head=document.createElement("div");head.className="question-category-head";
-  const name=document.createElement("input");name.value=c.name||"";name.placeholder="اسم الفئة";name.dataset.cat=ci;name.setAttribute("aria-label","اسم الفئة");head.append(name);
-  const del=document.createElement("button");del.type="button";del.className="secondary";del.textContent="حذف الفئة";
-  del.onclick=()=>{if(state.categories.length<=1){toast("يجب أن تبقى فئة واحدة على الأقل");return}if(!confirm("حذف فئة "+(c.name||"هذه الفئة")+" بكل أسئلتها؟"))return;state.categories.splice(ci,1);buildEditor()};
-  head.append(del);box.append(head);root.append(box);
-  c.questions.forEach((q,qi)=>jobs.push(()=>{
-   if(!Number.isFinite(+q.time))q.time=30;
-   const row=document.createElement("div");row.className="question-edit-row";
-   const title=document.createElement("div");title.className="question-edit-title";title.textContent="السؤال "+(qi+1);row.append(title);
-   const points=document.createElement("input");points.type="number";points.min="1";points.max="10000";points.value=String(q.v||100);points.dataset.v=ci+","+qi;points.setAttribute("aria-label","نقاط السؤال "+(qi+1));
-   const question=document.createElement("textarea");question.placeholder="اكتب نص السؤال";question.value=q.q||"";question.dataset.q=ci+","+qi;question.setAttribute("aria-label","نص السؤال "+(qi+1));
-   const answer=document.createElement("input");answer.placeholder="الإجابة الصحيحة";answer.value=q.a||"";answer.dataset.a=ci+","+qi;answer.setAttribute("aria-label","الإجابة الصحيحة "+(qi+1));
-   const seconds=document.createElement("input");seconds.type="number";seconds.min="5";seconds.max="300";seconds.value=String(Math.max(5,Math.min(300,+q.time||30)));seconds.dataset.time=ci+","+qi;seconds.setAttribute("aria-label","مدة السؤال بالثواني");
-   const labels=document.createElement("div");labels.className="question-edit-grid";
-   [[points,"النقاط"],[seconds,"الوقت بالثواني"]].forEach(([input,label])=>{const wrap=document.createElement("label");wrap.textContent=label;wrap.append(input);labels.append(wrap)});
-   row.append(question,answer,labels);
-   const remove=document.createElement("button");remove.type="button";remove.className="secondary question-remove";remove.textContent="إزالة السؤال";
-   remove.onclick=()=>{if(c.questions.length<=1){toast("أضف سؤالًا آخر قبل إزالة السؤال الأخير");return}c.questions.splice(qi,1);buildEditor()};
-   row.append(remove);box.append(row);
-  }));
-  jobs.push(()=>{
-   const add=document.createElement("button");add.type="button";add.className="secondary question-add";add.textContent="＋ إضافة سؤال لهذه الفئة";
-   add.onclick=()=>{c.questions.push({v:100,q:"",a:"",time:30,used:false});buildEditor()};
-   box.append(add);
+ const unlock=()=>{if(saveBtn)saveBtn.disabled=false;if(addBtn)addBtn.disabled=false};
+ try{
+  if(!Array.isArray(state.categories))state.categories=[];
+  state.categories=state.categories.filter(c=>c&&typeof c==="object").map(c=>({...c,name:String(c.name||"فئة"),questions:Array.isArray(c.questions)?c.questions.filter(q=>q&&typeof q==="object"):[]}));
+  if(!state.categories.length)state.categories=[{name:"فئة جديدة",questions:[{v:100,q:"",a:"",time:30,used:false}]}];
+  const jobs=[];
+  state.categories.forEach((c,ci)=>{
+   const box=document.createElement("section");box.className="question-category-editor";
+   const head=document.createElement("div");head.className="question-category-head";
+   const name=document.createElement("input");name.value=c.name;name.placeholder="اسم الفئة";name.dataset.cat=ci;name.setAttribute("aria-label","اسم الفئة");head.append(name);
+   const del=document.createElement("button");del.type="button";del.className="secondary";del.textContent="حذف الفئة";
+   del.onclick=()=>{if(state.categories.length<=1){toast("يجب أن تبقى فئة واحدة على الأقل");return}if(!confirm("حذف فئة "+(c.name||"هذه الفئة")+" بكل أسئلتها؟"))return;state.categories.splice(ci,1);buildEditor()};
+   head.append(del);box.append(head);root.append(box);
+   c.questions.forEach((q,qi)=>jobs.push(()=>{
+    if(!Number.isFinite(+q.time))q.time=30;
+    const row=document.createElement("div");row.className="question-edit-row";
+    const title=document.createElement("div");title.className="question-edit-title";title.textContent="السؤال "+(qi+1);row.append(title);
+    const points=document.createElement("input");points.type="number";points.min="1";points.max="10000";points.value=String(q.v||100);points.dataset.v=ci+","+qi;points.setAttribute("aria-label","نقاط السؤال "+(qi+1));
+    const question=document.createElement("textarea");question.placeholder="اكتب نص السؤال";question.value=q.q||"";question.dataset.q=ci+","+qi;question.setAttribute("aria-label","نص السؤال "+(qi+1));
+    const answer=document.createElement("input");answer.placeholder="الإجابة الصحيحة";answer.value=q.a||"";answer.dataset.a=ci+","+qi;answer.setAttribute("aria-label","الإجابة الصحيحة "+(qi+1));
+    const seconds=document.createElement("input");seconds.type="number";seconds.min="5";seconds.max="300";seconds.value=String(Math.max(5,Math.min(300,+q.time||30)));seconds.dataset.time=ci+","+qi;seconds.setAttribute("aria-label","مدة السؤال بالثواني");
+    const labels=document.createElement("div");labels.className="question-edit-grid";
+    [[points,"النقاط"],[seconds,"الوقت بالثواني"]].forEach(([input,label])=>{const wrap=document.createElement("label");wrap.textContent=label;wrap.append(input);labels.append(wrap)});
+    row.append(question,answer,labels);
+    const remove=document.createElement("button");remove.type="button";remove.className="secondary question-remove";remove.textContent="إزالة السؤال";
+    remove.onclick=()=>{if(c.questions.length<=1){toast("أضف سؤالًا آخر قبل إزالة السؤال الأخير");return}c.questions.splice(qi,1);buildEditor()};
+    row.append(remove);box.append(row);
+   }));
+   jobs.push(()=>{
+    const add=document.createElement("button");add.type="button";add.className="secondary question-add";add.textContent="＋ إضافة سؤال لهذه الفئة";
+    add.onclick=()=>{c.questions.push({v:100,q:"",a:"",time:30,used:false});buildEditor()};
+    box.append(add);
+   });
   });
- });
- if(!jobs.length){loading.textContent="لا توجد أسئلة بعد. أضف سؤالًا للبدء."}
- let cursor=0;
- function renderBatch(){
-  if(token!==editorRenderToken)return;
-  const stop=Math.min(cursor+12,jobs.length);
-  while(cursor<stop){jobs[cursor++]();/* Keep DOM work small so the browser can repaint between batches. */}
-  if(cursor<jobs.length){requestAnimationFrame(renderBatch);return}
-  loading.remove();
-  if(saveBtn)saveBtn.disabled=false;
-  if(addBtn)addBtn.disabled=false;
+  if(!jobs.length){loading.textContent="لا توجد أسئلة بعد. يمكنك إضافة سؤال أو فئة جديدة.";unlock();return}
+  let cursor=0;
+  const renderBatch=()=>{
+   if(token!==editorRenderToken)return;
+   try{
+    const stop=Math.min(cursor+6,jobs.length);
+    while(cursor<stop){jobs[cursor++]()}
+    if(cursor<jobs.length){setTimeout(()=>requestAnimationFrame(renderBatch),0);return}
+    loading.remove();unlock();
+   }catch(error){
+    loading.textContent="تعذر عرض بعض الأسئلة. أعد فتح إدارة الأسئلة أو حدّث الصفحة.";
+    loading.style.color="#a33b45";unlock();
+    console.error("Ihyaa question editor render failed:",error);
+   }
+  };
+  requestAnimationFrame(renderBatch);
+ }catch(error){
+  loading.textContent="تعذر تجهيز محرر الأسئلة. تم إيقاف التحميل بدل تعليق الصفحة.";
+  loading.style.color="#a33b45";unlock();
+  console.error("Ihyaa question editor setup failed:",error);
  }
- requestAnimationFrame(renderBatch);
 }
 function esc(s){return String(s).replaceAll("&","&amp;").replaceAll('"',"&quot;").replaceAll("<","&lt;").replaceAll(">","&gt;")}
 $("addCategory").onclick=()=>{state.categories.push({name:"فئة جديدة",questions:[100,200,300,400,500].map(v=>({v,q:"",a:"",used:false}))});buildEditor()};
