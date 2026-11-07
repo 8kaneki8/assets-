@@ -5,6 +5,10 @@ alter table public.ihyaa_duels
   add column if not exists question_deadline timestamptz,
   add column if not exists paused_at timestamptz;
 
+-- Backfill timers for matches that were already running before this patch.
+update public.ihyaa_duels set question_deadline=now()+make_interval(secs=>greatest(10,least(180,coalesce((settings->>'question_seconds')::int,30))))
+where status in('live','golden') and question_deadline is null;
+
 -- Keep the active question timer server-authoritative.
 create or replace function public.ihyaa_duel_create(
   p_red_id text,p_blue_id text,p_question_ids uuid[],p_settings jsonb default '{}'::jsonb
