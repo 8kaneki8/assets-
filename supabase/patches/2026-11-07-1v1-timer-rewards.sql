@@ -217,7 +217,8 @@ begin
     'red',case when is_host or me_team='red' then jsonb_build_object('name',red_name,'score',d.red_score,'correct',d.red_correct,'wrong',d.red_wrong) else null end,
     'blue',case when is_host or me_team='blue' then jsonb_build_object('name',blue_name,'score',d.blue_score,'correct',d.blue_correct,'wrong',d.blue_wrong) else null end,
     'winner_id',case when is_host then d.winner_id else null end,'winner_is_me',d.winner_id=uid,
-    'is_draw',d.status='completed' and d.winner_id is null,'question_deadline',d.question_deadline,
+    'is_draw',d.status='completed' and d.winner_id is null,'has_winner',d.winner_id is not null,
+    'question_deadline',case when d.status='paused' and d.question_deadline is not null then now()+greatest(interval '0',d.question_deadline-coalesce(d.paused_at,now())) else d.question_deadline end,
     'started_at',d.started_at,'finished_at',d.finished_at,'settings',d.settings
   );
 end $$;
