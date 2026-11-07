@@ -839,7 +839,7 @@ $("newGame").onclick=()=>{if(confirm("بدء مسابقة جديدة؟ سيتم 
 load();render();
 function openStartMenu(){const menu=$("startMenuOverlay");if(menu)menu.classList.add("show")}
 function hideStartMenu(){const menu=$("startMenuOverlay");if(menu)menu.classList.remove("show")}
-if(localStorage.getItem("ihyaaSetupComplete")!=="1"){setupGateActive=true;document.body.classList.add("setup-mode");$("hostOpen").click();$("hostOverlay").querySelector(".modal-head h2").textContent="جهّز أسئلة المسابقة";}else{document.body.classList.add("room-flow-mode");state.scores=[0,0];state.turn=0;state.current=null;state.winnerShown=false;state.categories.forEach(c=>c.questions.forEach(q=>q.used=false));save();openStartMenu();}
+if(localStorage.getItem("ihyaaSetupComplete")!=="1"){setupGateActive=true;document.body.classList.add("setup-mode");}else{document.body.classList.add("room-flow-mode");state.scores=[0,0];state.turn=0;state.current=null;state.winnerShown=false;state.categories.forEach(c=>c.questions.forEach(q=>q.used=false));save();openStartMenu();}
 $("startMenuOpen").onclick=()=>openStartMenu();
 $("startClassicBtn").onclick=()=>{hideStartMenu();$("rulesOverlay").classList.add("show")};
 $("startEditBtn").onclick=()=>{hideStartMenu();$("hostOpen").click()};
