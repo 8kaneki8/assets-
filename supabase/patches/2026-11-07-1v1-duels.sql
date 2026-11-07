@@ -353,3 +353,44 @@ begin
  where d.host_id=auth.uid() or auth.uid() in(d.red_user,d.blue_user);
  return v;
 end $$;
+
+
+-- Realtime carries only a non-sensitive state signal. Full match rows remain
+-- inaccessible to clients; participants must call the role-filtered view RPC.
+create table if not exists public.ihyaa_duel_signals (
+ duel_id uuid primary key references public.ihyaa_duels(id) on delete cascade,
+ version bigint not null default 1,
+ status text not null,
+ current_no smallint not null,
+ updated_at timestamptz not null default now()
+);
+alter table public.ihyaa_duel_signals enable row level security;
+drop policy if exists ihyaa_duel_signal_participant on public.ihyaa_duel_signals;
+create or replace function public.ihyaa_duel_signal_visible(p_duel uuid)
+returns boolean language sql stable security definer set search_path=public,auth as $$
+ select exists(select 1 from public.ihyaa_duels d where d.id=p_duel and auth.uid() in(d.host_id,d.red_user,d.blue_user))
+$$;
+create policy ihyaa_duel_signal_participant on public.ihyaa_duel_signals for select to authenticated using(public.ihyaa_duel_signal_visible(duel_id));
+revoke all on public.ihyaa_duel_signals from anon,authenticated;
+grant select on public.ihyaa_duel_signals to authenticated;
+revoke all on public.ihyaa_duels from anon,authenticated;
+drop policy if exists ihyaa_duels_participants_read on public.ihyaa_duels;
+
+create or replace function public.ihyaa_duel_signal_sync()
+returns trigger language plpgsql security definer set search_path=public as $$
+begin
+ insert into public.ihyaa_duel_signals(duel_id,version,status,current_no,updated_at)
+ values(new.id,1,new.status,new.current_no,new.updated_at)
+ on conflict(duel_id) do update set version=public.ihyaa_duel_signals.version+1,status=excluded.status,current_no=excluded.current_no,updated_at=excluded.updated_at;
+ return new;
+end $$;
+drop trigger if exists ihyaa_duel_signal_after_change on public.ihyaa_duels;
+create trigger ihyaa_duel_signal_after_change after insert or update on public.ihyaa_duels
+for each row execute function public.ihyaa_duel_signal_sync();
+
+do $$ begin
+ alter publication supabase_realtime drop table public.ihyaa_duels;
+exception when undefined_object then null; when invalid_parameter_value then null; end $$;
+do $$ begin
+ alter publication supabase_realtime add table public.ihyaa_duel_signals;
+exception when duplicate_object then null; when undefined_object then null; end $$;
