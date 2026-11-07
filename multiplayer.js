@@ -134,6 +134,7 @@ async function refreshSavedQuizzes(target){
    const actions=node("div","");const pass=field(actions,"كلمة مرور الغرفة (اختياري)","اتركها فارغة لغرفة مفتوحة","password");
    button(actions,"استضافة هذه المجموعة",async()=>{const saved=await rpc("ihyaa_get_saved_quiz",{p_quiz:q.id});room=await rpc("ihyaa_create_room",{p_title:saved.title,p_password:pass.value||null,p_settings:{},p_questions:saved.questions});role="host";showRoom()},"gold");
    button(actions,"تعديل الأسئلة",async()=>{const saved=await rpc("ihyaa_get_saved_quiz",{p_quiz:q.id});openQuestionSetEditor(libraryEditor,saved.questions,q.id,()=>refreshSavedQuizzes(target),saved.title)},"ihyEditBtn");
+   button(actions,"نسخ المجموعة",async()=>{const saved=await rpc("ihyaa_get_saved_quiz",{p_quiz:q.id});const proposed=String(saved.title||q.title)+" - نسخة";const copiedTitle=window.prompt("اكتب اسم المجموعة المنسوخة",proposed);if(copiedTitle===null)return;if(copiedTitle.trim().length<2)throw Error("اسم المجموعة يجب أن يكون من حرفين على الأقل.");await rpc("ihyaa_save_quiz",{p_title:copiedTitle.trim(),p_questions:saved.questions});await refreshSavedQuizzes(target);await refreshSavedSetOptions()},"ihyEditBtn");
    button(actions,"حذف المجموعة",async()=>{if(!confirm("حذف مجموعة الأسئلة من مكتبتك؟"))return;await rpc("ihyaa_delete_saved_quiz",{p_quiz:q.id});await refreshSavedQuizzes(target);await refreshSavedSetOptions()},"ihyEditBtn");
    item.append(actions);target.append(item);
   });
@@ -178,7 +179,7 @@ function openQuestionSetEditor(target,questions=[],replaceId=null,onSaved=()=>{}
   if(!qs.length)throw Error("اختر سؤالًا واحدًا على الأقل واكتب إجابته.");
   if(qs.some(x=>x.points<1||x.points>10000||x.seconds<5||x.seconds>300))throw Error("النقاط من 1 إلى 10000 والوقت من 5 إلى 300 ثانية.");
   busy=true;save.disabled=true;save.textContent="جارٍ حفظ المجموعة…";
-  try{await rpc("ihyaa_save_quiz",{p_title:title.value.trim(),p_questions:qs});if(replaceId)await rpc("ihyaa_delete_saved_quiz",{p_quiz:replaceId});target.innerHTML="";target.append(node("p","ihyMuted","✓ تم حفظ مجموعة الأسئلة. يمكنك استضافتها الآن أو استخدامها في أي غرفة جديدة."));await onSaved();await refreshSavedSetOptions()}
+  try{if(replaceId){await rpc("ihyaa_update_saved_quiz",{p_quiz:replaceId,p_title:title.value.trim(),p_questions:qs})}else{await rpc("ihyaa_save_quiz",{p_title:title.value.trim(),p_questions:qs})}target.innerHTML="";target.append(node("p","ihyMuted","✓ تم حفظ مجموعة الأسئلة. يمكنك استضافتها الآن أو استخدامها في أي غرفة جديدة."));await onSaved();await refreshSavedSetOptions()}
   catch(e){fail(e)}finally{busy=false;save.disabled=false;save.textContent="حفظ المجموعة"}
  };
  actions.append(save,cancel);target.append(panel,pool,rows,actions);
