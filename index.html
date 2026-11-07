@@ -68,6 +68,15 @@ h1 span{color:#b9d6f7}
 footer{border-top-color:#ffffff18;color:#8da8c8}
 .footer-mark{color:#b9d6f7}
 
+
+.header-actions{display:flex;align-items:center;gap:10px}
+.header-login{display:inline-flex;align-items:center;gap:9px;padding:10px 16px;border-radius:999px;text-decoration:none;color:#eaf3ff;border:1px solid #a9c8ed65;background:linear-gradient(135deg,#ffffff14,#ffffff06);font-size:11px;font-weight:800;transition:.22s}
+.header-login span{display:grid;place-items:center;width:22px;height:22px;border-radius:50%;background:#b9d6f7;color:#102c50;font-size:13px}
+.header-login:hover{transform:translateY(-2px);background:#a9c8ed20;border-color:#c9e0ff}
+.btn.primary{position:relative;overflow:hidden}
+.btn.primary:after{content:"";position:absolute;inset:0;transform:translateX(-120%);background:linear-gradient(100deg,transparent,#ffffff65,transparent);transition:transform .7s}
+.btn.primary:hover:after{transform:translateX(120%)}
+@media(max-width:540px){.header-actions{gap:6px}.header-tag{font-size:8px;padding:8px}.header-login{font-size:9px;padding:8px 10px}.header-login span{width:19px;height:19px}}
 </style>
 </head>
 <body>
@@ -78,7 +87,7 @@ footer{border-top-color:#ffffff18;color:#8da8c8}
 <img src="Arabic%20Calligraphy%20Emblem%20with%20Gold%20Accents.png" alt="">
 <span><b>مؤسسة إحياء</b><small>IHYAA • QUIZ ARENA</small></span>
 </a>
-<div class="header-tag"><span class="live-dot"></span> بوابة المسابقة الرسمية</div>
+<div class="header-actions"><div class="header-tag"><span class="live-dot"></span> بوابة المسابقة الرسمية</div><a class="header-login" href="game.html?open=online"><span>↗</span> دخول اللاعب</a></div>
 </header>
 <main>
 <section class="hero">
@@ -88,7 +97,7 @@ footer{border-top-color:#ffffff18;color:#8da8c8}
 <p class="slogan">المعرفة تُورث أثرًا… والمنافسة تصنع همة.</p>
 <p class="lead">مرحبًا بك في ساحة مؤسسة إحياء. اجمع فريقك، استعد للتحدّي، واختبر معرفتك في أجواء تجمع بين العلم وروح المنافسة.</p>
 <div class="actions">
-<a class="btn primary" href="game.html">ادخل ساحة المسابقة <span class="arrow">←</span></a>
+<a class="btn primary" href="game.html?open=online">ابدأ الآن <span class="arrow">←</span></a>
 <a class="btn secondary" href="game.html?open=rules">اكتشف طريقة اللعب</a>
 </div>
 </div>
