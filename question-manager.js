@@ -77,9 +77,21 @@
    add.addEventListener("click",()=>{cat.questions.push({v:100,q:"",a:"",time:30,used:false});persist();buildEditor();refreshQuickQuestionControls();toast("أضف نص السؤال والإجابة ثم احفظ")});
    card.append(list,add);r.append(card);
   });
-  const renderBatch=()=>{if(token!==renderToken)return;let done=0;while(jobs.length&&done<24){jobs.shift()();done++}if(jobs.length){setTimeout(renderBatch,0);return}
-   const stats=$id("qmStats");if(stats)stats.textContent=state.categories.length+" فئات • "+countQuestions()+" سؤال";
-   applyFilter();
+  // Avoid repeated Array.shift() reindexing for large saved question banks.
+  let jobCursor=0;
+  const renderBatch=()=>{
+   if(token!==renderToken)return;
+   try{
+    const stop=Math.min(jobCursor+24,jobs.length);
+    while(jobCursor<stop)jobs[jobCursor++]();
+    if(jobCursor<jobs.length){setTimeout(renderBatch,0);return}
+    const stats=$id("qmStats");if(stats)stats.textContent=state.categories.length+" فئات • "+countQuestions()+" سؤال";
+    applyFilter();
+   }catch(error){
+    const stats=$id("qmStats");if(stats)stats.textContent="تعذر إكمال عرض المكتبة";
+    console.error("Question manager batch render failed:",error);
+    toast("تعذر عرض بعض الأسئلة. أعد فتح الإدارة أو حدّث الصفحة.");
+   }
   };
   renderBatch();
   const addCategory=$id("addCategory");if(addCategory){addCategory.textContent="＋ إنشاء فئة جديدة";addCategory.onclick=()=>{state.categories.push({name:"فئة جديدة",questions:[]});persist();buildEditor();refreshQuickQuestionControls();toast("تم إنشاء الفئة")}}
