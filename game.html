@@ -589,7 +589,7 @@ $("startMenuOpen").onclick=()=>openStartMenu();
 $("startClassicBtn").onclick=()=>{hideStartMenu();$("rulesOverlay").classList.add("show")};
 $("startEditBtn").onclick=()=>{hideStartMenu();$("hostOpen").click()};
 $("startOnlineBtn").onclick=()=>{hideStartMenu();const b=$("onlineOpen");if(b)b.click();else toast("حمّل الصفحة مرة أخرى وحاول فتح الأونلاين")};
-$("startDuelBtn").onclick=()=>{hideStartMenu();$("duelBtn").click()};
+$("startDuelBtn").onclick=()=>{hideStartMenu();const b=$("duelBtn");if(b)b.click();else toast("تعذر تحميل نظام المواجهات. حدّث الصفحة وحاول مرة أخرى.")};
 $("backToStartBtn").onclick=()=>{close("hostOverlay");openStartMenu()};
 $("rulesStart").onclick=()=>{close("rulesOverlay");playUiSound("click");toast("المسابقة بدأت! اختاروا أول سؤال من لوحة التحدي أو ابدأوا بقرعة البداية.")};
 </script>
@@ -600,8 +600,13 @@ $("rulesStart").onclick=()=>{close("rulesOverlay");playUiSound("click");toast("�
 <script>
 document.addEventListener("DOMContentLoaded",()=>{
  const mode=new URLSearchParams(location.search).get("open")||location.hash.slice(1);
- if(localStorage.getItem("ihyaaSetupComplete")==="1"&&mode==="online"){document.body.classList.add("room-flow-mode");const b=document.getElementById("onlineOpen");if(b)b.click();}
- else if(mode==="host"){const b=document.getElementById("hostOpen");if(b)b.click();}
+ if(mode==="online"){
+  const menu=document.getElementById("startMenuOverlay");if(menu)menu.classList.remove("show");
+  const b=document.getElementById("onlineOpen");if(b)b.click();
+ }else if(mode==="duel"){
+  const menu=document.getElementById("startMenuOverlay");if(menu)menu.classList.remove("show");
+  const b=document.getElementById("duelBtn");if(b)b.click();
+ }else if(mode==="host"){const b=document.getElementById("hostOpen");if(b)b.click();}
  else if(mode==="rules"){const r=document.getElementById("rulesOverlay");if(r)r.classList.add("show");}
 });
 </script>
