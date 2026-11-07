@@ -125,31 +125,63 @@ async function loadRoomSuggestions(target){
   }
 }
 async function refreshSavedQuizzes(target){
-  target.textContent="جارٍ تحميل مسابقاتك المحفوظة…";
-  try{
-   const rows=await rpc("ihyaa_list_saved_quizzes");
-   target.innerHTML="";
-   if(!Array.isArray(rows)||!rows.length){target.append(node("p","ihyMuted","مكتبتك فارغة حاليًا. جهّز الأسئلة في لوحة الهوست ثم احفظ أول مسابقة هنا."));return}
-   rows.forEach(q=>{
-    const item=node("div","ihyPerson");
-    item.append(node("strong","",q.title),node("p","ihyMuted",(q.question_count||0)+" سؤال • محفوظة في مكتبتك"));
-    const actions=node("div","");
-    const pass=field(actions,"كلمة مرور الغرفة (اختياري)","اتركها فارغة لغرفة مفتوحة","password");
-    button(actions,"استضافة هذه المسابقة",async()=>{
-     const saved=await rpc("ihyaa_get_saved_quiz",{p_quiz:q.id});
-     room=await rpc("ihyaa_create_room",{p_title:saved.title,p_password:pass.value||null,p_settings:{},p_questions:saved.questions});
-     role="host";showRoom();
-    },"gold");
-    button(actions,"حذف من مكتبتي",async()=>{
-     await rpc("ihyaa_delete_saved_quiz",{p_quiz:q.id});
-     await refreshSavedQuizzes(target);
-    },"ihyEditBtn");
-    item.append(actions);target.append(item);
-   });
-  }catch(e){
-   target.innerHTML="";
-   target.append(node("p","ihyMuted","تعذر تحميل مكتبة المسابقات. تأكد من تطبيق تحديث قاعدة البيانات. "+String(e?.message||e)));
-  }
+ target.textContent="جارٍ تحميل مجموعات الأسئلة…";
+ try{
+  const rows=await rpc("ihyaa_list_saved_quizzes");target.innerHTML="";
+  if(!Array.isArray(rows)||!rows.length){target.append(node("p","ihyMuted","لا توجد مجموعات محفوظة بعد. أنشئ مجموعة واختر الأسئلة التي تريد استخدامها في مسابقاتك القادمة."));return}
+  rows.forEach(q=>{
+   const item=node("div","ihyPerson");item.append(node("strong","",q.title),node("p","ihyMuted",(q.question_count||0)+" سؤال • محفوظة في مكتبتك الخاصة"));
+   const actions=node("div","");const pass=field(actions,"كلمة مرور الغرفة (اختياري)","اتركها فارغة لغرفة مفتوحة","password");
+   button(actions,"استضافة هذه المجموعة",async()=>{const saved=await rpc("ihyaa_get_saved_quiz",{p_quiz:q.id});room=await rpc("ihyaa_create_room",{p_title:saved.title,p_password:pass.value||null,p_settings:{},p_questions:saved.questions});role="host";showRoom()},"gold");
+   button(actions,"تعديل الأسئلة",async()=>{const saved=await rpc("ihyaa_get_saved_quiz",{p_quiz:q.id});openQuestionSetEditor(libraryEditor,saved.questions,q.id,()=>refreshSavedQuizzes(target),saved.title)},"ihyEditBtn");
+   button(actions,"حذف المجموعة",async()=>{if(!confirm("حذف مجموعة الأسئلة من مكتبتك؟"))return;await rpc("ihyaa_delete_saved_quiz",{p_quiz:q.id});await refreshSavedQuizzes(target);await refreshSavedSetOptions()},"ihyEditBtn");
+   item.append(actions);target.append(item);
+  });
+ }catch(e){target.innerHTML="";target.append(node("p","ihyMuted","تعذر تحميل مكتبة الأسئلة. "+String(e?.message||e)))}
+}
+let libraryEditor=null;
+async function refreshSavedSetOptions(){
+ const select=$("ihySavedSetSelect");if(!select)return;
+ try{const rows=await rpc("ihyaa_list_saved_quizzes");select.innerHTML='<option value="">استخدم أسئلة لوحة اللعبة الحالية</option>';(rows||[]).forEach(q=>{const o=node("option","",q.title+" • "+(q.question_count||0)+" سؤال");o.value=q.id;select.append(o)})}catch(e){select.innerHTML='<option value="">تعذر تحميل المكتبة</option>'}
+}
+function openQuestionSetEditor(target,questions=[],replaceId=null,onSaved=()=>{},titleValue=""){
+ if(!target)return;target.innerHTML="";
+ const panel=node("div","ihyCard");panel.append(node("h3","",replaceId?"تعديل مجموعة الأسئلة":"إنشاء مجموعة أسئلة جديدة"),node("p","ihyMuted","اختر أسئلة جاهزة من لوحة اللعبة أو أضف أسئلة بنفسك. لن تظهر الإجابات الصحيحة للاعبين."));
+ const title=field(panel,"اسم المجموعة","مثال: الأدب مع الله");title.value=titleValue||"";
+ const rows=node("div","");
+ const addRow=(q={})=>{
+  const card=node("div","ihyCard");
+  const category=field(card,"الفئة","مثال: العقيدة");category.value=q.category||"عام";
+  const points=field(card,"النقاط","100","number");points.value=String(q.points||100);points.min="1";points.max="10000";
+  const seconds=field(card,"الوقت بالثواني","30","number");seconds.value=String(q.seconds||30);seconds.min="5";seconds.max="300";
+  const question=field(card,"نص السؤال","اكتب السؤال");question.value=q.question||"";
+  const answer=field(card,"الإجابة الصحيحة","اكتب الإجابة");answer.value=q.answer||"";
+  const remove=node("button","ihyBtn ihyEditBtn","إزالة السؤال");remove.type="button";remove.onclick=()=>card.remove();card.append(remove);
+  card._read=()=>({category:category.value.trim()||"عام",points:Number(points.value)||100,seconds:Number(seconds.value)||30,question:question.value.trim(),answer:answer.value.trim()});rows.append(card);
+ };
+ (questions||[]).forEach(addRow);
+ const pool=node("div","ihyCard");pool.append(node("strong","","اختيار من أسئلة لوحة اللعبة الحالية"),node("p","ihyMuted","حدد الأسئلة التي تريد إضافتها إلى المجموعة. يمكنك تعديلها بعد إضافتها."));
+ try{(state.categories||[]).forEach((cat,ci)=>(cat.questions||[]).forEach((q,qi)=>{
+  if(!String(q.q||"").trim()||!String(q.a||"").trim())return;
+  const label=node("label","ihyPerson");label.style.display="flex";label.style.gap="10px";label.style.alignItems="flex-start";
+  const check=node("input");check.type="checkbox";check.style.width="20px";check.style.margin="4px 0 0";
+  const copy=node("span","",cat.name+" • "+(q.v||100)+" نقطة — "+q.q);
+  check.onchange=()=>{if(check.checked)addRow({category:cat.name,points:q.v||100,seconds:q.time||30,question:q.q,answer:q.a})};
+  label.append(check,copy);pool.append(label);
+ }))}catch(e){pool.append(node("p","ihyMuted","لا توجد أسئلة جاهزة؛ يمكنك إضافة أسئلة يدويًا."))}
+ const add=node("button","ihyBtn ihyEditBtn","＋ إضافة سؤال يدوي");add.type="button";add.onclick=()=>addRow();pool.append(add);
+ const actions=node("div","");const save=node("button","ihyBtn gold","حفظ المجموعة");save.type="button";
+ const cancel=node("button","ihyBtn ihyEditBtn","إلغاء");cancel.type="button";cancel.onclick=()=>{target.innerHTML="";target.append(node("p","ihyMuted","تم إغلاق محرر المجموعة."))};
+ save.onclick=async()=>{
+  if(busy)return;const qs=[...rows.children].map(x=>x._read()).filter(x=>x.question&&x.answer);
+  if(title.value.trim().length<2)throw Error("اسم المجموعة يجب أن يكون من حرفين على الأقل.");
+  if(!qs.length)throw Error("اختر سؤالًا واحدًا على الأقل واكتب إجابته.");
+  if(qs.some(x=>x.points<1||x.points>10000||x.seconds<5||x.seconds>300))throw Error("النقاط من 1 إلى 10000 والوقت من 5 إلى 300 ثانية.");
+  busy=true;save.disabled=true;save.textContent="جارٍ حفظ المجموعة…";
+  try{await rpc("ihyaa_save_quiz",{p_title:title.value.trim(),p_questions:qs});if(replaceId)await rpc("ihyaa_delete_saved_quiz",{p_quiz:replaceId});target.innerHTML="";target.append(node("p","ihyMuted","✓ تم حفظ مجموعة الأسئلة. يمكنك استضافتها الآن أو استخدامها في أي غرفة جديدة."));await onSaved();await refreshSavedSetOptions()}
+  catch(e){fail(e)}finally{busy=false;save.disabled=false;save.textContent="حفظ المجموعة"}
+ };
+ actions.append(save,cancel);target.append(panel,pool,rows,actions);
 }
 function home(){
  const c=node("div","ihyAuthLayout");
@@ -176,11 +208,16 @@ function home(){
  const host=node("div","ihyCard");host.append(node("h3","","استضافة مسابقة"),node("p","ihyMuted","أنشئ غرفة وشارك كودها مع اللاعبين."));
  const title=field(host,"اسم المسابقة","مثال: تحدي التفسير");
  const pass=field(host,"كلمة مرور اختيارية","اتركها فارغة إذا لم تحتجها","password");
+ const savedSet=node("select");savedSet.id="ihySavedSetSelect";savedSet.style.cssText="width:100%;padding:11px;border:1px solid #d7d8cd;border-radius:9px;margin:5px 0 12px;background:#fff;color:#17352d";
+ savedSet.innerHTML='<option value="">استخدم أسئلة لوحة اللعبة الحالية</option>';
+ host.append(node("label","","مجموعة الأسئلة"),savedSet,node("p","ihyMuted","اختر مجموعة محفوظة لتفعيلها في هذه الغرفة، أو اترك الاختيار فارغًا لاستخدام أسئلة اللوحة الحالية."));
  button(host,"إنشاء غرفة",async()=>{
   await auth();if(!profile)throw Error("أنشئ ملف اللاعب أولًا.");
   if(title.value.trim().length<2)throw Error("اسم المسابقة يجب ألا يقل عن حرفين.");
-  const qs=[];try{state.categories.forEach(cat=>cat.questions.forEach(q=>{if(q.q&&q.a)qs.push({category:cat.name,points:q.v,question:q.q,answer:q.a,seconds:q.time||30})}))}catch(e){}
-  if(!qs.length)throw Error("لم أجد أسئلة مكتملة في لوحة المسابقة الحالية.");
+  let qs=[];
+  if(savedSet.value){const saved=await rpc("ihyaa_get_saved_quiz",{p_quiz:savedSet.value});qs=saved.questions||[]}
+  else{try{state.categories.forEach(cat=>cat.questions.forEach(q=>{if(q.q&&q.a)qs.push({category:cat.name,points:q.v,question:q.q,answer:q.a,seconds:q.time||30})}))}catch(e){}}
+  if(!qs.length)throw Error("لا توجد أسئلة في المجموعة المختارة.");
   room=await rpc("ihyaa_create_room",{p_title:title.value.trim(),p_password:pass.value||null,p_settings:{},p_questions:qs});role="host";showRoom();
  },"gold");
  const join=node("div","ihyCard");join.append(node("h3","","الانضمام إلى غرفة"),node("p","ihyMuted","أدخل الكود الذي أرسله لك الهوست."));
@@ -193,15 +230,13 @@ function home(){
   refreshRooms.onclick=()=>loadRoomSuggestions(roomList);discoverTools.append(refreshRooms);discover.append(discoverTools,roomList);c.append(discover);
   loadRoomSuggestions(roomList);
  if(profile){
-  const library=node("div","ihyCard ihySection");library.append(node("h3","","مكتبتي • المسابقات المحفوظة"),node("p","ihyMuted","احفظ تجهيزاتك مرة واحدة، واستضف المسابقة متى احتجت دون إعادة إدخال الأسئلة."));
-  const savedTitle=field(library,"اسم المسابقة","مثال: مسابقة السيرة والحديث");
-  const saveCurrent=button(library,"حفظ المسابقة الحالية في مكتبتي",async()=>{
-   const qs=[];state.categories.forEach(cat=>cat.questions.forEach(q=>{if(String(q.q||"").trim()&&String(q.a||"").trim())qs.push({category:cat.name,points:q.v,question:q.q,answer:q.a,seconds:q.time||30})}));
-   if(qs.length===0)throw Error("لا توجد أسئلة مكتملة لحفظها.");
-   await rpc("ihyaa_save_quiz",{p_title:savedTitle.value.trim(),p_questions:qs});
-   savedTitle.value="";await refreshSavedQuizzes(savedList);
-  },"gold");
-  const savedList=node("div","","جارٍ تحميل مكتبتك…");library.append(savedList);c.append(library);refreshSavedQuizzes(savedList);
+  const library=node("div","ihyCard ihySection");
+  library.append(node("h3","","مكتبة مجموعات الأسئلة"),node("p","ihyMuted","أنشئ مجموعاتك الخاصة، اختر الأسئلة المناسبة لكل مجموعة، واحفظها لاستخدامها في أي غرفة تستضيفها لاحقًا."));
+  libraryEditor=node("div","");library.append(libraryEditor);
+  const createSet=node("button","ihyBtn gold","＋ إنشاء مجموعة أسئلة");createSet.onclick=()=>openQuestionSetEditor(libraryEditor,[],null,()=>refreshSavedQuizzes(savedList));
+  library.append(createSet);
+  const savedList=node("div","","جارٍ تحميل مجموعاتك المحفوظة…");library.append(savedList);c.append(library);
+  refreshSavedQuizzes(savedList);refreshSavedSetOptions();
   const archive=node("div","ihyCard ihySection");archive.append(node("h3","","أرشيف مسابقاتي"));
   const list=node("div","","جارٍ تحميل الأرشيف…");archive.append(list);
   rpc("ihyaa_host_list_rooms").then(rows=>{list.innerHTML="";if(!rows.length){list.append(node("p","ihyMuted","لا توجد مسابقات محفوظة بعد."));return}rows.forEach(r=>{const item=node("div","ihyPerson");item.append(node("strong","",r.title+" • "+r.code),node("p","ihyMuted",r.status==="archived"?"مؤرشفة":r.status==="live"?"جارية":"في الانتظار"));button(item,"فتح السجل",async()=>{room={room_id:r.room_id,code:r.code,title:r.title};role="host";showRoom(true)});list.append(item)})}).catch(e=>{list.textContent=e.message});c.append(archive)
