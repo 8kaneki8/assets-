@@ -406,7 +406,7 @@ body[data-turn="red"]{--green:#a93645;--green2:#cf5968}body[data-turn="blue"]{--
 /* FIRST-RUN QUESTION BUILDER GATE */
 body.setup-mode{overflow:hidden;background:radial-gradient(ellipse at 50% 0%,#e7eddf,#f7f5ed 58%,#e9eee7)}
 body.setup-mode>.history-dust,body.setup-mode>header,body.setup-mode>main.wrap,body.setup-mode>.theme-dock,body.setup-mode>.draw-stage,body.setup-mode>.power-reveal,body.setup-mode>.toast,body.setup-mode>.winner-overlay{display:none!important}
-body.setup-mode>#hostOverlay{display:flex!important;position:fixed;inset:0;z-index:120;background:linear-gradient(135deg,#082d25f5,#0b4b3cf2);backdrop-filter:blur(10px);padding:clamp(10px,3vw,30px);overflow:auto;align-items:center}
+body.setup-mode>#hostOverlay{display:flex!important;position:fixed;inset:0;z-index:12001;background:linear-gradient(135deg,#082d25f5,#0b4b3cf2);backdrop-filter:blur(10px);padding:clamp(10px,3vw,30px);overflow:auto;align-items:center}
 body.setup-mode>#hostOverlay .modal{width:min(980px,100%);max-height:94vh;border-radius:26px;padding:clamp(18px,3vw,34px);overflow:auto}
 body.setup-mode>#hostOverlay .modal-head{border:0;padding:0 0 8px}
 body.setup-mode>#hostOverlay .modal-head h2{font-size:clamp(24px,4vw,34px);color:#174b3b}
@@ -733,7 +733,7 @@ $("drawBtn").onclick=()=>{
 $("drawClose").onclick=()=>{$("drawStage").classList.remove("show")};
 $("switchBtn").onclick=()=>{state.turn=1-state.turn;render();toast("الدور الآن: "+state.names[state.turn])};
 $("resetBtn").onclick=()=>{if(confirm("هل تريد تصفير النقاط وإعادة جميع الأسئلة؟")){state.scores=[0,0];state.turn=0;state.winnerShown=false;state.lifelines=[{supervisor:false,double:false,block:false},{supervisor:false,double:false,block:false}];state.categories.forEach(c=>c.questions.forEach(q=>q.used=false));render();toast("تم تجهيز لوحة جديدة")}};
-$("hostOpen").onclick=()=>{const overlay=$("hostOverlay");if(!overlay)return;overlay.classList.add("show");try{buildEditor();refreshQuickQuestionControls();$("editRed").value=state.names[0];$("editBlue").value=state.names[1];$("themeSelect").value=state.theme||"green";$("modeSelect").value=state.mode||"classic";$("soundToggle").checked=state.sound!==false;$("eventsToggle").checked=state.events!==false;$("duelTotalMinutes").value=state.duelTotalMinutes||7;}catch(error){console.error("Ihyaa question manager open failed:",error);toast("تم فتح إدارة الأسئلة، لكن تعذر تحميل بعض البيانات. أعد المحاولة.");}};
+$("hostOpen").onclick=()=>{const overlay=$("hostOverlay");if(!overlay)return;hideStartMenu();overlay.classList.add("show");try{buildEditor();refreshQuickQuestionControls();$("editRed").value=state.names[0];$("editBlue").value=state.names[1];$("themeSelect").value=state.theme||"green";$("modeSelect").value=state.mode||"classic";$("soundToggle").checked=state.sound!==false;$("eventsToggle").checked=state.events!==false;$("duelTotalMinutes").value=state.duelTotalMinutes||7;}catch(error){console.error("Ihyaa question manager open failed:",error);toast("تم فتح إدارة الأسئلة، لكن تعذر تحميل بعض البيانات. أعد المحاولة.");}};
 let editorRenderToken=0;
 function buildEditor(){
  const token=++editorRenderToken,root=$("categoryEditor"),saveBtn=$("saveSettings"),addBtn=$("addCategory");
