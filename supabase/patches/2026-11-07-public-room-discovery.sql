@@ -89,7 +89,10 @@ begin
   if char_length(trim(coalesce(p_title,''))) not between 2 and 70 then
     raise exception 'اسم المسابقة يجب أن يكون من حرفين إلى 70 حرفًا';
   end if;
-  if jsonb_typeof(p_questions)<>'array' or jsonb_array_length(p_questions) not between 1 and 200 then
+  if jsonb_typeof(p_questions) is distinct from 'array' then
+    raise exception 'بيانات الأسئلة غير صالحة';
+  end if;
+  if jsonb_array_length(p_questions) not between 1 and 200 then
     raise exception 'المسابقة يجب أن تحتوي من سؤال واحد إلى 200 سؤال';
   end if;
   if exists(
