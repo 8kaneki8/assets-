@@ -69,6 +69,30 @@ async function login(name){
  profile={username:profile.username,player_id:profile.player_id};
  home();
 }
+async function loadRoomSuggestions(target){
+  target.textContent="جارٍ البحث عن الغرف المتاحة…";
+  try{
+   const rows=await rpc("ihyaa_list_public_rooms");
+   target.innerHTML="";
+   if(!Array.isArray(rows)||!rows.length){target.append(node("p","ihyMuted","لا توجد غرف تنتظر لاعبين حاليًا. يمكنك إنشاء غرفة أو تحديث الاقتراحات لاحقًا."));return}
+   rows.forEach(r=>{
+    const item=node("div","ihyPerson");
+    const title=node("strong","",r.title||"مسابقة بدون عنوان");
+    const meta=node("p","ihyMuted",(r.has_password?"🔒 محمية بكلمة مرور":"🌐 مفتوحة للجميع")+" • المضيف: "+(r.host_name||"غير معروف")+" • اللاعبون: "+(r.player_count||0)+" • الكود: "+r.code);
+    const actions=node("div","");let pass=null;
+    if(r.has_password)pass=field(actions,"كلمة مرور الغرفة","أدخل كلمة المرور للانضمام","password");
+    button(actions,"انضم إلى الغرفة",async()=>{
+     await auth();if(!profile)throw Error("أنشئ ملف اللاعب بالاسم أولًا.");
+     room=await rpc("ihyaa_join_room",{p_code:String(r.code||"").toUpperCase(),p_password:pass?pass.value:null});
+     role="player";showRoom();
+    },"gold");
+    item.append(title,meta,actions);target.append(item);
+   });
+  }catch(e){
+   target.innerHTML="";
+   target.append(node("p","ihyMuted","تعذر تحميل اقتراحات الغرف. قد يحتاج مسؤول الموقع إلى تطبيق تحديث قاعدة البيانات الخاص باكتشاف الغرف. "+String(e?.message||e)));
+  }
+}
 function home(){
  const c=node("div","ihyAuthLayout");
  const top=node("div","ihyAuthPanel");top.id="ihyAuthPanel";
@@ -106,6 +130,10 @@ function home(){
  const pw=field(join,"كلمة المرور","إن وُجدت","password");
  button(join,"انضم إلى المسابقة",async()=>{await auth();if(!profile)throw Error("أنشئ ملف اللاعب أولًا.");if(!/^[A-Z0-9]{8}$/i.test(code.value.trim()))throw Error("أدخل كود غرفة صحيحًا مكوّنًا من 8 رموز.");room=await rpc("ihyaa_join_room",{p_code:code.value.trim().toUpperCase(),p_password:pw.value||null});role="player";showRoom()},"gold");
  grid.append(host,join);c.append(top,grid);
+  const discover=node("div","ihyCard ihySection");discover.append(node("h3","","الغرف المتاحة الآن"),node("p","ihyMuted","تظهر هنا كل الغرف التي ما زالت في الانتظار، سواء كانت مفتوحة أو محمية بكلمة مرور."));
+  const discoverTools=node("div","");const refreshRooms=node("button","ihyBtn ihyEditBtn","↻ تحديث الاقتراحات");const roomList=node("div","","جارٍ البحث عن الغرف المتاحة…");
+  refreshRooms.onclick=()=>loadRoomSuggestions(roomList);discoverTools.append(refreshRooms);discover.append(discoverTools,roomList);c.append(discover);
+  loadRoomSuggestions(roomList);
  if(profile){
   const archive=node("div","ihyCard ihySection");archive.append(node("h3","","أرشيف مسابقاتي"));
   const list=node("div","","جارٍ تحميل الأرشيف…");archive.append(list);
