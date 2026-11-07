@@ -620,6 +620,7 @@ body[data-theme] .turn{border-color:var(--team-line);background:var(--team-soft)
 .legacy-editor{display:block!important;margin-top:14px}.legacy-editor #categoryEditor{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,280px),1fr));gap:12px}
 @media(max-width:560px){.quick-question-grid{grid-template-columns:1fr}}
 </style>
+<link rel="stylesheet" href="question-manager.css?v=20261108">
 </head>
 <body>
 <div class="history-dust" aria-hidden="true"><i style="left:9%;--dur:14s;--delay:-0s;--drift:-45px"></i><i style="left:56%;--dur:16s;--delay:-3s;--drift:-14px"></i><i style="left:3%;--dur:18s;--delay:-6s;--drift:17px"></i><i style="left:50%;--dur:20s;--delay:-9s;--drift:-42px"></i><i style="left:97%;--dur:22s;--delay:-12s;--drift:-11px"></i><i style="left:44%;--dur:24s;--delay:-15s;--drift:20px"></i><i style="left:91%;--dur:26s;--delay:-18s;--drift:-39px"></i><i style="left:38%;--dur:28s;--delay:-2s;--drift:-8px"></i><i style="left:85%;--dur:14s;--delay:-5s;--drift:23px"></i><i style="left:32%;--dur:16s;--delay:-8s;--drift:-36px"></i><i style="left:79%;--dur:18s;--delay:-11s;--drift:-5px"></i><i style="left:26%;--dur:20s;--delay:-14s;--drift:26px"></i><i style="left:73%;--dur:22s;--delay:-17s;--drift:-33px"></i><i style="left:20%;--dur:24s;--delay:-1s;--drift:-2px"></i><i style="left:67%;--dur:26s;--delay:-4s;--drift:29px"></i><i style="left:14%;--dur:28s;--delay:-7s;--drift:-30px"></i><i style="left:61%;--dur:14s;--delay:-10s;--drift:1px"></i><i style="left:8%;--dur:16s;--delay:-13s;--drift:32px"></i><i style="left:55%;--dur:18s;--delay:-16s;--drift:-27px"></i><i style="left:2%;--dur:20s;--delay:-0s;--drift:4px"></i><i style="left:49%;--dur:22s;--delay:-3s;--drift:35px"></i><i style="left:96%;--dur:24s;--delay:-6s;--drift:-24px"></i></div>
@@ -848,6 +849,7 @@ $("startDuelBtn").onclick=()=>{hideStartMenu();const b=$("onlineDuelBtn");if(b)b
 $("backToStartBtn").onclick=()=>{close("hostOverlay");openStartMenu()};
 $("rulesStart").onclick=()=>{close("rulesOverlay");document.body.classList.remove("room-flow-mode","setup-mode");playUiSound("click");toast("المسابقة بدأت! اختاروا أول سؤال من لوحة التحدي أو ابدأوا بقرعة البداية.")};
 </script>
+<script src="question-manager.js?v=20261108"></script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="supabase-config.js"></script>
 <script src="multiplayer.js"></script>
