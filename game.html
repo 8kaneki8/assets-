@@ -540,6 +540,74 @@ body[data-theme] .turn{border-color:var(--team-line);background:var(--team-soft)
 @media(max-width:560px){.theme-dock{left:12px;bottom:12px;padding:8px 10px;gap:9px;border-radius:15px}.theme-choice{width:24px;height:24px;min-width:24px}.theme-dock-label{font-size:11px}.theme-dock-options{gap:8px}}
 @media(prefers-reduced-motion:reduce){.theme-choice{transition:none}}
 
+
+/* IHYAA QUESTION MANAGER — PREMIUM WORKSPACE */
+#hostOverlay{padding:clamp(8px,2vw,24px);align-items:center}
+#hostOverlay .modal{width:min(1120px,100%);max-height:min(94vh,980px);padding:clamp(16px,2.4vw,30px);background:linear-gradient(180deg,#fffefa 0%,#fff 42%);border:1px solid #e5dfcf;border-radius:26px;overflow-y:auto;overscroll-behavior:contain}
+#hostOverlay .modal-head{position:sticky;top:-1px;z-index:5;margin:-2px 0 18px;padding:4px 0 14px;background:#fffefaee;backdrop-filter:blur(12px)}
+#hostOverlay .modal-head h2{font-size:clamp(19px,2.3vw,25px);font-weight:900}
+#hostOverlay .host-intro{display:flex;align-items:center;justify-content:space-between;gap:18px;padding:22px 24px;margin-bottom:24px;border-radius:21px;color:#fff;background:radial-gradient(circle at 8% 20%,#ffffff20,transparent 32%),linear-gradient(125deg,#07392f,#0e624b);box-shadow:0 13px 30px #0b49351c}
+#hostOverlay .host-kicker{display:inline-flex;padding:5px 11px;border:1px solid #e3cb8a66;border-radius:99px;color:#f0d99f;font-size:11px;font-weight:800}
+#hostOverlay .host-intro h3{margin:9px 0 3px;color:#fff;font-size:clamp(21px,3vw,29px);font-weight:900}
+#hostOverlay .host-intro p{margin:0;color:#e0eee7;font-size:13px;line-height:1.9}
+#hostOverlay .host-intro-mark{width:66px;height:66px;flex:0 0 66px;display:grid;place-items:center;border:1px solid #f1d99b99;border-radius:20px;background:#ffffff12;color:#f3d99b;font-size:38px;font-weight:900}
+#hostOverlay .formrow,#hostOverlay .host-settings-grid{gap:12px}
+#hostOverlay .formrow{padding:16px;border:1px solid #e9e5d9;border-radius:18px;background:#fbfaf5}
+#hostOverlay .host-settings-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));padding:5px 0 14px}
+#hostOverlay .field{min-width:0;margin:8px 0}
+#hostOverlay .field>label:first-child{font-size:12px;color:#4b6257}
+#hostOverlay .field input:not([type=checkbox]),#hostOverlay .field textarea,#hostOverlay .field select,#hostOverlay select{width:100%;min-width:0;border:1px solid #dfe5da;border-radius:12px;background:#fff;padding:11px 13px;color:#18382f;outline:none;transition:border-color .2s,box-shadow .2s}
+#hostOverlay .field input:focus,#hostOverlay .field textarea:focus,#hostOverlay .field select:focus,#hostOverlay select:focus{border-color:#9ab9a3;box-shadow:0 0 0 3px #0d594614}
+#hostOverlay .host-section-heading{display:flex;justify-content:space-between;align-items:center;gap:12px;margin:22px 0 12px}
+#hostOverlay .host-section-heading>div:first-child{display:flex;align-items:center;gap:12px}
+#hostOverlay .host-section-heading>div:first-child>span{width:38px;height:38px;display:grid;place-items:center;border-radius:12px;background:#eaf1e9;color:#14533f;font-size:13px;font-weight:900}
+#hostOverlay .host-section-heading h3{margin:0;color:#173f32;font-size:17px;font-weight:900}
+#hostOverlay .host-section-heading p{margin:2px 0 0;color:#849087;font-size:11px}
+#hostOverlay .host-section-tag{padding:6px 11px;border:1px solid #e7e1d1;border-radius:99px;background:#faf8f1;color:#7a6637;font-size:10px;font-weight:800;white-space:nowrap}
+#hostOverlay .quick-question-panel{padding:18px;border:1px solid #dce8dc;border-radius:20px;background:linear-gradient(145deg,#f5faf4,#fff 65%);box-shadow:0 8px 24px #174d3210}
+#hostOverlay .quick-question-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:11px}
+#hostOverlay .quick-question-grid label,#hostOverlay .quick-wide{display:grid;gap:7px;color:#4b6257;font-size:12px;font-weight:800}
+#hostOverlay .quick-wide{margin-top:13px}
+#hostOverlay .quick-question-panel textarea{min-height:88px;resize:vertical}
+#hostOverlay .quick-actions{margin-top:14px;padding-top:13px;border-top:1px solid #e4ece2}
+#hostOverlay #quickAddQuestion{min-height:46px;padding-inline:22px}
+#hostOverlay .quick-summary{margin-top:12px;border-radius:12px;background:#fff;border-color:#e2e9df;font-weight:800}
+#hostOverlay .legacy-editor{margin-top:10px!important}
+#hostOverlay .legacy-editor #categoryEditor{display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
+#hostOverlay .question-category-editor{min-width:0;margin:0;padding:16px;border:1px solid #e5e6dc;border-radius:19px;background:#fff;box-shadow:0 7px 22px #18382f09}
+#hostOverlay .question-category-head{align-items:center;gap:8px}
+#hostOverlay .question-category-head input{min-width:0;font-weight:900;background:#f8faf6}
+#hostOverlay .question-category-head button{flex:0 0 auto;padding:9px 12px;font-size:11px}
+#hostOverlay .question-edit-row{position:relative;margin:10px 0;padding:13px;border:1px solid #e9eae2;border-radius:15px;background:#fbfcf9}
+#hostOverlay .question-edit-title{display:flex;align-items:center;gap:8px;margin-bottom:9px;color:#315f8b;font-size:12px}
+#hostOverlay .question-edit-title:before{content:"";width:7px;height:7px;border-radius:50%;background:#c5a35c}
+#hostOverlay .question-edit-row textarea{min-height:78px;background:#fff}
+#hostOverlay .question-edit-row>input{width:100%;padding:10px 12px;border:1px solid #dfe5da;border-radius:11px;background:#fff}
+#hostOverlay .question-edit-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:9px}
+#hostOverlay .question-edit-grid label{display:grid;gap:5px;color:#64766b;font-size:11px;font-weight:800}
+#hostOverlay .question-edit-grid input{width:100%;padding:9px 10px;border:1px solid #dfe5da;border-radius:10px;background:#fff}
+#hostOverlay .question-remove{margin-top:9px;padding:8px 12px;border:1px solid #f0dddd;background:#fff5f4;color:#a34b4b;font-size:11px}
+#hostOverlay .question-add,#hostOverlay #addCategory{width:100%;margin-top:8px;padding:11px;border:1px dashed #b8cdbb;background:#f5faf4;color:#245b43;font-weight:900}
+#hostOverlay .actions{position:sticky;bottom:-1px;z-index:4;margin:20px -4px -5px;padding:13px 4px 5px;background:#fffefaed;backdrop-filter:blur(12px);border-top:1px solid #eee9dd}
+#hostOverlay .actions button{flex:1;min-width:145px}
+@media(max-width:760px){
+ #hostOverlay{padding:7px;align-items:flex-end}
+ #hostOverlay .modal{max-height:96vh;border-radius:22px 22px 14px 14px;padding:15px}
+ #hostOverlay .host-intro{padding:17px;border-radius:17px}
+ #hostOverlay .host-intro-mark{width:50px;height:50px;flex-basis:50px;font-size:29px}
+ #hostOverlay .host-settings-grid{grid-template-columns:1fr 1fr}
+ #hostOverlay .quick-question-grid{grid-template-columns:1fr 1fr}
+ #hostOverlay .legacy-editor #categoryEditor{grid-template-columns:1fr}
+}
+@media(max-width:440px){
+ #hostOverlay .formrow,#hostOverlay .host-settings-grid,#hostOverlay .quick-question-grid{grid-template-columns:1fr}
+ #hostOverlay .host-section-heading{align-items:flex-start}
+ #hostOverlay .host-section-tag{display:none}
+ #hostOverlay .host-intro p{font-size:11px}
+ #hostOverlay .actions{gap:7px}
+ #hostOverlay .actions button{min-width:calc(50% - 5px);padding:11px 8px;font-size:12px}
+}
+
 </style>  <link rel="stylesheet" href="ihyaa-premium.css?v=20261107">
 <style>
 .quick-question-panel{padding:16px;border:1px solid #d9e5d9;border-radius:16px;background:#f7faf6;display:grid;gap:12px}
@@ -562,7 +630,9 @@ body[data-theme] .turn{border-color:var(--team-line);background:var(--team-soft)
 <div class="section-head"><div><h2>لوحة التحدّي</h2><p>اختر سؤالًا متاحًا لبدء الجولة</p></div><span class="hint" id="remaining">— سؤال متاح</span></div><section class="board" id="board"></section>
 <div class="hostbar"><button class="secondary" id="localDuelBtn">⚡ مواجهة محلية سريعة • 15 سؤالًا</button><button class="secondary" id="drawBtn">🎲 قرعة البداية</button><button class="secondary" id="switchBtn">⇄ تبديل الدور</button><button class="gold" id="resetBtn">↻ إعادة ضبط النقاط</button></div><div class="footer">مؤسسة إحياء • جيل على خطى السابقين</div></main>
 <aside class="theme-dock" aria-label="اختيار ألوان المسابقة"><span class="theme-dock-label">الثيم</span><div class="theme-dock-options"><button type="button" class="theme-choice theme-green" data-theme-choice="green" aria-label="الثيم الأخضر" aria-pressed="true" title="الأخضر"></button><button type="button" class="theme-choice theme-blue" data-theme-choice="blue" aria-label="الثيم الأزرق" aria-pressed="false" title="الأزرق"></button><button type="button" class="theme-choice theme-red" data-theme-choice="red" aria-label="الثيم الأحمر" aria-pressed="false" title="الأحمر"></button><button type="button" class="theme-choice theme-yellow" data-theme-choice="yellow" aria-label="الثيم الأصفر" aria-pressed="false" title="الأصفر"></button></div></aside><div class="overlay" id="questionOverlay"><div class="modal"><div class="modal-head"><h2>سؤال المسابقة</h2><button class="close" data-close="questionOverlay">×</button></div><div class="q-value" id="qValue"></div><div class="duel-clock" id="duelClock"></div><div class="event-banner" id="eventBanner"></div><button class="gold" id="resumeTimerBtn" style="display:none;margin:10px 0">▶ استئناف المؤقت</button><div class="timer-wrap" id="timerWrap"><div class="timer-meta"><span>الوقت المتبقي</span><strong id="timerText">30</strong></div><div class="timer-track"><span id="timerBar"></span></div></div><div class="question" id="qText"></div><div class="answer" id="qAnswer"></div><div class="actions"><button class="secondary" id="showAnswer">إظهار الإجابة</button><button class="primary" id="correctBtn">✓ إجابة صحيحة</button><button class="secondary" id="wrongBtn">✕ إجابة غير صحيحة</button><button class="gold" id="skipQuestionBtn" type="button">↷ تخطي السؤال (الهوست)</button></div><p class="hint">الإجابة الصحيحة تمنح الفريق نقاط السؤال ويُغلق السؤال. عند الإجابة الخاطئة أو انتهاء الوقت يُغلق السؤال دون نقاط، وينتقل الدور للفريق المنافس ليختار سؤالًا جديدًا من اللوحة.</p></div></div>
-<div class="overlay" id="hostOverlay"><div class="modal"><div class="modal-head"><h2>إعداد وإدارة المسابقة</h2><button class="close" data-close="hostOverlay">×</button></div><div class="formrow"><div class="field"><label>اسم الفريق الأحمر</label><input id="editRed" value="الفريق الأحمر"></div><div class="field"><label>اسم الفريق الأزرق</label><input id="editBlue" value="الفريق الأزرق"></div></div><div class="host-settings-grid"><div class="field theme-control"><label for="themeSelect">ثيم المسابقة</label><select id="themeSelect"><option value="green">الأخضر التراثي</option><option value="blue">الأزرق الملكي</option><option value="red">الأحمر العنابي</option><option value="yellow">الذهبي المشرق</option></select><small>معاينة فورية وحفظ تلقائي.</small></div><div class="field"><label for="modeSelect">نمط اللعب</label><select id="modeSelect"><option value="classic">المسابقة الكلاسيكية</option><option value="duel">مواجهة محلية 1 ضد 1 • 15 سؤالًا</option></select><small>المواجهة المحلية: 15 سؤالًا، 30 ثانية لكل سؤال، ومكافأة 600 نقطة للفائز. للمواجهة الأونلاين سؤال ذهبي عند التعادل.</small></div><div class="field"><label>المؤثرات الصوتية</label><label class="sound-toggle"><input id="soundToggle" type="checkbox"> مؤثرات قصيرة فقط — بدون موسيقى</label></div><div class="field"><label>الأحداث العشوائية</label><label class="sound-toggle"><input id="eventsToggle" type="checkbox"> تفعيل أحداث المفاجأة</label></div><div class="field"><label>مدة مواجهة 1 ضد 1 بالدقائق</label><input id="duelTotalMinutes" type="number" min="1" max="30" value="7"></div></div><div class="field"><label>لوحة إضافة الأسئلة اليدوية</label>
+<div class="overlay" id="hostOverlay"><div class="modal"><div class="modal-head"><h2>إعداد وإدارة المسابقة</h2><button class="close" data-close="hostOverlay">×</button></div>
+<div class="host-intro"><div><span class="host-kicker">مركز التحكم • مؤسسة إحياء</span><h3>إدارة مكتبة الأسئلة</h3><p>أنشئ الفئات، أضف الأسئلة، وحدد النقاط والوقت — كل شيء في مكان واحد.</p></div><div class="host-intro-mark">؟</div></div><div class="formrow"><div class="field"><label>اسم الفريق الأحمر</label><input id="editRed" value="الفريق الأحمر"></div><div class="field"><label>اسم الفريق الأزرق</label><input id="editBlue" value="الفريق الأزرق"></div></div><div class="host-settings-grid"><div class="field theme-control"><label for="themeSelect">ثيم المسابقة</label><select id="themeSelect"><option value="green">الأخضر التراثي</option><option value="blue">الأزرق الملكي</option><option value="red">الأحمر العنابي</option><option value="yellow">الذهبي المشرق</option></select><small>معاينة فورية وحفظ تلقائي.</small></div><div class="field"><label for="modeSelect">نمط اللعب</label><select id="modeSelect"><option value="classic">المسابقة الكلاسيكية</option><option value="duel">مواجهة محلية 1 ضد 1 • 15 سؤالًا</option></select><small>المواجهة المحلية: 15 سؤالًا، 30 ثانية لكل سؤال، ومكافأة 600 نقطة للفائز. للمواجهة الأونلاين سؤال ذهبي عند التعادل.</small></div><div class="field"><label>المؤثرات الصوتية</label><label class="sound-toggle"><input id="soundToggle" type="checkbox"> مؤثرات قصيرة فقط — بدون موسيقى</label></div><div class="field"><label>الأحداث العشوائية</label><label class="sound-toggle"><input id="eventsToggle" type="checkbox"> تفعيل أحداث المفاجأة</label></div><div class="field"><label>مدة مواجهة 1 ضد 1 بالدقائق</label><input id="duelTotalMinutes" type="number" min="1" max="30" value="7"></div></div><div class="host-section-heading"><div><span>01</span><div><h3>إضافة سؤال جديد</h3><p>أضف سؤالًا مباشرة إلى فئة موجودة أو أنشئ فئة جديدة.</p></div></div><div class="host-section-tag">إضافة سريعة</div></div>
+<div class="field"><label>بيانات السؤال الجديد</label>
 <div id="quickQuestionPanel" class="quick-question-panel">
 <div class="quick-question-grid">
 <label>الفئة الحالية<select id="quickCategory"></select></label>
@@ -575,6 +645,7 @@ body[data-theme] .turn{border-color:var(--team-line);background:var(--team-soft)
 <div class="quick-actions"><button type="button" class="primary" id="quickAddQuestion">＋ إضافة السؤال للمسابقة</button><span id="quickQuestionStatus" class="hint">السؤال يُضاف مباشرة ويحفظ تلقائيًا.</span></div>
 <div id="quickQuestionSummary" class="quick-summary"></div>
 </div></div>
+<div class="host-section-heading editor-heading"><div><span>02</span><div><h3>الفئات والأسئلة المحفوظة</h3><p>عدّل المحتوى أو احذف سؤالًا أو أضف أسئلة أخرى لكل فئة.</p></div></div><div class="host-section-tag">المكتبة الحالية</div></div>
 <div class="legacy-editor"><div id="categoryEditor"></div><button class="secondary" id="addCategory" type="button">＋ إضافة فئة</button></div><div class="actions"><button class="secondary" id="testDuelBtn">🧪 تجربة 1 ضد 1 بدون نقاط</button><button class="secondary" id="backToStartBtn">⌂ قائمة البداية</button><button class="primary" id="saveSettings">حفظ الأسئلة والإعدادات</button><button class="gold" id="newGame">بدء مسابقة جديدة</button></div><p class="hint">تُحفظ الإعدادات والنقاط على هذا الجهاز فقط. أضف سؤالًا وإجابة لكل قيمة نقاط. يمكنك تعديل الأسئلة قبل بدء المسابقة.</p></div></div>
 <div class="draw-stage" id="drawStage"><div class="draw-card"><div class="draw-emblem" id="drawEmblem">؟</div><h2 class="draw-title">قرعة البداية</h2><p class="draw-sub" id="drawSub">يتم اختيار الفريق الذي سيبدأ المسابقة...</p><div class="draw-result" id="drawResult">استعدوا!</div><div class="draw-track" id="drawTrack"><span></span></div><button class="primary draw-close" id="drawClose" style="display:none">ابدأ المسابقة</button></div></div><div class="power-reveal" id="powerReveal" aria-live="assertive"><div class="power-reveal-backdrop"></div><div class="power-reveal-card"><div class="power-reveal-orbit"></div><div class="power-reveal-icon" id="powerRevealIcon">✦</div><div class="power-reveal-kicker">POWER UP ACTIVATED</div><h2 id="powerRevealTitle">تم تفعيل المساعدة</h2><p id="powerRevealTeam"></p><div class="power-reveal-line"></div></div></div><div class="toast" id="toast"></div><div class="winner-overlay" id="winnerOverlay" role="dialog" aria-modal="true" aria-labelledby="winnerTitle"><div class="winner-rays"></div><div class="winner-confetti" id="winnerConfetti"></div><div class="winner-card" id="winnerCard"><div class="winner-crown">👑</div><div class="winner-kicker">مؤسسة إحياء • جيل على خطى السابقين</div><h2 class="winner-title" id="winnerTitle">بطل المسابقة</h2><div class="winner-name" id="winnerName"></div><div class="winner-score" id="winnerScore"></div><p class="winner-sub" id="winnerSub">أداء رائع.. تستحقون التتويج!</p><div class="winner-actions"><button class="primary" id="winnerClose">عرض النتيجة</button><button class="gold" id="winnerNewGame">🏆 مسابقة جديدة</button></div></div></div>
 <script>
