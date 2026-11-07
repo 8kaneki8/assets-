@@ -733,7 +733,7 @@ $("drawBtn").onclick=()=>{
 $("drawClose").onclick=()=>{$("drawStage").classList.remove("show")};
 $("switchBtn").onclick=()=>{state.turn=1-state.turn;render();toast("الدور الآن: "+state.names[state.turn])};
 $("resetBtn").onclick=()=>{if(confirm("هل تريد تصفير النقاط وإعادة جميع الأسئلة؟")){state.scores=[0,0];state.turn=0;state.winnerShown=false;state.lifelines=[{supervisor:false,double:false,block:false},{supervisor:false,double:false,block:false}];state.categories.forEach(c=>c.questions.forEach(q=>q.used=false));render();toast("تم تجهيز لوحة جديدة")}};
-$("hostOpen").onclick=()=>{buildEditor();refreshQuickQuestionControls();$("editRed").value=state.names[0];$("editBlue").value=state.names[1];$("themeSelect").value=state.theme||"green";$("modeSelect").value=state.mode||"classic";$("soundToggle").checked=state.sound!==false;$("eventsToggle").checked=state.events!==false;$("duelTotalMinutes").value=state.duelTotalMinutes||7;$("hostOverlay").classList.add("show")};
+$("hostOpen").onclick=()=>{const overlay=$("hostOverlay");if(!overlay)return;overlay.classList.add("show");try{buildEditor();refreshQuickQuestionControls();$("editRed").value=state.names[0];$("editBlue").value=state.names[1];$("themeSelect").value=state.theme||"green";$("modeSelect").value=state.mode||"classic";$("soundToggle").checked=state.sound!==false;$("eventsToggle").checked=state.events!==false;$("duelTotalMinutes").value=state.duelTotalMinutes||7;}catch(error){console.error("Ihyaa question manager open failed:",error);toast("تم فتح إدارة الأسئلة، لكن تعذر تحميل بعض البيانات. أعد المحاولة.");}};
 let editorRenderToken=0;
 function buildEditor(){
  const token=++editorRenderToken,root=$("categoryEditor"),saveBtn=$("saveSettings"),addBtn=$("addCategory");
