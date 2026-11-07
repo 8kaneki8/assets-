@@ -75,6 +75,7 @@ const fail=e=>{
  const old=$("ihyAuthError");if(old)old.remove();
  const target=$("ihyAuthPanel")||box;
  const error=node("p","ihyAuthError",msg);error.setAttribute("role","alert");target.prepend(error);
+ modal.classList.add("open");
 };
 let authPromise=null;
 async function auth(){
@@ -104,7 +105,10 @@ async function restoreProfile(){
  const user=await db.auth.getUser();if(user.error)throw user.error;
  if(!user.data.user){profile=null;return null;}
  const r=await db.from("ihyaa_profiles").select("username,public_id").eq("user_id",user.data.user.id).maybeSingle();
- if(r.error)throw r.error;
+ if(r.error){
+  if(r.error.code==="42501"||/row-level security|permission denied/i.test(String(r.error.message||""))){profile=null;return null}
+  throw r.error;
+ }
  profile=r.data?{username:r.data.username,player_id:r.data.public_id}:null;return profile;
 }
 async function login(name){
