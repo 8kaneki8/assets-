@@ -283,7 +283,7 @@ begin
  is_host:=uid=d.host_id;
  me_team:=case when uid=d.red_user then 'red' when uid=d.blue_user then 'blue' else null end;
  select * into q from ihyaa_duel_questions where duel_id=p_duel and question_no=d.current_no;
- answers:=case when q.question_no is null then null else jsonb_build_object('id',q.question_no,'category',q.category,'question',q.question_text,'options',q.options,'golden',q.is_golden) end;
+ answers:=case when q.question_no is null or d.status='lobby' then null else jsonb_build_object('id',q.question_no,'category',q.category,'question',q.question_text,'options',q.options,'golden',q.is_golden) end;
  if is_host then
   select coalesce(jsonb_agg(jsonb_build_object('player_id',p.public_id,'username',p.username,'option',a.answer_option,'correct',a.is_correct,'points',a.points_awarded,'elapsed_ms',a.elapsed_ms,'received_at',a.received_at)),'[]'::jsonb) into own_answer
   from ihyaa_duel_answers a join ihyaa_profiles p on p.user_id=a.user_id where a.duel_id=p_duel and a.question_no=d.current_no;
