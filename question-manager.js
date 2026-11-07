@@ -164,5 +164,12 @@
  };
  // Replace legacy renderer and reopen the editor if startup opened it before this file loaded.
  window.buildQuestionManager=buildEditor;
- if($id("hostOverlay")?.classList.contains("show")){buildEditor();refreshQuickQuestionControls()}
+ // First-run setup must open only after this manager has replaced the legacy editor.
+ if(document.body.classList.contains("setup-mode")){
+  const title=$id("hostOverlay")?.querySelector(".modal-head h2");
+  if(title)title.textContent="جهّز أسئلة المسابقة";
+  openManager();
+ }else if($id("hostOverlay")?.classList.contains("show")){
+  buildEditor();refreshQuickQuestionControls();
+ }
 })();
