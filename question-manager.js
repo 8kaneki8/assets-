@@ -4,9 +4,12 @@
  const $id=id=>document.getElementById(id);
  const root=()=> $id("categoryEditor");
  const clamp=(n,min,max,fallback)=>Number.isFinite(n)?Math.max(min,Math.min(max,Math.round(n))):fallback;
- let renderToken=0,searchText="";
+ let renderToken=0,searchText="",autosaveTimer=null;
+ // Cancel any legacy editor render queued during first-load initialization.
+ try{if(typeof editorRenderToken==="number")editorRenderToken++}catch(e){}
  const countQuestions=()=>state.categories.reduce((n,c)=>n+(Array.isArray(c.questions)?c.questions.length:0),0);
- const persist=()=>{try{save();return true}catch(e){console.error("Question manager save failed",e);toast("تعذر الحفظ على هذا الجهاز");return false}};
+ const persist=()=>{try{return save()!==false}catch(e){console.error("Question manager save failed",e);toast("تعذر الحفظ على هذا الجهاز");return false}};
+ const schedulePersist=()=>{clearTimeout(autosaveTimer);autosaveTimer=setTimeout(()=>{autosaveTimer=null;persist()},450)};
  function toolbar(){
   const host=root()?.parentElement;if(!host||$id("questionManagerToolbar"))return;
   const bar=document.createElement("div");bar.id="questionManagerToolbar";bar.className="qm-toolbar";
@@ -83,17 +86,27 @@
   r.oninput=e=>{
    const el=e.target;if(!el.dataset)return;
    const [ci,qi]=String(el.dataset.q||el.dataset.a||el.dataset.v||el.dataset.time||"").split(",").map(Number);
-   if(el.dataset.cat!==undefined){const c=state.categories[Number(el.dataset.cat)];if(c){c.name=el.value;persist();refreshQuickQuestionControls()}return}
+   if(el.dataset.cat!==undefined){const c=state.categories[Number(el.dataset.cat)];if(c){c.name=el.value;schedulePersist()}return}
    if(!Number.isInteger(ci)||!Number.isInteger(qi))return;
    const q=state.categories[ci]?.questions[qi];if(!q)return;
    if(el.dataset.q!==undefined)q.q=el.value;
    if(el.dataset.a!==undefined)q.a=el.value;
    if(el.dataset.v!==undefined){const n=Number(el.value);if(Number.isInteger(n)&&n>=1&&n<=10000)q.v=n}
    if(el.dataset.time!==undefined){const n=Number(el.value);if(Number.isInteger(n)&&n>=5&&n<=300)q.time=n}
-   persist();
+   schedulePersist();
   };
+  r.onchange=e=>{if(e.target?.dataset?.cat!==undefined)refreshQuickQuestionControls()};
  }
  function saveAll(){
+  clearTimeout(autosaveTimer);autosaveTimer=null;
+  // Read visible controls before validation so the last keystroke is never lost.
+  root()?.querySelectorAll("[data-cat]").forEach(el=>{const c=state.categories[Number(el.dataset.cat)];if(c)c.name=el.value});
+  root()?.querySelectorAll("[data-q],[data-a],[data-v],[data-time]").forEach(el=>{
+   const key=el.dataset.q!==undefined?"q":el.dataset.a!==undefined?"a":el.dataset.v!==undefined?"v":"time";
+   const [ci,qi]=String(el.dataset[key]).split(",").map(Number),q=state.categories[ci]?.questions[qi];if(!q)return;
+   if(key==="q"||key==="a")q[key]=el.value;
+   else {const n=Number(el.value),min=key==="v"?1:5,max=key==="v"?10000:300;if(Number.isInteger(n)&&n>=min&&n<=max)q[key]=n;else el.setCustomValidity("قيمة غير صحيحة");}
+  });
   const invalid=[];
   state.categories.forEach((c,ci)=>c.questions.forEach((q,qi)=>{
    q.q=String(q.q||"").trim();q.a=String(q.a||"").trim();
