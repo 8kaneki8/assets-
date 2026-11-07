@@ -132,5 +132,5 @@ if(role==="host"){const controls=el("div","duel-card");controls.append(el("h3","
 return v
 }
 async function launch(){try{await ensure();const rows=await call("ihyaa_duel_history");const active=rows.find(r=>["lobby","live","paused","golden"].includes(r.status));if(active){duelId=active.id;role=active.is_host?"host":"player";await openMatch();return}await loadBank();home()}catch(e){show("تعذر فتح نظام المواجهات",el("p","duel-error",e.message))}}
-document.addEventListener("DOMContentLoaded",()=>{const nav=document.querySelector(".nav-actions")||document.querySelector(".nav");if(!nav)return;const b=el("button","duel-btn gold","⚔️ 1 VS 1");b.id="duelBtn";b.style.marginInlineStart="8px";b.onclick=launch;nav.append(b)});
+document.addEventListener("DOMContentLoaded",()=>{const nav=document.querySelector(".nav-actions")||document.querySelector(".nav");if(!nav)return;const b=el("button","duel-btn gold","⚔️ 1 VS 1");b.id="onlineDuelBtn";b.style.marginInlineStart="8px";b.onclick=launch;nav.append(b)});
 })();
