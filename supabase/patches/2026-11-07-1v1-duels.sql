@@ -379,9 +379,9 @@ drop policy if exists ihyaa_duels_participants_read on public.ihyaa_duels;
 create or replace function public.ihyaa_duel_signal_sync()
 returns trigger language plpgsql security definer set search_path=public as $$
 begin
- insert into public.ihyaa_duel_signals(duel_id,version,status,current_no,updated_at)
+ insert into public.ihyaa_duel_signals as current_signal(duel_id,version,status,current_no,updated_at)
  values(new.id,1,new.status,new.current_no,new.updated_at)
- on conflict(duel_id) do update set version=public.ihyaa_duel_signals.version+1,status=excluded.status,current_no=excluded.current_no,updated_at=excluded.updated_at;
+ on conflict(duel_id) do update set version=current_signal.version+1,status=excluded.status,current_no=excluded.current_no,updated_at=excluded.updated_at;
  return new;
 end $$;
 drop trigger if exists ihyaa_duel_signal_after_change on public.ihyaa_duels;
