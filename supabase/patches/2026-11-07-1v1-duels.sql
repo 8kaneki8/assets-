@@ -76,9 +76,7 @@ alter table public.ihyaa_duel_answers enable row level security;
 alter table public.ihyaa_duel_events enable row level security;
 drop policy if exists ihyaa_duel_bank_owner on public.ihyaa_duel_bank;
 drop policy if exists ihyaa_duels_participants_read on public.ihyaa_duels;
-create policy ihyaa_duels_participants_read on public.ihyaa_duels for select to authenticated using(auth.uid() in(host_id,red_user,blue_user));
 revoke all on public.ihyaa_duel_bank,public.ihyaa_duels,public.ihyaa_duel_questions,public.ihyaa_duel_answers,public.ihyaa_duel_events from anon,authenticated;
-grant select on public.ihyaa_duels to authenticated;
 -- Question snapshots, correct answers, individual submissions and admin events are RPC-only.
 
 create or replace function public.ihyaa_duel_bank_save(p_id uuid,p_category text,p_question text,p_options jsonb,p_correct smallint)
