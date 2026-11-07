@@ -75,11 +75,10 @@ alter table public.ihyaa_duel_questions enable row level security;
 alter table public.ihyaa_duel_answers enable row level security;
 alter table public.ihyaa_duel_events enable row level security;
 drop policy if exists ihyaa_duel_bank_owner on public.ihyaa_duel_bank;
-create policy ihyaa_duel_bank_owner on public.ihyaa_duel_bank for select to authenticated using(owner_id=auth.uid());
 drop policy if exists ihyaa_duels_participants_read on public.ihyaa_duels;
 create policy ihyaa_duels_participants_read on public.ihyaa_duels for select to authenticated using(auth.uid() in(host_id,red_user,blue_user));
 revoke all on public.ihyaa_duel_bank,public.ihyaa_duels,public.ihyaa_duel_questions,public.ihyaa_duel_answers,public.ihyaa_duel_events from anon,authenticated;
-grant select on public.ihyaa_duel_bank,public.ihyaa_duels to authenticated;
+grant select on public.ihyaa_duels to authenticated;
 -- Question snapshots, correct answers, individual submissions and admin events are RPC-only.
 
 create or replace function public.ihyaa_duel_bank_save(p_id uuid,p_category text,p_question text,p_options jsonb,p_correct smallint)
@@ -88,7 +87,7 @@ declare out_id uuid;
 begin
  if auth.uid() is null or not exists(select 1 from ihyaa_profiles where user_id=auth.uid()) then raise exception 'سجّل الدخول أولاً'; end if;
  if char_length(trim(p_category)) not between 2 and 50 or char_length(trim(p_question)) not between 5 and 1000 or jsonb_typeof(p_options)<>'array' or jsonb_array_length(p_options)<>4 or p_correct not between 0 and 3 then raise exception 'بيانات السؤال أو الاختيارات غير مكتملة'; end if;
- if exists(select 1 from jsonb_array_elements_text(p_options) x where char_length(trim(x))=0) then raise exception 'يجب كتابة الاختيارات الأربعة'; end if;
+ if exists(select 1 from jsonb_array_elements_text(p_options) as opts(value) where char_length(trim(value))=0) then raise exception 'يجب كتابة الاختيارات الأربعة'; end if;
  if p_id is null then
   insert into ihyaa_duel_bank(owner_id,category,question_text,options,correct_option) values(auth.uid(),trim(p_category),trim(p_question),p_options,p_correct) returning id into out_id;
  else
@@ -110,6 +109,8 @@ create or replace function public.ihyaa_duel_bank_list()
 returns jsonb language plpgsql security definer set search_path=public,auth as $$
 declare v jsonb;
 begin
+ if auth.uid() is null then raise exception 'سجّل الدخول أولاً'; end if;
+ if exists(select 1 from ihyaa_duels where auth.uid() in(red_user,blue_user) and status in('lobby','live','paused','golden')) then raise exception 'لا يمكن فتح بنك الإجابات أثناء مشاركتك في مواجهة'; end if;
  select coalesce(jsonb_agg(jsonb_build_object('id',id,'category',category,'question',question_text,'options',options,'correct_option',correct_option,'active',active) order by updated_at desc),'[]'::jsonb)
  into v from ihyaa_duel_bank where owner_id=auth.uid();
  return v;
@@ -123,10 +124,11 @@ begin
  select user_id into red from ihyaa_profiles where public_id=upper(trim(p_red_id));
  select user_id into blue from ihyaa_profiles where public_id=upper(trim(p_blue_id));
  if red is null or blue is null or red=blue then raise exception 'تحقق من معرفَي اللاعبين؛ يجب أن يكونا لاعبين مختلفين'; end if;
+ if auth.uid() in(red,blue) then raise exception 'يجب أن يكون الهوست منفصلًا عن لاعبي المواجهة'; end if;
  if coalesce(array_length(p_question_ids,1),0)<>16 then raise exception 'اختر 15 سؤالًا وسؤالًا ذهبيًا واحدًا'; end if;
  if (select count(distinct x) from unnest(p_question_ids) x)<>16 then raise exception 'لا يمكن تكرار السؤال داخل المواجهة'; end if;
  if exists(select 1 from unnest(p_question_ids) x left join ihyaa_duel_bank b on b.id=x and b.owner_id=auth.uid() and b.active where b.id is null) then raise exception 'يوجد سؤال غير صالح أو لا تملكه'; end if;
- insert into ihyaa_duels(host_id,red_user,blue_user,settings) values(auth.uid(),red,blue,jsonb_build_object('correct_points',100,'last_question_points',200,'winner_reward',600)||coalesce(p_settings,'{}'::jsonb)) returning * into d;
+ insert into ihyaa_duels(host_id,red_user,blue_user,settings) values(auth.uid(),red,blue,jsonb_build_object('correct_points',greatest(0,least(10000,coalesce((p_settings->>'correct_points')::int,100))),'last_question_points',greatest(0,least(10000,coalesce((p_settings->>'last_question_points')::int,200))),'winner_reward',600)) returning * into d;
  insert into ihyaa_duel_questions(duel_id,question_no,category,question_text,options,correct_option,is_golden)
  select d.id,x.ordinality::smallint,b.category,b.question_text,b.options,b.correct_option,x.ordinality=16
  from unnest(p_question_ids) with ordinality x(id,ordinality) join ihyaa_duel_bank b on b.id=x.id;
