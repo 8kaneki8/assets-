@@ -549,7 +549,7 @@ body[data-theme] .turn{border-color:var(--team-line);background:var(--team-soft)
 .quick-question-panel textarea{resize:vertical}
 .quick-actions{display:flex;align-items:center;gap:12px;flex-wrap:wrap}
 .quick-summary{padding:10px 12px;background:#fff;border:1px solid #e3e9df;border-radius:10px;color:#53675d;font-size:12px}
-.legacy-editor-hidden{display:none!important}
+.legacy-editor{display:block!important;margin-top:14px}.legacy-editor #categoryEditor{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,280px),1fr));gap:12px}
 @media(max-width:560px){.quick-question-grid{grid-template-columns:1fr}}
 </style>
 </head>
@@ -575,7 +575,7 @@ body[data-theme] .turn{border-color:var(--team-line);background:var(--team-soft)
 <div class="quick-actions"><button type="button" class="primary" id="quickAddQuestion">＋ إضافة السؤال للمسابقة</button><span id="quickQuestionStatus" class="hint">السؤال يُضاف مباشرة ويحفظ تلقائيًا.</span></div>
 <div id="quickQuestionSummary" class="quick-summary"></div>
 </div></div>
-<div class="legacy-editor-hidden" aria-hidden="true"><div id="categoryEditor"></div><button class="secondary" id="addCategory" type="button">＋ إضافة فئة</button></div><div class="actions"><button class="secondary" id="testDuelBtn">🧪 تجربة 1 ضد 1 بدون نقاط</button><button class="secondary" id="backToStartBtn">⌂ قائمة البداية</button><button class="primary" id="saveSettings">حفظ الأسئلة والإعدادات</button><button class="gold" id="newGame">بدء مسابقة جديدة</button></div><p class="hint">تُحفظ الإعدادات والنقاط على هذا الجهاز فقط. أضف سؤالًا وإجابة لكل قيمة نقاط. يمكنك تعديل الأسئلة قبل بدء المسابقة.</p></div></div>
+<div class="legacy-editor"><div id="categoryEditor"></div><button class="secondary" id="addCategory" type="button">＋ إضافة فئة</button></div><div class="actions"><button class="secondary" id="testDuelBtn">🧪 تجربة 1 ضد 1 بدون نقاط</button><button class="secondary" id="backToStartBtn">⌂ قائمة البداية</button><button class="primary" id="saveSettings">حفظ الأسئلة والإعدادات</button><button class="gold" id="newGame">بدء مسابقة جديدة</button></div><p class="hint">تُحفظ الإعدادات والنقاط على هذا الجهاز فقط. أضف سؤالًا وإجابة لكل قيمة نقاط. يمكنك تعديل الأسئلة قبل بدء المسابقة.</p></div></div>
 <div class="draw-stage" id="drawStage"><div class="draw-card"><div class="draw-emblem" id="drawEmblem">؟</div><h2 class="draw-title">قرعة البداية</h2><p class="draw-sub" id="drawSub">يتم اختيار الفريق الذي سيبدأ المسابقة...</p><div class="draw-result" id="drawResult">استعدوا!</div><div class="draw-track" id="drawTrack"><span></span></div><button class="primary draw-close" id="drawClose" style="display:none">ابدأ المسابقة</button></div></div><div class="power-reveal" id="powerReveal" aria-live="assertive"><div class="power-reveal-backdrop"></div><div class="power-reveal-card"><div class="power-reveal-orbit"></div><div class="power-reveal-icon" id="powerRevealIcon">✦</div><div class="power-reveal-kicker">POWER UP ACTIVATED</div><h2 id="powerRevealTitle">تم تفعيل المساعدة</h2><p id="powerRevealTeam"></p><div class="power-reveal-line"></div></div></div><div class="toast" id="toast"></div><div class="winner-overlay" id="winnerOverlay" role="dialog" aria-modal="true" aria-labelledby="winnerTitle"><div class="winner-rays"></div><div class="winner-confetti" id="winnerConfetti"></div><div class="winner-card" id="winnerCard"><div class="winner-crown">👑</div><div class="winner-kicker">مؤسسة إحياء • جيل على خطى السابقين</div><h2 class="winner-title" id="winnerTitle">بطل المسابقة</h2><div class="winner-name" id="winnerName"></div><div class="winner-score" id="winnerScore"></div><p class="winner-sub" id="winnerSub">أداء رائع.. تستحقون التتويج!</p><div class="winner-actions"><button class="primary" id="winnerClose">عرض النتيجة</button><button class="gold" id="winnerNewGame">🏆 مسابقة جديدة</button></div></div></div>
 <script>
 const DEFAULT=[{name:"القرآن والتفسير",questions:[{v:100,q:"ما السورة التي تُسمّى أمّ الكتاب؟",a:"سورة الفاتحة"},{v:200,q:"كم عدد أجزاء القرآن الكريم؟",a:"ثلاثون جزءًا"},{v:300,q:"ما أطول سورة في القرآن الكريم؟",a:"سورة البقرة"},{v:400,q:"ما السورة التي لا تبدأ بالبسملة؟",a:"سورة التوبة"},{v:500,q:"ما السورة التي وردت فيها سجدتان؟",a:"سورة الحج"}]},{name:"الحديث والسيرة",questions:[{v:100,q:"من هو أول مؤذن في الإسلام؟",a:"بلال بن رباح رضي الله عنه"},{v:200,q:"في أي مدينة وُلد النبي ﷺ؟",a:"مكة المكرمة"},{v:300,q:"ما اسم مرضعة النبي ﷺ؟",a:"حليمة السعدية"},{v:400,q:"كم سنة استمرت الدعوة في مكة قبل الهجرة؟",a:"ثلاث عشرة سنة"},{v:500,q:"ما اسم الغار الذي نزل فيه الوحي أول مرة؟",a:"غار حراء"}]},{name:"الفقه والعبادات",questions:[{v:100,q:"كم عدد الصلوات المفروضة في اليوم والليلة؟",a:"خمس صلوات"},{v:200,q:"ما قبلة المسلمين؟",a:"الكعبة المشرفة"},{v:300,q:"في أي شهر يصوم المسلمون؟",a:"شهر رمضان"},{v:400,q:"كم عدد أركان الإسلام؟",a:"خمسة"},{v:500,q:"ما العبادة التي تكون في وقت مخصوص من يوم عرفة؟",a:"الوقوف بعرفة"}]}];
@@ -629,7 +629,7 @@ $("drawBtn").onclick=()=>{
 $("drawClose").onclick=()=>{$("drawStage").classList.remove("show")};
 $("switchBtn").onclick=()=>{state.turn=1-state.turn;render();toast("الدور الآن: "+state.names[state.turn])};
 $("resetBtn").onclick=()=>{if(confirm("هل تريد تصفير النقاط وإعادة جميع الأسئلة؟")){state.scores=[0,0];state.turn=0;state.winnerShown=false;state.lifelines=[{supervisor:false,double:false,block:false},{supervisor:false,double:false,block:false}];state.categories.forEach(c=>c.questions.forEach(q=>q.used=false));render();toast("تم تجهيز لوحة جديدة")}};
-$("hostOpen").onclick=()=>{refreshQuickQuestionControls();$("editRed").value=state.names[0];$("editBlue").value=state.names[1];$("themeSelect").value=state.theme||"green";$("modeSelect").value=state.mode||"classic";$("soundToggle").checked=state.sound!==false;$("eventsToggle").checked=state.events!==false;$("duelTotalMinutes").value=state.duelTotalMinutes||7;$("hostOverlay").classList.add("show")};
+$("hostOpen").onclick=()=>{buildEditor();refreshQuickQuestionControls();$("editRed").value=state.names[0];$("editBlue").value=state.names[1];$("themeSelect").value=state.theme||"green";$("modeSelect").value=state.mode||"classic";$("soundToggle").checked=state.sound!==false;$("eventsToggle").checked=state.events!==false;$("duelTotalMinutes").value=state.duelTotalMinutes||7;$("hostOverlay").classList.add("show")};
 let editorRenderToken=0;
 function buildEditor(){
  const token=++editorRenderToken,root=$("categoryEditor"),saveBtn=$("saveSettings"),addBtn=$("addCategory");
@@ -699,7 +699,7 @@ function buildEditor(){
  }
 }
 function esc(s){return String(s).replaceAll("&","&amp;").replaceAll('"',"&quot;").replaceAll("<","&lt;").replaceAll(">","&gt;")}
-$("addCategory").onclick=()=>{state.categories.push({name:"فئة جديدة",questions:[100,200,300,400,500].map(v=>({v,q:"",a:"",used:false}))});buildEditor()};
+$("addCategory").onclick=()=>{state.categories.push({name:"فئة جديدة",questions:[{v:100,q:"",a:"",time:30,used:false}]});buildEditor();refreshQuickQuestionControls()};
 
 function refreshQuickQuestionControls(){
  const select=$("quickCategory");if(!select)return;
@@ -721,7 +721,7 @@ $("quickAddQuestion").onclick=()=>{
  else{const index=Number($("quickCategory").value);category=state.categories[index];if(!category){toast("اختر فئة صحيحة أو اكتب اسم فئة جديدة");return}}
  if(!Array.isArray(category.questions))category.questions=[];
  category.questions.push({v:points,q:question,a:answer,time,used:false});
- save();render();refreshQuickQuestionControls();
+ save();render();refreshQuickQuestionControls();buildEditor();
  $("quickQuestionText").value="";$("quickAnswerText").value="";$("quickNewCategory").value="";
  $("quickPoints").value="100";$("quickTime").value="30";
  const status=$("quickQuestionStatus");if(status)status.textContent="تمت إضافة السؤال وحفظه بنجاح.";
