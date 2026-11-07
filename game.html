@@ -659,7 +659,7 @@ function buildEditor(){
    try{
     const stop=Math.min(cursor+6,jobs.length);
     while(cursor<stop){jobs[cursor++]()}
-    if(cursor<jobs.length){setTimeout(()=>requestAnimationFrame(renderBatch),0);return}
+    if(cursor<jobs.length){setTimeout(renderBatch,0);return}
     loading.remove();unlock();
    }catch(error){
     loading.textContent="تعذر عرض بعض الأسئلة. أعد فتح إدارة الأسئلة أو حدّث الصفحة.";
@@ -667,7 +667,7 @@ function buildEditor(){
     console.error("Ihyaa question editor render failed:",error);
    }
   };
-  requestAnimationFrame(renderBatch);
+  setTimeout(renderBatch,0);
  }catch(error){
   loading.textContent="تعذر تجهيز محرر الأسئلة. تم إيقاف التحميل بدل تعليق الصفحة.";
   loading.style.color="#a33b45";unlock();
