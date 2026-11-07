@@ -59,29 +59,45 @@ style.textContent+=`
 `;
 
 const modal=node("div");modal.id="ihyaaOnline";const box=node("div","ihyBox");modal.append(box);document.body.append(modal);
-const close=()=>{if(document.body.classList.contains("room-flow-mode"))return;modal.classList.remove("open");if(timer)clearInterval(timer);timer=null};
+const close=()=>{modal.classList.remove("open");if(timer)clearInterval(timer);timer=null};
 const shell=(title,content)=>{box.innerHTML="";const h=node("h2","",title);box.append(h,content);const x=node("button","ihyBtn","إغلاق");x.onclick=close;box.insertBefore(x,h);modal.classList.add("open")};
 const field=(parent,label,placeholder,type)=>{parent.append(node("label","",label));const i=node("input");i.placeholder=placeholder||"";i.type=type||"text";parent.append(i);return i};
 const button=(parent,label,fn,cls)=>{const b=node("button","ihyBtn "+(cls||""),label);b.onclick=async()=>{if(busy)return;busy=true;b.disabled=true;try{await fn()}catch(e){fail(e)}finally{busy=false;b.disabled=false}};parent.append(b);return b};
 const fail=e=>{
  const raw=String(e?.message||e||"حدث خطأ غير متوقع");
- const msg=raw.includes("Invalid login")?"تعذر تسجيل الدخول. حدّث الصفحة وحاول مرة أخرى."
-  :raw.includes("اسم المستخدم")?raw
-  :raw.includes("Failed to fetch")||raw.includes("NetworkError")?"تعذر الاتصال بالخادم. تحقق من الإنترنت وحاول مجددًا."
-  :raw.includes("User already registered")?"هذا الحساب موجود بالفعل."
+ const msg=raw.includes("Invalid login")?"تعذر استعادة جلسة اللاعب. حدّث الصفحة وحاول إنشاء ملف اللاعب من جديد."
+  :raw.includes("Failed to fetch")||raw.includes("NetworkError")?"تعذر الاتصال بخادم المسابقة. تحقق من الإنترنت ثم أعد المحاولة."
+  :raw.includes("Anonymous sign-ins are disabled")?"تسجيل دخول اللاعبين غير مفعّل في إعدادات Supabase."
+  :raw.includes("User already registered")?"هذا الحساب موجود بالفعل. جرّب تسجيل الدخول من نفس المتصفح الذي أنشأته منه."
+  :raw.includes("permission denied")||raw.includes("row-level security")?"الخادم رفض العملية بسبب صلاحيات قاعدة البيانات. يجب مراجعة سياسات RLS ودوال إحياء."
+  :raw.includes("Could not find the function")||raw.includes("does not exist")?"قاعدة البيانات لا تحتوي على الدالة المطلوبة أو أن تحديث SQL لم يُطبّق بعد."
   :raw;
  const old=$("ihyAuthError");if(old)old.remove();
  const target=$("ihyAuthPanel")||box;
  const error=node("p","ihyAuthError",msg);error.setAttribute("role","alert");target.prepend(error);
 };
+let authPromise=null;
 async function auth(){
- if(!ready())throw Error("إعداد الاتصال غير مكتمل. تحقق من تحميل مكتبة Supabase وملف الإعدادات.");
+ if(!ready())throw Error("خدمة الدخول غير مهيأة. تأكد من تحميل Supabase وملف supabase-config.js.");
  if(!db)db=window.supabase.createClient(URL,KEY,{auth:{persistSession:true,autoRefreshToken:true,detectSessionInUrl:false}});
- const current=await db.auth.getSession();if(current.error)throw current.error;
- if(!current.data.session){const signed=await db.auth.signInAnonymously();if(signed.error)throw signed.error;}
- const user=await db.auth.getUser();if(user.error)throw user.error;
- if(!user.data.user)throw Error("تعذر إنشاء جلسة لاعب. حاول مرة أخرى.");
- return true;
+ if(authPromise)return authPromise;
+ authPromise=(async()=>{
+  const current=await db.auth.getSession();
+  if(current.error)throw current.error;
+  if(!current.data?.session){
+   const signed=await db.auth.signInAnonymously();
+   if(signed.error){
+    const message=String(signed.error.message||"");
+    if(/disabled|not enabled|anonymous/i.test(message))throw Error("تسجيل دخول اللاعبين غير مفعّل في Supabase. فعّل Anonymous Sign-Ins من Authentication → Sign In / Providers.");
+    throw signed.error;
+   }
+  }
+  const user=await db.auth.getUser();
+  if(user.error)throw user.error;
+  if(!user.data?.user)throw Error("لم يتم إنشاء جلسة لاعب. أعد المحاولة بعد تحديث الصفحة.");
+  return true;
+ })();
+ try{return await authPromise}finally{authPromise=null}
 }
 async function restoreProfile(){
  if(!db)return null;
@@ -96,8 +112,13 @@ async function login(name){
  if(clean.length<2||clean.length>24)throw Error("اسم اللاعب يجب أن يكون من حرفين إلى 24 حرفًا.");
  if(!/^[\p{L}\p{N} _.-]+$/u.test(clean))throw Error("استخدم الحروف والأرقام والمسافة أو الرموز البسيطة فقط.");
  await auth();
- profile=await rpc("ihyaa_register",{p_username:clean});
- profile={username:profile.username,player_id:profile.player_id};
+ let result=await rpc("ihyaa_register",{p_username:clean});
+ if(Array.isArray(result))result=result[0];
+ if(!result||typeof result!=="object")throw Error("تم الاتصال بالخادم لكن لم تصل بيانات ملف اللاعب. تحقق من تحديث قاعدة بيانات إحياء.");
+ const username=result.username||result.name;
+ const playerId=result.player_id||result.public_id;
+ if(!username||!playerId)throw Error("الخادم لم يُرجع اسم اللاعب ومعرّفه بالشكل المتوقع. راجع دالة ihyaa_register في Supabase.");
+ profile={username,player_id:playerId};
  home();
 }
 async function loadRoomSuggestions(target){
