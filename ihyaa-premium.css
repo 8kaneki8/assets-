@@ -7,14 +7,14 @@ button{font-family:inherit}
 }
 body{background-color:var(--ih-bg)}
 /* Portal */
-body:has(.hero) .wrap{width:min(1180px,calc(100% - 40px))}
-body:has(.hero) header{border-bottom-color:rgba(184,216,255,.16)}
-body:has(.hero) .brand img{filter:drop-shadow(0 8px 18px #0006)}
-body:has(.hero) .hero{min-height:560px}
-body:has(.hero) .visual-card{border-radius:34px;box-shadow:0 34px 90px #0009,inset 0 1px #ffffff30}
-body:has(.hero) .portal{border-radius:20px;min-height:166px;box-shadow:0 12px 34px #0002}
-body:has(.hero) .portal:hover{box-shadow:0 20px 44px #0005;transform:translateY(-5px)}
-body:has(.hero) .btn{border-radius:15px}
+body:has(.portals) .wrap{width:min(1180px,calc(100% - 40px))}
+body:has(.portals) header{border-bottom-color:rgba(184,216,255,.16)}
+body:has(.portals) .brand img{filter:drop-shadow(0 8px 18px #0006)}
+body:has(.portals) .hero{min-height:560px}
+body:has(.portals) .visual-card{border-radius:34px;box-shadow:0 34px 90px #0009,inset 0 1px #ffffff30}
+body:has(.portals) .portal{border-radius:20px;min-height:166px;box-shadow:0 12px 34px #0002}
+body:has(.portals) .portal:hover{box-shadow:0 20px 44px #0005;transform:translateY(-5px)}
+body:has(.portals) .btn{border-radius:15px}
 /* Classic game */
 body:has(#board){background:radial-gradient(ellipse at 50% -15%,#173d69 0,#091b36 48%,#06142a 100%)}
 body:has(#board) .top{background:linear-gradient(135deg,rgba(10,35,66,.98),rgba(7,23,47,.96));border-bottom:1px solid var(--ih-line);box-shadow:0 12px 45px #0003}
@@ -71,7 +71,7 @@ body:has(#board) .winner-card{border:1px solid rgba(215,189,130,.6);border-radiu
  body:has(#board) .cell{min-height:54px}
 }
 @media(max-width:480px){
- body:has(.hero) .wrap{width:calc(100% - 28px)}
+ body:has(.portals) .wrap{width:calc(100% - 28px)}
  body:has(#board) main.wrap{padding-inline:12px}
  body:has(#board) .hostbar button{flex-basis:100%}
 }
