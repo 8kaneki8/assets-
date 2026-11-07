@@ -8,7 +8,7 @@ const ready=()=>window.supabase&&URL.startsWith("https://")&&!URL.includes("YOUR
 const style=node("style");style.textContent=`#ihyaaOnline{position:fixed;inset:0;z-index:10030;background:#071b16d9;display:none;align-items:center;justify-content:center;padding:14px;backdrop-filter:blur(8px)}#ihyaaOnline.open{display:flex}.ihyBox{background:#faf9f4;color:#17352d;width:min(940px,100%);max-height:92vh;overflow:auto;border:1px solid #c6a45b;border-radius:22px;padding:20px}.ihyBox h2{margin:0 0 16px}.ihyGrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px}.ihyCard{background:white;border:1px solid #e5e1d6;border-radius:13px;padding:13px;margin:9px 0}.ihyBox input,.ihyBox select{width:100%;padding:11px;border:1px solid #d7d8cd;border-radius:9px;margin:5px 0 12px}.ihyBtn{border:0;border-radius:10px;padding:10px 14px;margin:4px;background:#0d5946;color:white;font-weight:800;cursor:pointer}.ihyBtn.gold{background:#c6a45b;color:#17352d}.ihyCode{font-size:26px;letter-spacing:3px;font-weight:900;color:#0d5946}.ihyPerson{padding:9px;background:#f2f1e9;border-radius:9px;margin:5px 0}.ihyQuestion{font-size:22px;font-weight:900;padding:16px;background:#f1efe5;border-radius:12px;line-height:1.8}.ihyAnswer{background:#e4f1e8;padding:12px;border-radius:10px;margin:8px 0}.ihyMuted{color:#718078;font-size:13px;line-height:1.8}.ihySection{margin-top:16px;padding-top:12px;border-top:1px solid #e8e3d7}`;
 document.head.append(style);
 
-style.textContent+=\`
+style.textContent+=`
 .ihyAuthLayout{display:grid;gap:14px;max-width:780px;margin:auto}
 .ihyAuthPanel{background:linear-gradient(145deg,#fff 0%,#f4f7f5 100%);border:1px solid #d9e3dc;border-radius:18px;padding:20px;box-shadow:0 10px 30px #17352d0d}
 .ihyAuthIntro{text-align:center;padding:8px 8px 18px}
@@ -25,7 +25,7 @@ style.textContent+=\`
 .ihyEditWrap{display:grid;gap:8px;margin-top:8px}
 .ihyAuthError{background:#fff0ed;border:1px solid #efc1b8;color:#922f20;padding:11px;border-radius:10px;line-height:1.7}
 .ihyBtn:disabled{opacity:.55;cursor:not-allowed}
-\`;
+`;
 
 const modal=node("div");modal.id="ihyaaOnline";const box=node("div","ihyBox");modal.append(box);document.body.append(modal);
 const close=()=>{if(document.body.classList.contains("room-flow-mode"))return;modal.classList.remove("open");if(timer)clearInterval(timer);timer=null};
