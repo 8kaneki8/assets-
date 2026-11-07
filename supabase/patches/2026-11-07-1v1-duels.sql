@@ -270,3 +270,28 @@ grant execute on function public.ihyaa_duel_control(uuid,text,jsonb) to authenti
 grant execute on function public.ihyaa_duel_view(uuid) to authenticated;
 grant execute on function public.ihyaa_duel_history() to authenticated;
 grant execute on function public.ihyaa_duel_adjust(uuid,uuid,integer,text) to authenticated;
+
+
+-- Include participant identity in the safe view so the client can render
+-- host controls only for the host and label the player's own side.
+create or replace function public.ihyaa_duel_view(p_duel uuid)
+returns jsonb language plpgsql security definer set search_path=public,auth as $$
+declare d ihyaa_duels; q ihyaa_duel_questions; uid uuid; is_host boolean; me_team text; answers jsonb; own_answer jsonb; red_name text; blue_name text;
+begin
+ uid:=auth.uid(); select * into d from ihyaa_duels where id=p_duel and uid in(host_id,red_user,blue_user);
+ if d.id is null then raise exception 'لا تملك صلاحية عرض هذه المواجهة'; end if;
+ is_host:=uid=d.host_id;
+ me_team:=case when uid=d.red_user then 'red' when uid=d.blue_user then 'blue' else null end;
+ select * into q from ihyaa_duel_questions where duel_id=p_duel and question_no=d.current_no;
+ answers:=case when q.question_no is null then null else jsonb_build_object('id',q.question_no,'category',q.category,'question',q.question_text,'options',q.options,'golden',q.is_golden) end;
+ if is_host then
+  select coalesce(jsonb_agg(jsonb_build_object('player_id',p.public_id,'username',p.username,'option',a.answer_option,'correct',a.is_correct,'points',a.points_awarded,'elapsed_ms',a.elapsed_ms,'received_at',a.received_at)),'[]'::jsonb) into own_answer
+  from ihyaa_duel_answers a join ihyaa_profiles p on p.user_id=a.user_id where a.duel_id=p_duel and a.question_no=d.current_no;
+  if answers is not null then answers:=answers||jsonb_build_object('correct_option',q.correct_option); end if;
+ else
+  select jsonb_build_object('answered',true,'correct',is_correct,'points',points_awarded) into own_answer from ihyaa_duel_answers where duel_id=p_duel and question_no=d.current_no and user_id=uid;
+ end if;
+ select username into red_name from ihyaa_profiles where user_id=d.red_user;
+ select username into blue_name from ihyaa_profiles where user_id=d.blue_user;
+ return jsonb_build_object('duel_id',d.id,'code',d.code,'status',d.status,'question_no',d.current_no,'question',answers,'my_answer',case when is_host then null else own_answer end,'host_answers',case when is_host then own_answer else null end,'is_host',is_host,'my_team',me_team,'red_user',d.red_user,'blue_user',d.blue_user,'red',jsonb_build_object('name',red_name,'score',d.red_score,'correct',d.red_correct,'wrong',d.red_wrong),'blue',jsonb_build_object('name',blue_name,'score',d.blue_score,'correct',d.blue_correct,'wrong',d.blue_wrong),'winner_id',d.winner_id,'started_at',d.started_at,'finished_at',d.finished_at,'settings',d.settings);
+end $$;
