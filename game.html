@@ -861,7 +861,7 @@ document.addEventListener("DOMContentLoaded",()=>{
  }else if(mode==="duel"){
   const menu=document.getElementById("startMenuOverlay");if(menu)menu.classList.remove("show");
   const b=document.getElementById("onlineDuelBtn");if(b)b.click();
- }else if(mode==="host"){const b=document.getElementById("hostOpen");if(b)b.click();}
+ }else if(mode==="host"||mode==="questions"){const b=document.getElementById("hostOpen");if(b)b.click();}
  else if(mode==="rules"){const r=document.getElementById("rulesOverlay");if(r)r.classList.add("show");}
 });
 </script>
