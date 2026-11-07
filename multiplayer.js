@@ -9,6 +9,37 @@ const style=node("style");style.textContent=`#ihyaaOnline{position:fixed;inset:0
 document.head.append(style);
 
 style.textContent+=`
+
+/* IHYAA PREMIUM BLUE/GOLD PLAYER SIGN-IN */
+#ihyaaOnline{background:radial-gradient(ellipse at 15% 10%,#3476b044,transparent 42%),#06152be8!important;padding:clamp(12px,3vw,28px)!important;backdrop-filter:blur(14px)!important}
+.ihyBox{width:min(980px,100%)!important;max-height:min(92vh,900px)!important;padding:clamp(16px,3vw,30px)!important;border:1px solid #9fc3ed70!important;border-radius:26px!important;background:linear-gradient(145deg,#fafdff 0%,#edf4fc 55%,#e6effb 100%)!important;color:#142c4a!important;box-shadow:0 35px 100px #0009,0 0 0 1px #ffffff30 inset!important;position:relative}
+.ihyBox>h2{font-size:clamp(20px,3vw,28px)!important;color:#173b66!important;margin:0 0 18px!important;padding:5px 0 14px!important;border-bottom:1px solid #c9d9ec}
+.ihyAuthLayout{max-width:850px!important;gap:16px!important}
+.ihyAuthPanel{border:1px solid #cbdced!important;border-radius:22px!important;padding:clamp(18px,3vw,30px)!important;background:linear-gradient(145deg,#fff,#f2f7fd)!important;box-shadow:0 18px 45px #244b7612!important;position:relative;overflow:hidden}
+.ihyAuthPanel:before{content:"";position:absolute;width:220px;height:220px;border:1px solid #a9c8ed40;border-radius:50%;top:-145px;left:-90px;box-shadow:0 0 0 22px #a9c8ed10,0 0 0 44px #a9c8ed08;pointer-events:none}
+.ihyAuthIntro{position:relative;padding:8px 8px 20px!important}
+.ihyAuthMark{width:62px!important;height:62px!important;border-radius:20px!important;background:linear-gradient(145deg,#1b5b91,#102c50)!important;color:#f2d38d!important;box-shadow:0 12px 28px #174a7e35,0 0 0 5px #dceafb!important;font-size:30px!important;margin-bottom:16px!important}
+.ihyAuthIntro>div:nth-child(2){font-size:clamp(19px,3vw,25px);font-weight:900;color:#173b66}
+.ihyAuthIntro .ihyMuted{max-width:520px;margin:9px auto 0;color:#647b96!important;line-height:2!important}
+.ihyAuthLabel{color:#24486f!important;font-size:13px;margin:12px 0 9px!important}
+.ihyAuthInput{min-height:54px!important;border:1px solid #c6d6e8!important;border-radius:14px!important;padding:14px 16px!important;background:#fff!important;color:#142c4a!important;box-shadow:0 4px 14px #1e47700a!important;transition:border-color .2s,box-shadow .2s,transform .2s!important}
+.ihyAuthInput:focus{border-color:#4d88c6!important;box-shadow:0 0 0 4px #6ca1d433!important;transform:translateY(-1px)}
+.ihyAuthInput::placeholder{color:#91a3b8}
+.ihyAuthSubmit{min-height:54px!important;border-radius:14px!important;background:linear-gradient(120deg,#e8cf91,#c39a4d)!important;color:#183657!important;font-size:14px!important;font-weight:900!important;box-shadow:0 12px 25px #b18a4530!important;transition:transform .2s,filter .2s!important}
+.ihyAuthSubmit:hover{transform:translateY(-2px);filter:brightness(1.04)}
+.ihyAuthPanel .ihyMuted{color:#71859e!important}
+.ihyAuthError{border-radius:13px!important;box-shadow:0 8px 20px #9b3d2410}
+.ihyIdentity{background:linear-gradient(145deg,#eaf3fd,#f8fbff)!important;border:1px solid #c5d9ee!important;border-radius:17px!important;padding:18px!important}
+.ihyIdentityName{color:#173b66!important;font-size:25px!important}
+.ihyPlayerId{color:#2c659a!important}
+.ihyCard{border-color:#d5e1ef!important;border-radius:16px!important;box-shadow:0 8px 22px #244b7609}
+.ihyBtn{border-radius:12px!important;transition:transform .18s,filter .18s!important}
+.ihyBtn:hover:not(:disabled){transform:translateY(-1px);filter:brightness(1.04)}
+.ihyBtn.gold{background:linear-gradient(120deg,#e8cf91,#c39a4d)!important;color:#183657!important}
+.ihyEditBtn{background:#e6eef8!important;color:#24486f!important}
+.ihyCode{color:#235b91!important}.ihyPerson{background:#f0f5fb!important}
+@media(max-width:560px){.ihyBox{border-radius:19px!important}.ihyAuthPanel{padding:17px!important}.ihyAuthMark{width:54px!important;height:54px!important}}
+
 .ihyAuthLayout{display:grid;gap:14px;max-width:780px;margin:auto}
 .ihyAuthPanel{background:linear-gradient(145deg,#fff 0%,#f4f7f5 100%);border:1px solid #d9e3dc;border-radius:18px;padding:20px;box-shadow:0 10px 30px #17352d0d}
 .ihyAuthIntro{text-align:center;padding:8px 8px 18px}
@@ -124,12 +155,12 @@ function home(){
  const c=node("div","ihyAuthLayout");
  const top=node("div","ihyAuthPanel");top.id="ihyAuthPanel";
  const intro=node("div","ihyAuthIntro");
- intro.append(node("div","ihyAuthMark","إ"),node("div","", "جيل على خطى السابقين"),node("p","ihyMuted","دخول سريع بالاسم فقط، دون بريد إلكتروني أو كلمة مرور. يُحفظ ملفك على هذا المتصفح."));
+ intro.append(node("div","ihyAuthMark","إ"),node("div","", "أهلًا بك في مؤسسة إحياء"),node("p","ihyMuted","أنشئ هويتك للمشاركة في المسابقات. اكتب الاسم الذي سيظهر للاعبين — بدون بريد إلكتروني أو كلمة مرور."));
  top.append(intro);
  if(!profile){
   const label=node("label","ihyAuthLabel","اسم اللاعب");
-  const name=node("input","ihyAuthInput");name.id="ihyPlayerName";name.type="text";name.placeholder="اكتب الاسم الذي سيظهر للمشاركين";name.maxLength=24;name.autocomplete="nickname";name.minLength=2;
-  const hint=node("p","ihyMuted","من حرفين إلى 24 حرفًا. لا تحتاج إلى بريد أو كلمة مرور؛ ملف اللاعب مرتبط بهذا المتصفح.");
+  const name=node("input","ihyAuthInput");name.id="ihyPlayerName";name.type="text";name.placeholder="مثال: فارس المعرفة";name.maxLength=24;name.autocomplete="nickname";name.minLength=2;name.setAttribute("aria-label","اسم اللاعب");name.spellcheck=false;
+  const hint=node("p","ihyMuted","من حرفين إلى 24 حرفًا • الحروف والأرقام والمسافة مسموحة • سيظهر هذا الاسم داخل الغرف والنتائج.");
   const submit=node("button","ihyBtn gold ihyAuthSubmit","إنشاء ملف اللاعب والمتابعة");
   submit.onclick=async()=>{if(busy)return;busy=true;submit.disabled=true;submit.textContent="جارٍ تجهيز ملفك…";try{await login(name.value)}catch(e){fail(e)}finally{busy=false;submit.disabled=false;submit.textContent="إنشاء ملف اللاعب والمتابعة"}};
   name.addEventListener("keydown",e=>{if(e.key==="Enter")submit.click()});
