@@ -1,0 +1,77 @@
+/* IHYAA • Unified premium interface layer */
+:root{--ih-bg:#07172f;--ih-panel:#0d2546;--ih-panel-2:#12365f;--ih-blue:#8fbae9;--ih-blue-bright:#b8d8ff;--ih-gold:#d7bd82;--ih-ink:#122d4d;--ih-line:rgba(143,186,233,.24);--ih-shadow:0 24px 70px rgba(0,10,30,.28)}
+:where(button,a,input,select,textarea):focus-visible{outline:3px solid #8fc5ff!important;outline-offset:3px}
+button{font-family:inherit}
+@media(prefers-reduced-motion:no-preference){
+ :where(.btn,.portal,.cell,.ihyBtn,.duel-btn,.duel-option,.primary,.secondary,.gold){transition:transform .2s ease,box-shadow .2s ease,background .2s ease,border-color .2s ease,filter .2s ease}
+}
+body{background-color:var(--ih-bg)}
+/* Portal */
+body:has(.hero) .wrap{width:min(1180px,calc(100% - 40px))}
+body:has(.hero) header{border-bottom-color:rgba(184,216,255,.16)}
+body:has(.hero) .brand img{filter:drop-shadow(0 8px 18px #0006)}
+body:has(.hero) .hero{min-height:560px}
+body:has(.hero) .visual-card{border-radius:34px;box-shadow:0 34px 90px #0009,inset 0 1px #ffffff30}
+body:has(.hero) .portal{border-radius:20px;min-height:166px;box-shadow:0 12px 34px #0002}
+body:has(.hero) .portal:hover{box-shadow:0 20px 44px #0005;transform:translateY(-5px)}
+body:has(.hero) .btn{border-radius:15px}
+/* Classic game */
+body:has(#board){background:radial-gradient(ellipse at 50% -15%,#173d69 0,#091b36 48%,#06142a 100%)}
+body:has(#board) .top{background:linear-gradient(135deg,rgba(10,35,66,.98),rgba(7,23,47,.96));border-bottom:1px solid var(--ih-line);box-shadow:0 12px 45px #0003}
+body:has(#board) .top .nav,body:has(#board) .top .hero{max-width:1240px}
+body:has(#board) .top .brand img{filter:drop-shadow(0 5px 14px #0006)}
+body:has(#board) .top .hero h2{letter-spacing:-.6px}
+body:has(#board) main.wrap{max-width:1240px;padding-bottom:42px}
+body:has(#board) .scoreboard{gap:14px;margin-top:24px}
+body:has(#board) .team{border:1px solid rgba(255,255,255,.13);border-radius:20px;box-shadow:var(--ih-shadow);backdrop-filter:blur(12px);padding:20px 22px}
+body:has(#board) .team.red{background:linear-gradient(145deg,#532c42,#251d36)}
+body:has(#board) .team.blue{background:linear-gradient(145deg,#174b78,#142a4b)}
+body:has(#board) .points{font-variant-numeric:tabular-nums;text-shadow:0 5px 22px #0005}
+body:has(#board) .turn{border:1px solid var(--ih-line);border-radius:16px;padding:13px 18px;background:#0c2442;box-shadow:0 10px 30px #0003}
+body:has(#board) .preselect-help{border:1px solid var(--ih-line);border-radius:22px;background:linear-gradient(145deg,rgba(17,48,82,.94),rgba(8,28,53,.96));box-shadow:var(--ih-shadow);padding:20px}
+body:has(#board) .lifeline-tile{border-radius:13px;min-height:48px}
+body:has(#board) .section-head{margin:30px 0 15px}
+body:has(#board) .section-head h2{font-size:clamp(20px,2.4vw,28px)}
+body:has(#board) .board{gap:14px}
+body:has(#board) .category{border:1px solid rgba(174,205,239,.2);border-radius:18px;background:linear-gradient(160deg,#102c50,#0a1d38);box-shadow:0 14px 35px #0003;padding:14px}
+body:has(#board) .category h3{color:#e8f2ff;border-bottom:1px solid rgba(174,205,239,.18);padding-bottom:12px}
+body:has(#board) .cell{border:1px solid #557fb2;border-radius:12px;background:linear-gradient(145deg,#2864a3,#19477e);color:#f4d99d;box-shadow:inset 0 1px #ffffff30,0 5px 0 #0c2c54;min-height:62px}
+body:has(#board) .cell:hover:not(:disabled){background:linear-gradient(145deg,#3b83c8,#235b98);box-shadow:0 12px 25px #0004,0 5px 0 #0c2c54}
+body:has(#board) .cell:disabled{background:#142846;color:#6e85a4;border-color:#263f60;opacity:.55}
+body:has(#board) .hostbar{display:flex;gap:10px;flex-wrap:wrap;justify-content:center;margin:24px auto}
+body:has(#board) .hostbar button,body:has(#board) .actions button{border-radius:12px;min-height:44px;padding-inline:17px}
+body:has(#board) .overlay{backdrop-filter:blur(10px);background:rgba(2,10,24,.78)}
+body:has(#board) .modal{border:1px solid rgba(143,186,233,.35);border-radius:24px;background:linear-gradient(155deg,#f9fbff,#eaf2fc);box-shadow:0 35px 100px #0009;color:#183653}
+body:has(#board) .modal-head{border-bottom:1px solid #d5e2f1;padding-bottom:14px}
+body:has(#board) .question{color:#183653;line-height:1.9}
+body:has(#board) .answer{border-radius:14px}
+body:has(#board) .timer-track{border-radius:99px;overflow:hidden}
+body:has(#board) .hostbar button:hover,body:has(#board) .actions button:hover{transform:translateY(-2px)}
+body:has(#board) .winner-card{border:1px solid rgba(215,189,130,.6);border-radius:28px;box-shadow:0 35px 100px #0009}
+/* Online room and saved quiz library */
+#ihyaaOnline .ihyBox{border-radius:26px!important;box-shadow:0 35px 100px #0008!important}
+#ihyaaOnline .ihyCard{border-radius:17px!important;box-shadow:0 8px 24px rgba(28,65,108,.07)}
+#ihyaaOnline .ihyPerson{border:1px solid #d8e5f3;border-radius:12px;padding:12px}
+#ihyaaOnline .ihyBtn{border-radius:12px;min-height:42px;box-shadow:0 5px 14px #153e6b18}
+#ihyaaOnline .ihyBtn:hover:not(:disabled){transform:translateY(-2px);filter:brightness(1.06)}
+#ihyaaOnline .ihyAuthInput{width:100%;max-width:100%}
+#ihyaaOnline .ihyCode{letter-spacing:.16em;font-variant-numeric:tabular-nums}
+/* Duel */
+#ihyaaDuel .duel-card,#ihyaaDuel .duel-player{border-radius:20px;box-shadow:0 16px 42px #0003}
+#ihyaaDuel .duel-btn{border-radius:12px;min-height:42px}
+#ihyaaDuel .duel-option{border-radius:14px;min-height:54px}
+#ihyaaDuel .duel-option:hover:not(:disabled){box-shadow:0 9px 24px #0004}
+#ihyaaDuel .duel-winner{border-radius:24px;box-shadow:0 20px 55px #0004}
+@media(max-width:720px){
+ body:has(#board) .scoreboard{grid-template-columns:1fr;gap:9px}
+ body:has(#board) .team{padding:15px 17px}
+ body:has(#board) .preselect-help{padding:14px}
+ body:has(#board) .hostbar button{flex:1 1 42%}
+ body:has(#board) .category{padding:10px}
+ body:has(#board) .cell{min-height:54px}
+}
+@media(max-width:480px){
+ body:has(.hero) .wrap{width:calc(100% - 28px)}
+ body:has(#board) main.wrap{padding-inline:12px}
+ body:has(#board) .hostbar button{flex-basis:100%}
+}
