@@ -97,12 +97,12 @@ function home(){
  const c=node("div","ihyAuthLayout");
  const top=node("div","ihyAuthPanel");top.id="ihyAuthPanel";
  const intro=node("div","ihyAuthIntro");
- intro.append(node("div","ihyAuthMark","إ"),node("div","", "جيل على خطى السابقين"),node("p","ihyMuted","ملف لاعب واحد يحفظ اسمك ومعرّفك على هذا المتصفح."));
+ intro.append(node("div","ihyAuthMark","إ"),node("div","", "جيل على خطى السابقين"),node("p","ihyMuted","دخول سريع بالاسم فقط، دون بريد إلكتروني أو كلمة مرور. يُحفظ ملفك على هذا المتصفح."));
  top.append(intro);
  if(!profile){
   const label=node("label","ihyAuthLabel","اسم اللاعب");
   const name=node("input","ihyAuthInput");name.id="ihyPlayerName";name.type="text";name.placeholder="اكتب الاسم الذي سيظهر للمشاركين";name.maxLength=24;name.autocomplete="nickname";name.minLength=2;
-  const hint=node("p","ihyMuted","من حرفين إلى 24 حرفًا. سيُحفظ الاسم تلقائيًا لهذا المتصفح.");
+  const hint=node("p","ihyMuted","من حرفين إلى 24 حرفًا. لا تحتاج إلى بريد أو كلمة مرور؛ ملف اللاعب مرتبط بهذا المتصفح.");
   const submit=node("button","ihyBtn gold ihyAuthSubmit","إنشاء ملف اللاعب والمتابعة");
   submit.onclick=async()=>{if(busy)return;busy=true;submit.disabled=true;submit.textContent="جارٍ تجهيز ملفك…";try{await login(name.value)}catch(e){fail(e)}finally{busy=false;submit.disabled=false;submit.textContent="إنشاء ملف اللاعب والمتابعة"}};
   name.addEventListener("keydown",e=>{if(e.key==="Enter")submit.click()});
