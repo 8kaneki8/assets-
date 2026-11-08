@@ -387,5 +387,28 @@ const subs=await rpc("ihyaa_host_submissions",{p_room:room.room_id});const targe
 function showRoom(readOnly=false){const c=node("div");const info=node("div","ihyCard");info.append(node("div","","كود الغرفة"),node("div","ihyCode",room.code),node("div","ihyMuted","حالة الدخول: "+(role==="host"?"أنت الهوست":"لاعب")));const status=node("p","ihyMuted","جارٍ التحديث…");status.id="ihyStatus";info.append(status);c.append(info,node("h3","","اللاعبون"),node("div","",""));const roster=node("div");roster.id="ihyRoster";c.append(roster,node("h3","","السؤال الحالي"));const board=node("div","ihyCard");board.id="ihyPlayerBoard";board.style.display="none";c.append(board);const q=node("div","ihyCard");q.id="ihyQuestion";c.append(q);const scores=node("div","ihyCard");scores.id="ihyScores";c.append(scores);
 if(role==="host"&&!readOnly){const h=node("div","ihyCard");h.append(node("h3","","تحكم الهوست"));const invite=field(h,"إضافة لاعب باستخدام ID","مثال: A1B2C3D4");button(h,"إضافة اللاعب",async()=>{if(!invite.value.trim())throw Error("أدخل معرّف اللاعب");await rpc("ihyaa_host_invite_player",{p_room:room.room_id,p_player_id:invite.value.trim()});invite.value="";await refresh()},"gold");const red=field(h,"اسم الفريق الأحمر","الفريق الأحمر");const blue=field(h,"اسم الفريق الأزرق","الفريق الأزرق");const startBtn=button(h,"ابدأ المسابقة",async()=>{await rpc("ihyaa_host_start",{p_room:room.room_id,p_red_name:red.value||"الفريق الأحمر",p_blue_name:blue.value||"الفريق الأزرق"});await refresh()},"gold");startBtn.id="ihyStartMatch";startBtn.disabled=true;const sel=node("select");sel.id="ihySelect";h.append(node("label","","فتح سؤال"),sel);button(h,"اعرض السؤال للاعبين",async()=>{if(!sel.value)throw Error("اختر سؤالًا");await rpc("ihyaa_host_pick_question",{p_room:room.room_id,p_question:sel.value});await refresh()});h.append(node("h3","","إجابات اللاعبين"));const subs=node("div");subs.id="ihySubs";h.append(subs);button(h,"حفظ في الأرشيف",async()=>{if(!confirm("تأكيد حفظ المسابقة في الأرشيف؟"))return;await rpc("ihyaa_host_archive",{p_room:room.room_id});close();home()},"gold");c.append(h)}
 button(c,"العودة",()=>{close();home()});shell(room.title+(readOnly?" | سجل مؤرشف":""),c);refresh(readOnly).catch(fail);if(!readOnly)timer=setInterval(()=>refresh().catch(()=>{}),2500)}
-document.addEventListener("DOMContentLoaded",()=>{const nav=document.querySelector(".nav-actions")||document.querySelector(".nav");if(!nav)return;const b=node("button","","🌐 مسابقات أونلاين");b.id="onlineOpen";b.style.cssText="margin-inline-start:8px;background:#e6c77b;color:#17352d;padding:10px 15px;border-radius:12px;font-weight:900";b.onclick=async()=>{try{await auth();await restoreProfile();home()}catch(e){if(!ready()){const c=node("div","ihyCard");c.append(node("h3","","تفعيل الغرف الجماعية"),node("p","ihyMuted","الغرف تحتاج ربط Supabase مرة واحدة حتى يستطيع اللاعبون الدخول من أجهزة مختلفة."),node("p","ihyMuted","افتح ملف supabase-config.js في المستودع، واستبدل YOUR_SUPABASE_ANON_KEY بمفتاح Publishable أو anon العام من Supabase → Project Settings → API Keys. لا تستخدم Secret أو service_role ولا تشارك المفتاح السري."),node("p","ihyMuted","بعد حفظ الملف، حدّث الصفحة وابدأ إنشاء الغرفة."));shell("إعداد الاتصال بالمسابقات",c)}else fail(e)}};nav.append(b)});
+function initOnlineEntry(){
+ const nav=document.querySelector(".nav-actions")||document.querySelector(".nav");
+ if(!nav)return;
+ let b=$("onlineOpen");
+ if(!b){
+  b=node("button","","🌐 مسابقات أونلاين");b.id="onlineOpen";
+  b.style.cssText="margin-inline-start:8px;background:#e6c77b;color:#17352d;padding:10px 15px;border-radius:12px;font-weight:900";
+  nav.append(b);
+ }
+ b.onclick=async()=>{
+  try{await auth();await restoreProfile();home()}
+  catch(e){
+   if(!ready()){
+    const c=node("div","ihyCard");
+    c.append(node("h3","","تفعيل الغرف الجماعية"),node("p","ihyMuted","الغرف تحتاج ربط Supabase مرة واحدة حتى يستطيع اللاعبون الدخول من أجهزة مختلفة."),node("p","ihyMuted","افتح ملف supabase-config.js في المستودع، وتأكد من وجود مفتاح Publishable أو anon العام من Supabase → Project Settings → API Keys. لا تستخدم Secret أو service_role ولا تشارك المفتاح السري."),node("p","ihyMuted","بعد حفظ الملف، حدّث الصفحة وابدأ إنشاء الغرفة."));
+    shell("إعداد الاتصال بالمسابقات",c);
+   }else fail(e);
+  }
+ };
+ const start=$("startOnlineBtn");
+ if(start)start.onclick=()=>{const menu=$("startMenuOverlay");if(menu)menu.classList.remove("show");b.click()};
+}
+if(document.readyState==="loading")document.addEventListener("DOMContentLoaded",initOnlineEntry,{once:true});
+else initOnlineEntry();
 })();
