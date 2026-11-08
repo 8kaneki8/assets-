@@ -665,7 +665,7 @@ body[data-theme] .turn{border-color:var(--team-line);background:var(--team-soft)
 .ql-footer{flex-shrink:0}.ql-status{max-width:65%;line-height:1.6}
 @media(max-width:760px){.ql-workspace{padding:12px}.ql-workspace-grid{grid-template-columns:1fr;overflow:auto}.ql-sidebar{max-height:220px}.ql-group-list{grid-template-columns:repeat(2,minmax(0,1fr))}.ql-filterbar{grid-template-columns:1fr 110px}.ql-filterbar button{grid-column:1/-1}.ql-stats{gap:6px}.ql-stat{padding:8px}.ql-stat strong{font-size:17px}}
 @media(max-width:460px){.ql-group-list{grid-template-columns:1fr}.ql-editor-fields{grid-template-columns:1fr}.ql-stats{grid-template-columns:repeat(3,minmax(0,1fr))}.ql-stat span{font-size:10px}}
-</style>  <link rel="stylesheet" href="ihyaa-premium.css?v=20261107">
+.ql-group-entry{display:flex;gap:5px;align-items:stretch}.ql-group-entry .ql-group-choice{flex:1;min-width:0}.ql-group-delete{width:32px;flex-shrink:0;border:1px solid #f0d8d6;border-radius:9px;background:#fff4f2;color:#a34249;font-size:18px;font-weight:900}</style>  <link rel="stylesheet" href="ihyaa-premium.css?v=20261107">
 <style>
 .quick-question-panel{padding:16px;border:1px solid #d9e5d9;border-radius:16px;background:#f7faf6;display:grid;gap:12px}
 .quick-question-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
@@ -846,10 +846,12 @@ function renderQuestionLibrary(){
  if(selectedQuestionGroupId&&!questionLibrary.some(g=>g.id===selectedQuestionGroupId))selectedQuestionGroupId=questionLibrary[0]?.id||null;
  groups.innerHTML="";
  questionLibrary.forEach(g=>{
+  const entry=document.createElement("div");entry.className="ql-group-entry";
   const b=document.createElement("button");b.type="button";b.className="ql-group-choice"+(g.id===selectedQuestionGroupId?" active":"");
   b.innerHTML="<span>"+qlEscape(g.name)+"</span><small>"+g.questions.length+" سؤال</small>";
   b.onclick=()=>{selectedQuestionGroupId=g.id;editingQuestionId=null;$("qlQuestionForm").hidden=true;renderQuestionLibrary()};
-  groups.append(b);
+  const del=document.createElement("button");del.type="button";del.className="ql-group-delete";del.textContent="×";del.title="حذف المجموعة";del.setAttribute("aria-label","حذف مجموعة "+g.name);del.onclick=()=>deleteLibraryGroup(g.id);
+  entry.append(b,del);groups.append(entry);
  });
  $("qlGroupCount").textContent=questionLibrary.length;
  const total=questionLibrary.reduce((n,g)=>n+g.questions.length,0);
@@ -882,6 +884,14 @@ function saveLibraryGroupName(){
  if(!name){qlStatus("اسم المجموعة لا يمكن أن يكون فارغًا.");input.focus();return}
  if(questionLibrary.some(g=>g.id!==group.id&&g.name.toLocaleLowerCase("ar")===name.toLocaleLowerCase("ar"))){qlStatus("يوجد بالفعل مجموعة بهذا الاسم.");return}
  group.name=name.slice(0,70);if(saveQuestionLibrary()){renderQuestionLibrary();qlStatus("تم حفظ اسم المجموعة.")}
+}
+function deleteLibraryGroup(id){
+ const group=questionLibrary.find(g=>g.id===id);if(!group)return;
+ if(!confirm("حذف مجموعة «"+group.name+"» وكل أسئلتها؟"))return;
+ questionLibrary=questionLibrary.filter(g=>g.id!==id);
+ if(selectedQuestionGroupId===id)selectedQuestionGroupId=questionLibrary[0]?.id||null;
+ $("qlQuestionForm").hidden=true;editingQuestionId=null;
+ if(saveQuestionLibrary()){renderQuestionLibrary();qlStatus("تم حذف المجموعة وأسئلتها.")}
 }
 function openLibraryQuestionEditor(id=null){
  const group=currentQuestionGroup();if(!group){qlStatus("أنشئ مجموعة أولاً.");return}
