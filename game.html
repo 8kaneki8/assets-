@@ -722,11 +722,11 @@ body[data-theme] .turn{border-color:var(--team-line);background:var(--team-soft)
   <div class="ql-workspace-grid">
    <aside class="ql-sidebar"><div class="ql-sidebar-title"><strong>مجموعات الأسئلة</strong><span id="qlGroupCount">0</span></div><div id="questionLibraryGroups" class="ql-group-list"></div><div class="ql-new-group"><input id="newQuestionGroupName" maxlength="70" placeholder="اسم المجموعة الجديدة"><button type="button" id="addQuestionGroupBtn">＋ إنشاء مجموعة</button></div></aside>
    <section class="ql-main">
-    <div class="ql-main-toolbar"><div class="ql-current-group"><label for="qlCurrentGroupName">اسم المجموعة</label><div><input id="qlCurrentGroupName" maxlength="70" placeholder="اختر مجموعة أولاً"><button id="saveQuestionGroupNameBtn" type="button">حفظ الاسم</button></div></div><div class="ql-tools"><button id="exportQuestionLibraryBtn" type="button">تصدير نسخة</button><label class="ql-import-label" for="importQuestionLibraryFile">استيراد JSON</label><input id="importQuestionLibraryFile" type="file" accept=".json,application/json" hidden></div></div>
+    <div class="ql-main-toolbar"><div class="ql-current-group"><label for="qlCurrentGroupName">اسم المجموعة المحددة لإعادة التسمية أو إضافة سؤال</label><div><input id="qlCurrentGroupName" maxlength="70" placeholder="اختر مجموعة أولاً"><button id="saveQuestionGroupNameBtn" type="button">حفظ الاسم</button></div></div><div class="ql-tools"><button id="exportQuestionLibraryBtn" type="button">تصدير نسخة</button><label class="ql-import-label" for="importQuestionLibraryFile">استيراد JSON</label><input id="importQuestionLibraryFile" type="file" accept=".json,application/json" hidden></div></div>
     <div class="ql-filterbar"><input id="qlSearchInput" type="search" placeholder="ابحث في نص السؤال أو الإجابة..."><select id="qlValueFilter"><option value="all">كل النقاط</option><option value="100">100 نقطة</option><option value="200">200 نقطة</option><option value="300">300 نقطة</option><option value="400">400 نقطة</option><option value="500">500 نقطة</option></select><button class="primary" id="newLibraryQuestionBtn" type="button">＋ إضافة سؤال</button></div>
-    <div class="ql-table-wrap"><table class="ql-table"><thead><tr><th>النقاط</th><th>السؤال</th><th>الإجابة</th><th>الوقت</th><th>إجراءات</th></tr></thead><tbody id="questionLibraryTableBody"></tbody></table><div class="ql-empty" id="qlNoQuestions">اختر مجموعة من القائمة أو أنشئ مجموعة جديدة.</div></div>
+    <div class="ql-table-wrap"><table class="ql-table"><thead><tr><th>المجموعة</th><th>النقاط</th><th>السؤال</th><th>الإجابة</th><th>الوقت</th><th>إجراءات</th></tr></thead><tbody id="questionLibraryTableBody"></tbody></table><div class="ql-empty" id="qlNoQuestions">اختر مجموعة من القائمة أو أنشئ مجموعة جديدة.</div></div>
     <form id="qlQuestionForm" class="ql-editor" hidden>
-     <div class="ql-editor-head"><div><strong id="qlEditorTitle">إضافة سؤال جديد</strong><small>اكتب البيانات ثم احفظها في المجموعة الحالية.</small></div><button type="button" id="cancelQuestionEditBtn" class="ql-cancel">إغلاق</button></div>
+     <div class="ql-editor-head"><div><strong id="qlEditorTitle">إضافة سؤال جديد</strong><small>اكتب البيانات ثم احفظها داخل المجموعة المحددة.</small></div><button type="button" id="cancelQuestionEditBtn" class="ql-cancel">إغلاق</button></div>
      <label>نص السؤال<textarea id="qlQuestionText" rows="3" maxlength="1200" required placeholder="اكتب السؤال هنا..."></textarea></label>
      <label>الإجابة الصحيحة<textarea id="qlAnswerText" rows="2" maxlength="800" required placeholder="اكتب الإجابة الصحيحة..."></textarea></label>
      <div class="ql-editor-fields"><label>النقاط<select id="qlQuestionValue"><option>100</option><option>200</option><option>300</option><option>400</option><option>500</option></select></label><label>وقت الإجابة بالثواني<input id="qlQuestionTime" type="number" min="5" max="300" value="30" required></label></div>
@@ -891,16 +891,16 @@ function renderQuestionLibrary(){
  $("qlCurrentGroupName").value=group?group.name:"";
  $("qlCurrentGroupName").disabled=!group;$("saveQuestionGroupNameBtn").disabled=!group;$("newLibraryQuestionBtn").disabled=!group;
  const query=($("qlSearchInput").value||"").trim().toLocaleLowerCase("ar"),valueFilter=$("qlValueFilter").value;
- const rows=group?group.questions.filter(q=>(valueFilter==="all"||String(q.v)===valueFilter)&&(!query||(q.q+" "+q.a).toLocaleLowerCase("ar").includes(query))).sort((a,b)=>Number(a.v)-Number(b.v)):[];
+ const rows=questionLibrary.flatMap(g=>g.questions.map(q=>({group:g,q}))).filter(({group:g,q})=>(valueFilter==="all"||String(q.v)===valueFilter)&&(!query||(g.name+" "+q.q+" "+q.a).toLocaleLowerCase("ar").includes(query))).sort((a,b)=>Number(a.q.v)-Number(b.q.v)||a.group.name.localeCompare(b.group.name,"ar"));
  body.innerHTML="";
- rows.forEach(q=>{
+ rows.forEach(({group:g,q})=>{
   const tr=document.createElement("tr");
-  tr.innerHTML='<td>'+q.v+'</td><td>'+qlEscape(q.q)+'</td><td>'+qlEscape(q.a)+'</td><td>'+q.time+' ث</td><td><div class="ql-row-actions"><button type="button" data-ql-edit="'+qlEscape(q.id)+'">تعديل</button><button type="button" class="danger" data-ql-delete="'+qlEscape(q.id)+'">حذف</button><button type="button" data-ql-copy="'+qlEscape(q.id)+'">نسخ</button></div></td>';
+  tr.innerHTML='<td>'+qlEscape(g.name)+'</td><td>'+q.v+'</td><td>'+qlEscape(q.q)+'</td><td>'+qlEscape(q.a)+'</td><td>'+q.time+' ث</td><td><div class="ql-row-actions"><button type="button" data-ql-edit="'+qlEscape(q.id)+'" data-ql-group="'+qlEscape(g.id)+'">تعديل</button><button type="button" class="danger" data-ql-delete="'+qlEscape(q.id)+'" data-ql-group="'+qlEscape(g.id)+'">حذف</button><button type="button" data-ql-copy="'+qlEscape(q.id)+'" data-ql-group="'+qlEscape(g.id)+'">نسخ</button></div></td>';
   body.append(tr);
  });
  empty.style.display=rows.length?"none":"block";
- empty.textContent=!group?"أنشئ مجموعة جديدة أو اختر مجموعة من القائمة.":group.questions.length?"لا توجد نتائج مطابقة لبحثك أو فلترك.":"المجموعة فارغة. اضغط «إضافة سؤال» للبدء.";
- $("questionLibraryStatus").textContent="الحفظ تلقائي على هذا الجهاز • "+(group?group.name:"لا توجد مجموعة محددة");
+ empty.textContent=questionLibrary.length===0?"أنشئ مجموعة جديدة للبدء.": "لا توجد أسئلة مطابقة للبحث أو فلتر النقاط في جميع المجموعات.";
+ $("questionLibraryStatus").textContent="عرض موحّد لكل المجموعات • "+rows.length+" سؤال ظاهر من أصل "+total+" • الحفظ تلقائي على هذا الجهاز";
 }
 function addLibraryGroup(){
  const input=$("newQuestionGroupName"),name=input.value.trim();
@@ -942,15 +942,15 @@ function saveLibraryQuestionForm(event){
  group.questions.sort((a,b)=>a.v-b.v);
  if(saveQuestionLibrary()){$("qlQuestionForm").hidden=true;editingQuestionId=null;renderQuestionLibrary();qlStatus(item?"تم تحديث السؤال وحفظه.":"تمت إضافة السؤال وحفظه.")}
 }
-function deleteLibraryQuestion(questionId){
- const group=currentQuestionGroup();if(!group)return;
+function deleteLibraryQuestion(questionId,groupId){
+ const group=questionLibrary.find(g=>g.id===groupId)||currentQuestionGroup();if(!group)return;
  if(!group.questions.some(q=>q.id===questionId))return;
  if(!confirm("حذف هذا السؤال من المجموعة؟"))return;
  group.questions=group.questions.filter(q=>q.id!==questionId);
  if(saveQuestionLibrary()){renderQuestionLibrary();qlStatus("تم حذف السؤال.")}
 }
-function duplicateLibraryQuestion(questionId){
- const group=currentQuestionGroup();if(!group)return;
+function duplicateLibraryQuestion(questionId,groupId){
+ const group=questionLibrary.find(g=>g.id===groupId)||currentQuestionGroup();if(!group)return;
  const item=group.questions.find(q=>q.id===questionId);if(!item)return;
  group.questions.push({...item,id:"q-"+Date.now()+"-"+Math.random().toString(36).slice(2,7),q:item.q+" (نسخة)"});group.questions.sort((a,b)=>a.v-b.v);
  if(saveQuestionLibrary()){renderQuestionLibrary();qlStatus("تم نسخ السؤال.")}
@@ -986,9 +986,9 @@ $("qlSearchInput").addEventListener("input",renderQuestionLibrary);
 $("qlValueFilter").addEventListener("change",renderQuestionLibrary);
 $("questionLibraryTableBody").addEventListener("click",event=>{
  const edit=event.target.closest("[data-ql-edit]"),del=event.target.closest("[data-ql-delete]"),copy=event.target.closest("[data-ql-copy]");
- if(edit)openLibraryQuestionEditor(edit.dataset.qlEdit);
- if(del)deleteLibraryQuestion(del.dataset.qlDelete);
- if(copy)duplicateLibraryQuestion(copy.dataset.qlCopy);
+ if(edit){selectedQuestionGroupId=edit.dataset.qlGroup;renderQuestionLibrary();openLibraryQuestionEditor(edit.dataset.qlEdit)}
+ if(del)deleteLibraryQuestion(del.dataset.qlDelete,del.dataset.qlGroup);
+ if(copy)duplicateLibraryQuestion(copy.dataset.qlCopy,copy.dataset.qlGroup);
 });
 $("exportQuestionLibraryBtn").onclick=exportQuestionLibrary;
 $("importQuestionLibraryFile").addEventListener("change",importQuestionLibraryFile);
