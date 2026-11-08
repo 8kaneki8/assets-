@@ -411,7 +411,7 @@ function showRoom(readOnly=false){
  const rosterTitle=node("h3","","اللاعبون والفرق");side.append(rosterTitle);
  const roster=node("div","ihyRosterList");roster.id="ihyRoster";side.append(roster);
  if(role==="host"&&!readOnly){
-  const h=node("section","ihyHostPanel");h.append(node("div","ihyHostPanelHead","","تحكم الهوست"),node("p","ihyMuted","ابدأ المباراة بعد توزيع اللاعبين. أثناء اللعب ستظهر لك الإجابة والتحكيم هنا."));
+  const h=node("section","ihyHostPanel");h.append(node("div","ihyHostPanelHead","تحكم الهوست"),node("p","ihyMuted","ابدأ المباراة بعد توزيع اللاعبين. أثناء اللعب ستظهر لك الإجابة والتحكيم هنا."));
   const invite=field(h,"إضافة لاعب باستخدام ID","مثال: A1B2C3D4");invite.classList.add("ihyHostInput");
   button(h,"إضافة اللاعب",async()=>{if(!invite.value.trim())throw Error("أدخل معرّف اللاعب");await rpc("ihyaa_host_invite_player",{p_room:room.room_id,p_player_id:invite.value.trim()});invite.value="";await refresh()},"gold").classList.add("ihyHostAction");
   const red=field(h,"اسم الفريق الأحمر","الفريق الأحمر");red.classList.add("ihyHostInput");
