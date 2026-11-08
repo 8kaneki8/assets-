@@ -860,7 +860,7 @@ function renderQuestionLibrary(){
  $("qlCurrentGroupName").value=group?group.name:"";
  $("qlCurrentGroupName").disabled=!group;$("saveQuestionGroupNameBtn").disabled=!group;$("newLibraryQuestionBtn").disabled=!group;
  const query=($("qlSearchInput").value||"").trim().toLocaleLowerCase("ar"),valueFilter=$("qlValueFilter").value;
- const rows=group?group.questions.filter(q=>(valueFilter==="all"||String(q.v)===valueFilter)&&(!query||(q.q+" "+q.a).toLocaleLowerCase("ar").includes(query))):[];
+ const rows=group?group.questions.filter(q=>(valueFilter==="all"||String(q.v)===valueFilter)&&(!query||(q.q+" "+q.a).toLocaleLowerCase("ar").includes(query))).sort((a,b)=>Number(a.v)-Number(b.v)):[];
  body.innerHTML="";
  rows.forEach(q=>{
   const tr=document.createElement("tr");
