@@ -7,6 +7,17 @@ const rpc=async(name,args={})=>{const r=await db.rpc(name,args);if(r.error)throw
 const ready=()=>window.supabase&&URL.startsWith("https://")&&!URL.includes("YOUR_PROJECT")&&KEY&&!KEY.includes("YOUR_SUPABASE");
 const style=node("style");style.textContent=`#ihyaaOnline{position:fixed;inset:0;z-index:10030;background:#071b16d9;display:none;align-items:center;justify-content:center;padding:14px;backdrop-filter:blur(8px)}#ihyaaOnline.open{display:flex}.ihyBox{background:#faf9f4;color:#17352d;width:min(940px,100%);max-height:92vh;overflow:auto;border:1px solid #c6a45b;border-radius:22px;padding:20px}.ihyBox h2{margin:0 0 16px}.ihyGrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px}.ihyCard{background:white;border:1px solid #e5e1d6;border-radius:13px;padding:13px;margin:9px 0}.ihyBox input,.ihyBox select{width:100%;padding:11px;border:1px solid #d7d8cd;border-radius:9px;margin:5px 0 12px}.ihyBtn{border:0;border-radius:10px;padding:10px 14px;margin:4px;background:#0d5946;color:white;font-weight:800;cursor:pointer}.ihyBtn.gold{background:#c6a45b;color:#17352d}.ihyCode{font-size:26px;letter-spacing:3px;font-weight:900;color:#0d5946}.ihyPerson{padding:9px;background:#f2f1e9;border-radius:9px;margin:5px 0}.ihyQuestion{font-size:22px;font-weight:900;padding:16px;background:#f1efe5;border-radius:12px;line-height:1.8}.ihyAnswer{background:#e4f1e8;padding:12px;border-radius:10px;margin:8px 0}.ihyMuted{color:#718078;font-size:13px;line-height:1.8}.ihySection{margin-top:16px;padding-top:12px;border-top:1px solid #e8e3d7}`;
 document.head.append(style);
+/* CLASSIC BOARD + DEDICATED HOST CONSOLE */
+.ihyRoomShell{direction:rtl;color:#183653;max-width:1400px;margin:0 auto}
+.ihyRoomHero{display:flex;justify-content:space-between;align-items:center;gap:18px;flex-wrap:wrap;padding:22px;border-radius:20px;background:linear-gradient(120deg,#0b2343,#174d7d 65%,#236ba8);color:#fff;box-shadow:0 18px 42px #123c681f}
+.ihyRoomIdentity h2{font-size:clamp(22px,3vw,32px);margin:5px 0;color:#fff}.ihyRoomIdentity p{margin:0;color:#d7e8f8}.ihyRoomKicker{font-size:11px;letter-spacing:.4px;color:#f0d99d;font-weight:900}.ihyRoomCodeBox{display:grid;gap:3px;padding:12px 18px;border:1px solid #ffffff44;border-radius:15px;background:#ffffff12;text-align:center;min-width:140px}.ihyRoomCodeBox span{font-size:11px;color:#d7e8f8}.ihyRoomCodeBox .ihyCode{font-size:26px;letter-spacing:3px;color:#f2d48b;direction:ltr}
+.ihyRoomStatusBar{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;margin:14px 0;padding:12px 16px;border:1px solid #d4e1ef;border-radius:14px;background:#f5f9fe;color:#24486f}.ihyTurnBadge{padding:7px 12px;border-radius:999px;background:#e8f0fa;color:#1c568c;font-size:12px;font-weight:900}
+.ihyScores{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:14px 0}.ihyScoreCard{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:15px 18px;border:1px solid #d5e1ef;border-radius:16px;background:#fff;box-shadow:0 8px 20px #21466e0a}.ihyScoreCard span{font-weight:900;color:#284c70}.ihyScoreCard strong{font-size:30px;font-weight:900}.ihyScoreRed{border-top:4px solid #c94e5d}.ihyScoreRed strong{color:#b33d4c}.ihyScoreBlue{border-top:4px solid #347bc4}.ihyScoreBlue strong{color:#2465a2}
+.ihyRoomLayout{display:grid;grid-template-columns:minmax(0,1fr) minmax(270px,340px);gap:16px;align-items:start}.ihyRoomMain,.ihyRoomSide{min-width:0}.ihyRoomSide{display:grid;gap:12px}.ihyBoardPanel,.ihyQuestionPanel,.ihyHostPanel{padding:17px;border:1px solid #d5e1ef;border-radius:18px;background:#fff;box-shadow:0 10px 28px #244b760c;margin:0 0 14px}.ihyBoardHeading{font-size:19px;font-weight:900;color:#173b66}.ihyBoardCategories{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:12px;margin-top:12px}.ihyCategoryCard{padding:12px;border:1px solid #d7e3f0;border-radius:15px;background:linear-gradient(145deg,#fafdff,#edf4fc);min-width:0}.ihyCategoryCard h3{margin:0 0 10px;text-align:center;color:#164a83;font-size:15px;font-weight:900;line-height:1.6;min-height:42px;display:grid;place-items:center}.ihyPointsGrid{display:grid;grid-template-columns:1fr;gap:8px}.ihyPointBtn{min-height:51px;border:1px solid #2636a0;border-radius:7px;background:linear-gradient(145deg,#343acb,#2934ae);color:#ffe08a;font-size:19px;font-weight:900;box-shadow:inset 0 1px #ffffff20,0 3px 0 #151b72;transition:transform .18s,filter .18s}.ihyPointBtn:hover:not(:disabled){transform:translateY(-2px);filter:brightness(1.12)}.ihyPointBtn:disabled{opacity:.62;cursor:not-allowed}.ihyPointBtn.used{background:#e9eef4;color:#7b8da2;border-color:#d2dce8;box-shadow:none;font-size:13px}
+.ihyRosterList{display:grid;gap:7px}.ihyRosterList .ihyPerson{display:grid;gap:7px;padding:10px 12px;border:1px solid #dce6f1;border-radius:12px;background:#f5f9fe;color:#294b6e;font-size:12px}.ihyRosterList select{width:100%;padding:8px;border:1px solid #cbd9e8;border-radius:9px;background:white;color:#23486f}.ihyHostPanel{border-top:4px solid #c6a45b}.ihyHostPanelHead{font-size:18px;font-weight:900;color:#173b66}.ihyHostPanel .ihyHostInput{margin:5px 0 9px}.ihyHostPanel .ihyHostAction,.ihyHostPanel .ihyStartMatch{width:100%;min-height:45px}.ihyHostPanel .ihyStartMatch{font-size:15px;padding:12px;margin:8px 0}.ihyHostPanel .ihyStartMatch:disabled{opacity:.5}.ihySubmissionsTitle{margin-top:18px;padding-top:13px;border-top:1px solid #dce6f1;color:#173b66}.ihySubmissions .ihyCard{margin:8px 0}.ihyQuestionPanel .ihyQuestion{background:#edf4fc;color:#173b66;border:1px solid #d7e3f0;border-radius:14px}.ihyQuestionPanel .ihyAnswer{background:#e8f5ed;color:#1b6241;border:1px solid #c9e6d4;font-weight:900}.ihyBackButton{width:100%;margin-top:14px;background:#eaf1fa!important;color:#214f80!important}
+@media(max-width:850px){.ihyRoomLayout{grid-template-columns:1fr}.ihyRoomSide{grid-template-columns:1fr}.ihyBoardCategories{grid-template-columns:repeat(auto-fit,minmax(155px,1fr))}}
+@media(max-width:520px){.ihyRoomHero{padding:16px}.ihyScores{gap:8px}.ihyScoreCard{padding:12px}.ihyScoreCard strong{font-size:24px}.ihyBoardPanel,.ihyQuestionPanel,.ihyHostPanel{padding:12px}.ihyBoardCategories{grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}.ihyCategoryCard{padding:8px}.ihyPointBtn{min-height:46px;font-size:17px}}
+
 
 style.textContent+=`
 
@@ -336,25 +347,31 @@ function home(){
 async function refreshPlayerBoard(target,v){
  if(!target)return;
  target.innerHTML="";
- if(v.status!=="live"||v.question){target.style.display="none";return}
+ if(v.status!=="live"){target.style.display="none";return}
  target.style.display="block";
  const canPick=role==="player";
- target.append(node("h3","",canPick?"اختر الفئة والنقاط":"لوحة الأسئلة — مشاهدة الهوست"));
- target.append(node("p","ihyMuted",canPick?"اختر سؤالًا من دور فريقك. سيظهر السؤال للفريقين بعد الاختيار.":"هذه نفس لوحة اللاعبين؛ الاختيار متاح للاعب صاحب الدور فقط."));
+ target.append(node("div","ihyBoardHeading",canPick?"لوحة اختيار الأسئلة":"لوحة المسابقة — عرض الهوست"));
+ target.append(node("p","ihyMuted",canPick?"اختر سؤالًا من لوحة الفئات عندما يحين دور فريقك.":"أنت ترى نفس لوحة اللاعبين. الاختيار يظل متاحًا للاعبين فقط."));
  try{
   const rows=await rpc(canPick?"ihyaa_player_list_board":"ihyaa_host_list_questions",{p_room:room.room_id});
   const groups=new Map();
   (rows||[]).forEach(q=>{const name=String(q.category||"عام");if(!groups.has(name))groups.set(name,[]);groups.get(name).push(q)});
-  if(!groups.size){target.append(node("p","ihyMuted","لا توجد أسئلة متاحة."));return}
+  const grid=node("div","ihyBoardCategories");
+  if(!groups.size){target.append(node("p","ihyMuted","لا توجد أسئلة متاحة في هذه المسابقة."));return}
   for(const [category,items] of groups){
-   const card=node("section","ihyCard");card.append(node("h3","",category));
+   const card=node("section","ihyCategoryCard");
+   card.append(node("h3","",category));
    const points=node("div","ihyPointsGrid");
-   items.sort((a,b)=>Number(a.points)-Number(b.points)).forEach(q=>{
-    const b=node("button","ihyPointBtn",String(q.points)+" نقطة");b.type="button";
-    b.disabled=!!q.used||!canPick;
-    if(q.used){b.classList.add("used");b.textContent=String(q.points)+" • تم الاختيار"}
-    else if(!canPick){b.title="الهوست يشاهد اللوحة فقط"}
-    if(canPick)b.onclick=async()=>{
+   items.sort((a,b)=>Number(a.points)-Number(b.points)||String(a.id).localeCompare(String(b.id))).forEach(q=>{
+    const used=!!q.used;
+    const b=node("button","ihyPointBtn",used?"✓":String(q.points));
+    b.type="button";
+    b.disabled=used||!canPick||!!v.question;
+    if(used){b.classList.add("used");b.title="تم استخدام هذا السؤال"}
+    else if(!canPick){b.title="الهوست يشاهد اللوحة ولا يختار بدل اللاعبين"}
+    else if(v.question){b.title="انتظر انتهاء السؤال الحالي"}
+    else{b.title=String(q.points)+" نقطة";b.setAttribute("aria-label",category+"، "+q.points+" نقطة");}
+    if(canPick&&!used&&!v.question)b.onclick=async()=>{
      if(busy)return;busy=true;b.disabled=true;
      try{await rpc("ihyaa_player_pick_question",{p_room:room.room_id,p_question:q.id});await refresh()}
      catch(e){fail(e);b.disabled=!!q.used}
@@ -362,19 +379,56 @@ async function refreshPlayerBoard(target,v){
     };
     points.append(b);
    });
-   card.append(points);target.append(card);
+   card.append(points);grid.append(card);
   }
+  target.append(grid);
  }catch(e){target.append(node("p","ihyMuted","تعذر تحميل لوحة الأسئلة: "+String(e?.message||e)));console.error(e)}
 }
 async function refresh(readOnly=false){if(!room)return;const v=await rpc("ihyaa_room_view",{p_room:room.room_id});const roster=$("ihyRoster");if(roster){roster.innerHTML="";(v.roster||[]).forEach(p=>{const row=node("div","ihyPerson",p.username+" • "+p.player_id+" • "+(p.team||"لم يحدد الفريق"));if(role==="host"&&p.role!=="host"&&v.status==="lobby"){const s=node("select");s.innerHTML='<option value="">تحديد الفريق</option><option value="red">الأحمر</option><option value="blue">الأزرق</option>';s.value=p.team||"";s.onchange=async()=>{try{await rpc("ihyaa_host_assign_member",{p_room:room.room_id,p_user:p.user_id,p_team:s.value});await refresh()}catch(e){fail(e)}};row.append(s)}roster.append(row)})}
 const board=$("ihyPlayerBoard");if((role==="player"||role==="host")&&!readOnly)await refreshPlayerBoard(board,v);const q=$("ihyQuestion");if(q){const questionId=v.question?.id||null;const renderedId=q.dataset.questionId===undefined?undefined:(q.dataset.questionId||null);if(questionId!==renderedId){q.innerHTML="";q.dataset.questionId=questionId||"";if(v.question){q.append(node("div","ihyQuestion",v.question.question),node("p","","النقاط: "+v.question.points+" • الدور: "+(v.turn_team==="red"?"الأحمر":"الأزرق")));if(role==="host")q.append(node("div","ihyAnswer","الإجابة الصحيحة (للهوست فقط): "+v.question.answer));else{const input=field(q,"إجابتك","اكتب إجابتك");button(q,"إرسال الإجابة",async()=>{if(!input.value.trim())throw Error("اكتب إجابتك أولًا");await rpc("ihyaa_submit_answer",{p_room:room.room_id,p_answer:input.value.trim()});input.disabled=true;alert("وصلت إجابتك للهوست") },"gold")}}else q.append(node("p","",v.status==="archived"?"هذه المسابقة مؤرشفة.":"بانتظار الهوست لفتح السؤال."))}else{const input=q.querySelector("input");if(input&&document.activeElement!==input&&input.disabled===false)input.value=input.value}const oldClock=q.querySelector(".ihyQuestionClock");if(v.question_deadline){const left=Math.max(0,Math.ceil((Date.parse(v.question_deadline)-Date.now())/1000));const clock=oldClock||node("p","ihyMuted ihyQuestionClock");clock.textContent=left>0?"الوقت المتبقي: "+left+" ثانية": "انتهى وقت السؤال؛ ينتظر إغلاق الهوست";if(!oldClock)q.append(clock)}else oldClock?.remove()}
-const score=$("ihyScores");if(score)score.textContent=(v.settings?.red_name||"الفريق الأحمر")+": "+(v.scores.red||0)+" | "+(v.settings?.blue_name||"الفريق الأزرق")+": "+(v.scores.blue||0);
+const score=$("ihyScores");if(score){score.innerHTML="";const red=node("div","ihyScoreCard ihyScoreRed");red.append(node("span","","🔴 "+(v.settings?.red_name||"الفريق الأحمر")),node("strong","",String(v.scores.red||0)));const blue=node("div","ihyScoreCard ihyScoreBlue");blue.append(node("span","","🔵 "+(v.settings?.blue_name||"الفريق الأزرق")),node("strong","",String(v.scores.blue||0)));score.append(red,blue)}const turn=$("ihyTurn");if(turn)turn.textContent=v.status==="live"?(v.question?"السؤال الحالي لفريق "+(v.turn_team==="red"?(v.settings?.red_name||"الأحمر"):(v.settings?.blue_name||"الأزرق")):"الدور الآن: "+(v.turn_team==="red"?(v.settings?.red_name||"الأحمر"):(v.settings?.blue_name||"الأزرق"))):"بانتظار بدء المسابقة";
 const status=$("ihyStatus");if(status)status.textContent=v.status==="live"?"المسابقة جارية":v.status==="archived"?"المسابقة مؤرشفة":"غرفة الانتظار";
 if(role==="host"&&!readOnly&&v.status!=="archived"){const start=$("ihyStartMatch");if(start){const redCount=(v.roster||[]).filter(p=>p.role==="player"&&p.team==="red").length;const blueCount=(v.roster||[]).filter(p=>p.role==="player"&&p.team==="blue").length;const ready=redCount>0&&blueCount>0&&v.status==="lobby";start.disabled=!ready;start.textContent=v.status==="live"?"✓ المسابقة بدأت":ready?"ابدأ المسابقة":"وزّع لاعبًا واحدًا على الأقل لكل فريق";}await hostRefresh(v)}}
 async function hostRefresh(v){const subs=await rpc("ihyaa_host_submissions",{p_room:room.room_id});const target=$("ihySubs");if(target){target.innerHTML="";if(!subs.length)target.append(node("p","ihyMuted","لا توجد إجابات معلقة"));subs.forEach(s=>{const card=node("div","ihyCard");card.append(node("strong","",s.username+" • "+s.player_id),node("p","",s.answer));button(card,"صحيحة",async()=>{await rpc("ihyaa_host_judge",{p_room:room.room_id,p_submission:s.id,p_correct:true});await refresh()},"gold");button(card,"خاطئة",async()=>{await rpc("ihyaa_host_judge",{p_room:room.room_id,p_submission:s.id,p_correct:false});await refresh()});target.append(card)});if(v.question&&v.question_deadline){const deadline=Date.parse(v.question_deadline);const left=Math.max(0,Math.ceil((deadline-Date.now())/1000));target.append(node("p","ihyMuted",left>0?"يمكن إنهاء السؤال بعد "+left+" ثانية. الإجابة الخاطئة لا تغلق السؤال تلقائيًا.":"انتهى وقت السؤال؛ يمكنك إغلاقه وتمرير الدور."));const expire=button(target,"إنهاء السؤال وتمرير الدور",async()=>{await rpc("ihyaa_host_expire_question",{p_room:room.room_id});await refresh()},"gold");expire.disabled=Date.now()<deadline}}}
-function showRoom(readOnly=false){const c=node("div");const info=node("div","ihyCard");info.append(node("div","","كود الغرفة"),node("div","ihyCode",room.code),node("div","ihyMuted","حالة الدخول: "+(role==="host"?"أنت الهوست":"لاعب")));const status=node("p","ihyMuted","جارٍ التحديث…");status.id="ihyStatus";info.append(status);c.append(info,node("h3","","اللاعبون"),node("div","",""));const roster=node("div");roster.id="ihyRoster";c.append(roster,node("h3","","السؤال الحالي"));const board=node("div","ihyCard");board.id="ihyPlayerBoard";board.style.display="none";c.append(board);const q=node("div","ihyCard");q.id="ihyQuestion";c.append(q);const scores=node("div","ihyCard");scores.id="ihyScores";c.append(scores);
-if(role==="host"&&!readOnly){const h=node("div","ihyCard");h.append(node("h3","","تحكم الهوست"));const invite=field(h,"إضافة لاعب باستخدام ID","مثال: A1B2C3D4");button(h,"إضافة اللاعب",async()=>{if(!invite.value.trim())throw Error("أدخل معرّف اللاعب");await rpc("ihyaa_host_invite_player",{p_room:room.room_id,p_player_id:invite.value.trim()});invite.value="";await refresh()},"gold");const red=field(h,"اسم الفريق الأحمر","الفريق الأحمر");const blue=field(h,"اسم الفريق الأزرق","الفريق الأزرق");const startBtn=button(h,"ابدأ المسابقة",async()=>{await rpc("ihyaa_host_start",{p_room:room.room_id,p_red_name:red.value||"الفريق الأحمر",p_blue_name:blue.value||"الفريق الأزرق"});await refresh()},"gold");startBtn.id="ihyStartMatch";startBtn.disabled=true;const boardNote=node("p","ihyMuted","تابع لوحة الفئات والنقاط أعلى الغرفة. اللاعب صاحب الدور هو من يختار السؤال، وستظهر لك تفاصيله والإجابة للتحكيم.");h.append(boardNote);h.append(node("h3","","إجابات اللاعبين"));const subs=node("div");subs.id="ihySubs";h.append(subs);button(h,"حفظ في الأرشيف",async()=>{if(!confirm("تأكيد حفظ المسابقة في الأرشيف؟"))return;await rpc("ihyaa_host_archive",{p_room:room.room_id});close();home()},"gold");c.append(h)}
-button(c,"العودة",()=>{close();home()});shell(room.title+(readOnly?" | سجل مؤرشف":""),c);refresh(readOnly).catch(fail);if(!readOnly)timer=setInterval(()=>refresh().catch(()=>{}),2500)}
+function showRoom(readOnly=false){
+ const c=node("div","ihyRoomShell");
+ const hero=node("header","ihyRoomHero");
+ const identity=node("div","ihyRoomIdentity");
+ identity.append(node("div","ihyRoomKicker","مؤسسة إحياء • جيل على خطى السابقين"),node("h2","",room.title||"مسابقة إحياء"),node("p","ihyMuted",role==="host"?"لوحة تحكم الهوست":"ساحة اللاعبين"));
+ const codeBox=node("div","ihyRoomCodeBox");codeBox.append(node("span","","كود الغرفة"),node("strong","ihyCode",room.code||"—"));
+ hero.append(identity,codeBox);c.append(hero);
+ const statusBar=node("div","ihyRoomStatusBar");
+ const status=node("strong","","جارٍ الاتصال بالغرفة…");status.id="ihyStatus";
+ const turn=node("span","ihyTurnBadge","بانتظار بدء المسابقة");turn.id="ihyTurn";
+ statusBar.append(status,turn);c.append(statusBar);
+ const scores=node("section","ihyScores");scores.id="ihyScores";c.append(scores);
+ const layout=node("div","ihyRoomLayout");
+ const main=node("main","ihyRoomMain");
+ const board=node("section","ihyBoardPanel");board.id="ihyPlayerBoard";board.style.display="none";main.append(board);
+ const q=node("section","ihyQuestionPanel");q.id="ihyQuestion";main.append(q);
+ layout.append(main);
+ const side=node("aside","ihyRoomSide");
+ const rosterTitle=node("h3","","اللاعبون والفرق");side.append(rosterTitle);
+ const roster=node("div","ihyRosterList");roster.id="ihyRoster";side.append(roster);
+ if(role==="host"&&!readOnly){
+  const h=node("section","ihyHostPanel");h.append(node("div","ihyHostPanelHead","","تحكم الهوست"),node("p","ihyMuted","ابدأ المباراة بعد توزيع اللاعبين. أثناء اللعب ستظهر لك الإجابة والتحكيم هنا."));
+  const invite=field(h,"إضافة لاعب باستخدام ID","مثال: A1B2C3D4");invite.classList.add("ihyHostInput");
+  button(h,"إضافة اللاعب",async()=>{if(!invite.value.trim())throw Error("أدخل معرّف اللاعب");await rpc("ihyaa_host_invite_player",{p_room:room.room_id,p_player_id:invite.value.trim()});invite.value="";await refresh()},"gold").classList.add("ihyHostAction");
+  const red=field(h,"اسم الفريق الأحمر","الفريق الأحمر");red.classList.add("ihyHostInput");
+  const blue=field(h,"اسم الفريق الأزرق","الفريق الأزرق");blue.classList.add("ihyHostInput");
+  const startBtn=button(h,"ابدأ المسابقة",async()=>{await rpc("ihyaa_host_start",{p_room:room.room_id,p_red_name:red.value||"الفريق الأحمر",p_blue_name:blue.value||"الفريق الأزرق"});await refresh()},"gold");startBtn.id="ihyStartMatch";startBtn.classList.add("ihyStartMatch");startBtn.disabled=true;
+  h.append(node("p","ihyMuted","الهوست يشاهد لوحة الفئات نفسها؛ اللاعب صاحب الدور هو من يختار السؤال."));
+  h.append(node("h3","ihySubmissionsTitle","إجابات اللاعبين"));
+  const subs=node("div","ihySubmissions");subs.id="ihySubs";h.append(subs);
+  button(h,"حفظ المسابقة في الأرشيف",async()=>{if(!confirm("تأكيد حفظ المسابقة في الأرشيف؟"))return;await rpc("ihyaa_host_archive",{p_room:room.room_id});close();home()},"gold");
+  side.append(h);
+ }
+ layout.append(side);c.append(layout);
+ const back=button(c,"العودة إلى المسابقات",()=>{close();home()},"ihyBackButton");back.type="button";
+ shell(room.title+(readOnly?" | سجل مؤرشف":""),c);
+ refresh(readOnly).catch(fail);
+ if(!readOnly)timer=setInterval(()=>refresh().catch(()=>{}),2500);
+}
 function initOnlineEntry(){
  const nav=document.querySelector(".nav-actions")||document.querySelector(".nav");
  if(!nav)return;
