@@ -608,6 +608,28 @@ body[data-theme] .turn{border-color:var(--team-line);background:var(--team-soft)
  #hostOverlay .actions button{min-width:calc(50% - 5px);padding:11px 8px;font-size:12px}
 }
 
+
+/* Independent question library — separate from the retired legacy editor */
+.question-library-overlay{position:fixed;inset:0;z-index:45;display:none;align-items:center;justify-content:center;padding:16px;background:#071b19d9;backdrop-filter:blur(9px)}
+.question-library-overlay.show{display:flex}
+.question-library-modal{width:min(920px,100%);max-height:92vh;overflow:auto;background:#fbfcf9;border:1px solid #d8e3d9;border-radius:24px;padding:22px;box-shadow:0 30px 100px #0005;animation:modalIn .3s ease both}
+.ql-head{display:flex;align-items:center;justify-content:space-between;gap:12px;border-bottom:1px solid #e2e9e0;padding-bottom:14px;margin-bottom:15px}
+.ql-head h2{margin:0;color:#123f32;font-size:22px}.ql-head p{margin:4px 0 0;color:#718078;font-size:12px}
+.ql-toolbar{display:flex;gap:9px;flex-wrap:wrap;margin:12px 0}
+.ql-groups{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.ql-group{border:1px solid #dfe8df;border-radius:16px;background:#fff;padding:14px;min-width:0}
+.ql-group-head{display:flex;align-items:center;gap:8px;margin-bottom:10px}.ql-group-head strong{flex:1;overflow-wrap:anywhere;color:#174b38}
+.ql-count{font-size:11px;color:#718078;background:#edf3ec;border-radius:20px;padding:4px 9px}
+.ql-questions{display:grid;gap:7px}
+.ql-question{border:1px solid #edf0e9;border-radius:11px;padding:9px;background:#fafbf8;font-size:12px;line-height:1.7}
+.ql-question b{color:#80652d}.ql-question p{margin:3px 0;color:#365448;overflow-wrap:anywhere}
+.ql-actions{display:flex;gap:6px;flex-wrap:wrap;margin-top:10px}
+.ql-actions button,.ql-mini{border:1px solid #dce6dc;border-radius:9px;background:#f0f5ef;color:#24543f;padding:7px 10px;font-size:12px;font-weight:800}
+.ql-actions .danger,.ql-mini.danger{background:#fff0ef;border-color:#f0d3d1;color:#a34249}
+.ql-empty{grid-column:1/-1;padding:30px;text-align:center;color:#77877e;border:1px dashed #cfd9cf;border-radius:15px;background:#fff}
+.ql-footer{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;border-top:1px solid #e2e9e0;margin-top:16px;padding-top:14px}
+.ql-status{font-size:12px;color:#718078}
+@media(max-width:620px){.ql-groups{grid-template-columns:1fr}.question-library-modal{padding:15px;border-radius:18px}.ql-head h2{font-size:18px}}
 </style>  <link rel="stylesheet" href="ihyaa-premium.css?v=20261107">
 <style>
 .quick-question-panel{padding:16px;border:1px solid #d9e5d9;border-radius:16px;background:#f7faf6;display:grid;gap:12px}
@@ -625,7 +647,16 @@ body[data-theme] .turn{border-color:var(--team-line);background:var(--team-soft)
 <body>
 <div class="history-dust" aria-hidden="true"><i style="left:9%;--dur:14s;--delay:-0s;--drift:-45px"></i><i style="left:56%;--dur:16s;--delay:-3s;--drift:-14px"></i><i style="left:3%;--dur:18s;--delay:-6s;--drift:17px"></i><i style="left:50%;--dur:20s;--delay:-9s;--drift:-42px"></i><i style="left:97%;--dur:22s;--delay:-12s;--drift:-11px"></i><i style="left:44%;--dur:24s;--delay:-15s;--drift:20px"></i><i style="left:91%;--dur:26s;--delay:-18s;--drift:-39px"></i><i style="left:38%;--dur:28s;--delay:-2s;--drift:-8px"></i><i style="left:85%;--dur:14s;--delay:-5s;--drift:23px"></i><i style="left:32%;--dur:16s;--delay:-8s;--drift:-36px"></i><i style="left:79%;--dur:18s;--delay:-11s;--drift:-5px"></i><i style="left:26%;--dur:20s;--delay:-14s;--drift:26px"></i><i style="left:73%;--dur:22s;--delay:-17s;--drift:-33px"></i><i style="left:20%;--dur:24s;--delay:-1s;--drift:-2px"></i><i style="left:67%;--dur:26s;--delay:-4s;--drift:29px"></i><i style="left:14%;--dur:28s;--delay:-7s;--drift:-30px"></i><i style="left:61%;--dur:14s;--delay:-10s;--drift:1px"></i><i style="left:8%;--dur:16s;--delay:-13s;--drift:32px"></i><i style="left:55%;--dur:18s;--delay:-16s;--drift:-27px"></i><i style="left:2%;--dur:20s;--delay:-0s;--drift:4px"></i><i style="left:49%;--dur:22s;--delay:-3s;--drift:35px"></i><i style="left:96%;--dur:24s;--delay:-6s;--drift:-24px"></i></div>
 <header class="top"><div class="nav"><div class="brand"><img src="Arabic%20Calligraphy%20Emblem%20with%20Gold%20Accents.png" alt="شعار إحياء"><div><h1>مؤسسة إحياء</h1><p>جيل على خطى السابقين</p></div></div><div class="nav-actions"><button id="startMenuOpen">⌂ القائمة الرئيسية</button><button id="settingsOpen">⚙ إعدادات المسابقة</button></div></div><div class="hero"><div class="eyebrow">مسابقة تفاعلية • علم ومتعة وتنافس</div><h2>تحدّي المعرفة يبدأ من هنا</h2><p>اختر الفئة والنقاط، وتعاون مع فريقك للوصول إلى القمة.</p></div></header>
-<div class="start-menu-overlay" id="startMenuOverlay" role="dialog" aria-modal="true" aria-labelledby="startMenuTitle"><div class="start-menu-card"><div class="start-menu-brand">إحياء <span>•</span> مؤسسة إحياء</div><div class="start-menu-kicker">جيل على خطى السابقين</div><h2 id="startMenuTitle">ابدأ صناعة التحدّي</h2><p>جهّز أسئلتك، اختر طريقة اللعب، واجمع الفريقين في تجربة معرفية واحدة.</p><div class="start-menu-actions"><button class="start-action start-primary" id="startClassicBtn"><span>▶</span><strong>ابدأ المسابقة</strong><small>ادخل إلى لوحة الأسئلة والفريقين</small></button><button class="start-action" id="startOnlineBtn"><span>◎</span><strong>المسابقات الأونلاين</strong><small>أنشئ غرفة أو انضم إلى غرفة متاحة</small></button><button class="start-action" id="startDuelBtn"><span>⚔</span><strong>مواجهة أونلاين 1 ضد 1</strong><small>أنشئ مواجهة أو انضم إلى مواجهة مباشرة بين لاعبين</small></button></div><div class="start-menu-foot">يمكنك العودة إلى هذه القائمة في أي وقت من زر القائمة أعلى الصفحة.</div></div></div><div class="overlay" id="rulesOverlay"><div class="modal rules-modal"><div class="modal-head"><h2>قوانين المسابقة</h2><span class="q-value">مؤسسة إحياء</span></div><div class="rules-intro">اقرأ القواعد قبل البداية حتى تكون المنافسة واضحة وعادلة للجميع.</div><section class="rules-section"><h3>المسابقة الكلاسيكية</h3><ol class="rules-list"><li>تُجرى قرعة البداية لتحديد الفريق الذي يختار السؤال الأول.</li><li>يظهر مؤقّت السؤال على الشاشة؛ المدة الافتراضية 30 ثانية وقد يغيّرها المنظّم من إعدادات السؤال.</li><li>الإجابة الصحيحة تمنح الفريق نقاط السؤال، ثم يُغلق السؤال ويُحدّث جدول النتائج.</li><li>الإجابة الخاطئة أو انتهاء الوقت يعني عدم إضافة نقاط، ويُغلق السؤال.</li><li>عند اعتماد إجابة صحيحة يحتفظ الفريق بدوره، وعند الإجابة الخاطئة ينتقل الدور إلى الفريق الآخر.</li><li>السؤال المستخدم لا يمكن اختياره مرة ثانية في الجولة نفسها.</li><li>للمنظّم تخطّي السؤال عند الحاجة؛ السؤال المتخطّى يُغلق ولا تُحتسب له نقاط.</li></ol></section><section class="rules-section"><h3>وسائل المساعدة</h3><ul class="rules-list"><li>الاستعانة بمشرف، ودبل النقاط، ومنع دور المنافس متاحة وفق إعدادات الجولة.</li><li>كل وسيلة مساعدة متاحة مرة واحدة لكل فريق، وتُطبّق على السؤال التالي بعد تفعيلها.</li><li>يجب تفعيل وسيلة المساعدة قبل اختيار السؤال؛ وبعد استخدامها لا يمكن استرجاعها في الجولة نفسها.</li></ul></section><section class="rules-section"><h3>الغرف الأونلاين</h3><ul class="rules-list"><li>يدخل كل لاعب باسم عرض فقط، دون الحاجة إلى بريد إلكتروني أو كلمة مرور شخصية.</li><li>يُشارك كود الغرفة مع اللاعبين؛ الغرفة المحمية تتطلب كلمة مرور الغرفة، أما المفتوحة فيمكن الانضمام إليها مباشرة.</li><li>يُوزّع الهوست اللاعبين على الفريقين ويبدأ الجولة عندما يصبح الفريقان جاهزين.</li><li>لا تظهر الإجابة الصحيحة للاعبين؛ يرسل اللاعب إجابته ويعتمد الهوست صحتها أو خطأها.</li><li>التزم باسم مناسب واحترم بقية المشاركين وقرارات المنظّم.</li></ul></section><section class="rules-section"><h3>مواجهة 1 ضد 1</h3><ul class="rules-list"><li>تتكوّن المواجهة من 15 سؤالًا عاديًا وسؤال ذهبي عند التعادل، ولكل سؤال 30 ثانية افتراضيًا.</li><li>الإجابة الصحيحة تمنح 100 نقطة، والسؤال الخامس عشر 200 نقطة، والفائز يحصل على 600 نقطة إضافية تُضاف للنتيجة النهائية.</li><li>لا يحق للاعب تغيير إجابته بعد إرسالها للسؤال الحالي.</li><li>الهوست مسؤول عن بدء المواجهة وإيقافها مؤقتًا أو استئنافها واعتماد الانتقال بين الأسئلة.</li><li>تُعرض النتيجة النهائية عند انتهاء المواجهة، وتُحتسب المكافأة وفق إعدادات النظام.</li></ul></section><p class="rules-note">قرار الهوست ينظّم سير المسابقة، ولا يغيّر الإجابات أو النقاط بعد اعتمادها إلا وفق أدوات اللعبة المتاحة.</p><button class="primary" id="rulesStart">فهمت، ابدأ المسابقة</button></div></div>
+<div class="start-menu-overlay" id="startMenuOverlay" role="dialog" aria-modal="true" aria-labelledby="startMenuTitle"><div class="start-menu-card"><div class="start-menu-brand">إحياء <span>•</span> مؤسسة إحياء</div><div class="start-menu-kicker">جيل على خطى السابقين</div><h2 id="startMenuTitle">ابدأ صناعة التحدّي</h2><p>جهّز أسئلتك، اختر طريقة اللعب، واجمع الفريقين في تجربة معرفية واحدة.</p><div class="start-menu-actions"><button class="start-action start-primary" id="startClassicBtn"><span>▶</span><strong>ابدأ المسابقة</strong><small>ادخل إلى لوحة الأسئلة والفريقين</small></button><button class="start-action" id="startOnlineBtn"><span>◎</span><strong>المسابقات الأونلاين</strong><small>أنشئ غرفة أو انضم إلى غرفة متاحة</small></button><button class="start-action" id="startDuelBtn"><span>⚔</span><strong>مواجهة أونلاين 1 ضد 1</strong><small>أنشئ مواجهة أو انضم إلى مواجهة مباشرة بين لاعبين</small></button></div><div class="start-menu-foot">يمكنك العودة إلى هذه القائمة في أي وقت من زر القائمة أعلى الصفحة.</div></div><button class="start-action" id="openQuestionLibraryBtn" type="button"><span>✎</span><strong>إدارة الأسئلة</strong><small>أنشئ مجموعاتك وأسئلتك واحفظها للمسابقات القادمة</small></button></div>
+<div class="question-library-overlay" id="questionLibraryOverlay" role="dialog" aria-modal="true" aria-labelledby="questionLibraryTitle">
+ <section class="question-library-modal">
+  <header class="ql-head"><div><h2 id="questionLibraryTitle">إدارة الأسئلة</h2><p>مكتبة مستقلة تحفظ مجموعاتك على هذا الجهاز، ويمكنك تجهيزها للمسابقة وقتما تريد.</p></div><button class="close" id="closeQuestionLibraryBtn" type="button" aria-label="إغلاق">×</button></header>
+  <div class="ql-toolbar"><button class="primary" id="addQuestionGroupBtn" type="button">＋ إنشاء مجموعة أسئلة</button><button class="secondary" id="qlBackBtn" type="button">العودة للقائمة الرئيسية</button></div>
+  <div class="ql-groups" id="questionLibraryGroups"></div>
+  <footer class="ql-footer"><span class="ql-status" id="questionLibraryStatus" aria-live="polite">لم يتم اعتماد مجموعة للمسابقة بعد.</span><button class="primary" id="applyQuestionLibraryBtn" type="button">اعتماد الأسئلة للمسابقة</button></footer>
+ </section>
+</div>
+<div class="overlay" id="rulesOverlay"><div class="modal rules-modal"><div class="modal-head"><h2>قوانين المسابقة</h2><span class="q-value">مؤسسة إحياء</span></div><div class="rules-intro">اقرأ القواعد قبل البداية حتى تكون المنافسة واضحة وعادلة للجميع.</div><section class="rules-section"><h3>المسابقة الكلاسيكية</h3><ol class="rules-list"><li>تُجرى قرعة البداية لتحديد الفريق الذي يختار السؤال الأول.</li><li>يظهر مؤقّت السؤال على الشاشة؛ المدة الافتراضية 30 ثانية وقد يغيّرها المنظّم من إعدادات السؤال.</li><li>الإجابة الصحيحة تمنح الفريق نقاط السؤال، ثم يُغلق السؤال ويُحدّث جدول النتائج.</li><li>الإجابة الخاطئة أو انتهاء الوقت يعني عدم إضافة نقاط، ويُغلق السؤال.</li><li>عند اعتماد إجابة صحيحة يحتفظ الفريق بدوره، وعند الإجابة الخاطئة ينتقل الدور إلى الفريق الآخر.</li><li>السؤال المستخدم لا يمكن اختياره مرة ثانية في الجولة نفسها.</li><li>للمنظّم تخطّي السؤال عند الحاجة؛ السؤال المتخطّى يُغلق ولا تُحتسب له نقاط.</li></ol></section><section class="rules-section"><h3>وسائل المساعدة</h3><ul class="rules-list"><li>الاستعانة بمشرف، ودبل النقاط، ومنع دور المنافس متاحة وفق إعدادات الجولة.</li><li>كل وسيلة مساعدة متاحة مرة واحدة لكل فريق، وتُطبّق على السؤال التالي بعد تفعيلها.</li><li>يجب تفعيل وسيلة المساعدة قبل اختيار السؤال؛ وبعد استخدامها لا يمكن استرجاعها في الجولة نفسها.</li></ul></section><section class="rules-section"><h3>الغرف الأونلاين</h3><ul class="rules-list"><li>يدخل كل لاعب باسم عرض فقط، دون الحاجة إلى بريد إلكتروني أو كلمة مرور شخصية.</li><li>يُشارك كود الغرفة مع اللاعبين؛ الغرفة المحمية تتطلب كلمة مرور الغرفة، أما المفتوحة فيمكن الانضمام إليها مباشرة.</li><li>يُوزّع الهوست اللاعبين على الفريقين ويبدأ الجولة عندما يصبح الفريقان جاهزين.</li><li>لا تظهر الإجابة الصحيحة للاعبين؛ يرسل اللاعب إجابته ويعتمد الهوست صحتها أو خطأها.</li><li>التزم باسم مناسب واحترم بقية المشاركين وقرارات المنظّم.</li></ul></section><section class="rules-section"><h3>مواجهة 1 ضد 1</h3><ul class="rules-list"><li>تتكوّن المواجهة من 15 سؤالًا عاديًا وسؤال ذهبي عند التعادل، ولكل سؤال 30 ثانية افتراضيًا.</li><li>الإجابة الصحيحة تمنح 100 نقطة، والسؤال الخامس عشر 200 نقطة، والفائز يحصل على 600 نقطة إضافية تُضاف للنتيجة النهائية.</li><li>لا يحق للاعب تغيير إجابته بعد إرسالها للسؤال الحالي.</li><li>الهوست مسؤول عن بدء المواجهة وإيقافها مؤقتًا أو استئنافها واعتماد الانتقال بين الأسئلة.</li><li>تُعرض النتيجة النهائية عند انتهاء المواجهة، وتُحتسب المكافأة وفق إعدادات النظام.</li></ul></section><p class="rules-note">قرار الهوست ينظّم سير المسابقة، ولا يغيّر الإجابات أو النقاط بعد اعتمادها إلا وفق أدوات اللعبة المتاحة.</p><button class="primary" id="rulesStart">فهمت، ابدأ المسابقة</button></div></div>
 <main class="wrap"><section class="scoreboard"><div class="team red"><div><h3 id="redName">الفريق الأحمر</h3><small>الفريق الأول</small></div><div class="points" id="redScore">0</div></div><div class="turn"><small>الدور الحالي</small><strong id="turnName">الفريق الأحمر</strong></div><div class="team blue"><div><h3 id="blueName">الفريق الأزرق</h3><small>الفريق الثاني</small></div><div class="points" id="blueScore">0</div></div></section>
 <section class="live-match-strip" aria-live="polite"><div class="live-leader"><span class="live-dot"></span><strong id="matchLead">المسابقة جاهزة</strong><small id="matchGap">النتيجة متعادلة</small></div><div class="live-progress"><div class="live-progress-meta"><span>تقدم المسابقة</span><strong id="matchProgressText">0 / 15 سؤالًا</strong></div><div class="live-progress-track"><i id="matchProgress"></i></div></div><div class="live-used"><strong id="usedCount">0</strong><span>سؤال مستخدم</span></div></section><section class="preselect-help" id="preselectHelp" aria-label="وسائل المساعدة قبل اختيار السؤال"><div class="preselect-head"><div><span class="preselect-kicker">POWER UPS • قبل اختيار السؤال</span><h2>جهّز فريقك للمواجهة</h2><p>وسائل المساعدة تظهر هنا قبل اختيار أي سؤال — اختر خطتك أولًا!</p></div><div class="preselect-turn" id="helpTurn">دور الفريق الأحمر</div></div><div class="lifelines"><div class="lifelines-title">وسائل مساعدة الفريق الحالي <small>كل وسيلة تُستخدم مرة واحدة طوال المسابقة وتُطبّق على السؤال القادم</small></div><div class="lifelines-actions"><button class="secondary lifeline-tile" id="supervisorBtn">🧑‍🏫 الاستعانة بمشرف</button><button class="secondary lifeline-tile" id="doubleBtn">✨ دبل النقاط</button><button class="secondary lifeline-tile" id="blockBtn">🛡️ منع دور المنافس</button></div></div><section class="lifeline-dashboard" aria-label="حالة وسائل المساعدة للفريقين"><div class="lifeline-team red-lifeline"><div class="lifeline-team-head"><strong id="redLifeName">الفريق الأحمر</strong><span>وسائل المساعدة</span></div><div class="life-pills" id="redLifePills"></div></div><div class="lifeline-team blue-lifeline"><div class="lifeline-team-head"><strong id="blueLifeName">الفريق الأزرق</strong><span>وسائل المساعدة</span></div><div class="life-pills" id="blueLifePills"></div></div></section></section>
 <div class="section-head"><div><h2>لوحة التحدّي</h2><p>اختر سؤالًا متاحًا لبدء الجولة</p></div><span class="hint" id="remaining">— سؤال متاح</span></div><section class="board" id="board"></section>
@@ -720,6 +751,135 @@ $("resetBtn").onclick=()=>{if(confirm("هل تريد تصفير النقاط و�
 $("themeSelect").onchange=()=>{state.theme=$("themeSelect").value;applyTheme();save();playUiSound("click");toast("تم تطبيق الثيم الجديد")};$("modeSelect").onchange=()=>{state.mode=$("modeSelect").value;save();toast(state.mode==="duel"?"تم اختيار نمط المواجهة 1 ضد 1":"تم اختيار المسابقة الكلاسيكية")};$("soundToggle").onchange=()=>{state.sound=$("soundToggle").checked;save();if(state.sound)playUiSound("correct");toast(state.sound?"تم تشغيل المؤثرات الصوتية":"تم إيقاف المؤثرات الصوتية")};$("eventsToggle").onchange=()=>{state.events=$("eventsToggle").checked;save();toast(state.events?"تم تفعيل الأحداث العشوائية":"تم إيقاف الأحداث العشوائية")};$("duelTotalMinutes").onchange=()=>{state.duelTotalMinutes=Math.max(1,Math.min(30,+$("duelTotalMinutes").value||7));$("duelTotalMinutes").value=state.duelTotalMinutes;save()};document.querySelectorAll("[data-theme-choice]").forEach(b=>b.onclick=()=>{state.theme=b.dataset.themeChoice;applyTheme();save();playUiSound("click");toast("تم تغيير ثيم المسابقة")});
 $("saveSettings").onclick=()=>{state.names=[$("editRed").value.trim()||"الفريق الأحمر",$("editBlue").value.trim()||"الفريق الأزرق"];state.theme=$("themeSelect").value;state.mode=$("modeSelect").value;state.sound=$("soundToggle").checked;state.events=$("eventsToggle").checked;state.duelTotalMinutes=Math.max(1,Math.min(30,+$("duelTotalMinutes").value||7));applyTheme();save();render();close("hostOverlay");toast("تم حفظ إعدادات المسابقة")};
 $("newGame").onclick=()=>{if(confirm("بدء مسابقة جديدة؟ سيتم تصفير النقاط وإعادة الأسئلة.")){state.scores=[0,0];state.turn=0;state.current=null;state.winnerShown=false;state.duel={active:false,questions:[],index:0,correct:[0,0]};state.lifelines=[{supervisor:false,double:false,block:false},{supervisor:false,double:false,block:false}];state.pending=[{supervisor:false,double:false,block:false},{supervisor:false,double:false,block:false}];state.categories.forEach(c=>c.questions.forEach(q=>q.used=false));save();render();close("hostOverlay");document.body.classList.remove("room-flow-mode","setup-mode");hideStartMenu();toast("المسابقة جاهزة! اختاروا سؤالًا من اللوحة.")}};
+
+/* New independent question library. It intentionally does not read or restore the retired editor. */
+const QUESTION_LIBRARY_KEY="ihyaaQuestionLibraryV2";
+let questionLibrary=[];
+let selectedQuestionGroup=null;
+function loadQuestionLibrary(){
+ try{
+  const raw=localStorage.getItem(QUESTION_LIBRARY_KEY);
+  const parsed=raw?JSON.parse(raw):[];
+  questionLibrary=Array.isArray(parsed)?parsed.filter(g=>g&&typeof g==="object").map((g,i)=>({
+   id:String(g.id||("group-"+i+"-"+Date.now())),
+   name:String(g.name||"مجموعة أسئلة"),
+   questions:Array.isArray(g.questions)?g.questions.filter(q=>q&&typeof q==="object").map(q=>({
+    id:String(q.id||("q-"+Math.random().toString(36).slice(2))),
+    v:Math.max(1,Math.min(10000,Math.round(Number(q.v)||100))),
+    q:String(q.q||""),a:String(q.a||""),time:Math.max(5,Math.min(300,Math.round(Number(q.time)||30)))
+   })).filter(q=>q.q.trim()&&q.a.trim()):[]
+  })):[]; 
+ }catch(e){console.warn("Question library data is invalid; starting empty.",e);questionLibrary=[]}
+}
+function saveQuestionLibrary(){
+ try{localStorage.setItem(QUESTION_LIBRARY_KEY,JSON.stringify(questionLibrary));return true}
+ catch(e){console.error("Question library save failed:",e);qlStatus("تعذر الحفظ على هذا الجهاز. تحقق من مساحة التخزين.");return false}
+}
+function qlStatus(message){const el=$("questionLibraryStatus");if(el)el.textContent=message}
+function openQuestionLibrary(){
+ loadQuestionLibrary();renderQuestionLibrary();
+ const menu=$("startMenuOverlay");if(menu)menu.classList.remove("show");
+ $("questionLibraryOverlay").classList.add("show");
+}
+function closeQuestionLibrary(){
+ $("questionLibraryOverlay").classList.remove("show");
+ if(document.body.classList.contains("room-flow-mode"))openStartMenu();
+}
+function renderQuestionLibrary(){
+ const root=$("questionLibraryGroups");if(!root)return;root.innerHTML="";
+ if(!questionLibrary.length){const empty=document.createElement("div");empty.className="ql-empty";empty.textContent="لا توجد مجموعات بعد. أنشئ مجموعة جديدة ثم أضف أسئلتك.";root.append(empty);return}
+ questionLibrary.forEach(group=>{
+  const card=document.createElement("article");card.className="ql-group";
+  const head=document.createElement("div");head.className="ql-group-head";
+  const name=document.createElement("strong");name.textContent=group.name;
+  const count=document.createElement("span");count.className="ql-count";count.textContent=group.questions.length+" سؤال";
+  head.append(name,count);card.append(head);
+  const actions=document.createElement("div");actions.className="ql-actions";
+  const add=document.createElement("button");add.type="button";add.textContent="＋ إضافة سؤال";add.onclick=()=>addLibraryQuestion(group.id);
+  const rename=document.createElement("button");rename.type="button";rename.textContent="تعديل الاسم";rename.onclick=()=>renameLibraryGroup(group.id);
+  const remove=document.createElement("button");remove.type="button";remove.className="danger";remove.textContent="حذف المجموعة";remove.onclick=()=>deleteLibraryGroup(group.id);
+  actions.append(add,rename,remove);card.append(actions);
+  const list=document.createElement("div");list.className="ql-questions";
+  if(!group.questions.length){const p=document.createElement("p");p.className="hint";p.textContent="المجموعة فارغة — أضف أول سؤال.";list.append(p)}
+  group.questions.forEach(question=>{
+   const item=document.createElement("div");item.className="ql-question";
+   const meta=document.createElement("b");meta.textContent=question.v+" نقطة • "+question.time+" ثانية";
+   const q=document.createElement("p");q.textContent="السؤال: "+question.q;
+   const a=document.createElement("p");a.textContent="الإجابة: "+question.a;
+   const row=document.createElement("div");row.className="ql-actions";
+   const edit=document.createElement("button");edit.type="button";edit.textContent="تعديل";edit.onclick=()=>editLibraryQuestion(group.id,question.id);
+   const del=document.createElement("button");del.type="button";del.className="danger";del.textContent="حذف";del.onclick=()=>deleteLibraryQuestion(group.id,question.id);
+   row.append(edit,del);item.append(meta,q,a,row);list.append(item);
+  });
+  card.append(list);root.append(card);
+ });
+}
+function addLibraryGroup(){
+ const name=prompt("اكتب اسم مجموعة الأسئلة:");
+ if(name===null)return;
+ if(!name.trim()){alert("اكتب اسمًا للمجموعة.");return}
+ questionLibrary.push({id:"g-"+Date.now()+"-"+Math.random().toString(36).slice(2,7),name:name.trim().slice(0,70),questions:[]});
+ if(saveQuestionLibrary()){renderQuestionLibrary();qlStatus("تم إنشاء المجموعة وحفظها.")}
+}
+function renameLibraryGroup(id){
+ const group=questionLibrary.find(g=>g.id===id);if(!group)return;
+ const name=prompt("اسم المجموعة الجديد:",group.name);if(name===null)return;
+ if(!name.trim()){alert("اسم المجموعة لا يمكن أن يكون فارغًا.");return}
+ group.name=name.trim().slice(0,70);if(saveQuestionLibrary()){renderQuestionLibrary();qlStatus("تم تحديث اسم المجموعة.")}
+}
+function deleteLibraryGroup(id){
+ const group=questionLibrary.find(g=>g.id===id);if(!group)return;
+ if(!confirm("حذف مجموعة «"+group.name+"» وكل أسئلتها؟"))return;
+ questionLibrary=questionLibrary.filter(g=>g.id!==id);if(saveQuestionLibrary()){renderQuestionLibrary();qlStatus("تم حذف المجموعة.")}
+}
+function addLibraryQuestion(groupId){
+ const group=questionLibrary.find(g=>g.id===groupId);if(!group)return;
+ const q=prompt("اكتب نص السؤال:");if(q===null)return;
+ if(!q.trim()){alert("نص السؤال مطلوب.");return}
+ const a=prompt("اكتب الإجابة الصحيحة:");if(a===null)return;
+ if(!a.trim()){alert("الإجابة مطلوبة.");return}
+ const v=prompt("قيمة السؤال بالنقاط (100 إلى 500 أو أي قيمة حتى 10000):","100");if(v===null)return;
+ const value=Number(v);if(!Number.isInteger(value)||value<1||value>10000){alert("أدخل قيمة صحيحة من 1 إلى 10000.");return}
+ const time=prompt("مدة السؤال بالثواني (5 إلى 300):","30");if(time===null)return;
+ const seconds=Number(time);if(!Number.isInteger(seconds)||seconds<5||seconds>300){alert("أدخل مدة من 5 إلى 300 ثانية.");return}
+ group.questions.push({id:"q-"+Date.now()+"-"+Math.random().toString(36).slice(2,7),q:q.trim(),a:a.trim(),v:value,time:seconds});
+ if(saveQuestionLibrary()){renderQuestionLibrary();qlStatus("تمت إضافة السؤال وحفظه.")}
+}
+function editLibraryQuestion(groupId,questionId){
+ const group=questionLibrary.find(g=>g.id===groupId),item=group?.questions.find(q=>q.id===questionId);if(!item)return;
+ const q=prompt("تعديل نص السؤال:",item.q);if(q===null)return;
+ const a=prompt("تعديل الإجابة:",item.a);if(a===null)return;
+ const v=prompt("قيمة السؤال:",String(item.v));if(v===null)return;
+ const time=prompt("مدة السؤال بالثواني:",String(item.time));if(time===null)return;
+ const value=Number(v),seconds=Number(time);
+ if(!q.trim()||!a.trim()||!Number.isInteger(value)||value<1||value>10000||!Number.isInteger(seconds)||seconds<5||seconds>300){alert("راجع البيانات: السؤال والإجابة مطلوبان، والقيمة 1–10000، والوقت 5–300 ثانية.");return}
+ Object.assign(item,{q:q.trim(),a:a.trim(),v:value,time:seconds});
+ if(saveQuestionLibrary()){renderQuestionLibrary();qlStatus("تم تعديل السؤال وحفظه.")}
+}
+function deleteLibraryQuestion(groupId,questionId){
+ const group=questionLibrary.find(g=>g.id===groupId);if(!group)return;
+ if(!confirm("هل تريد حذف هذا السؤال نهائيًا من المكتبة؟"))return;
+ group.questions=group.questions.filter(q=>q.id!==questionId);
+ if(saveQuestionLibrary()){renderQuestionLibrary();qlStatus("تم حذف السؤال.")}
+}
+function applyQuestionLibrary(){
+ const ready=questionLibrary.filter(g=>g.name.trim()&&g.questions.length);
+ if(!ready.length){alert("أضف مجموعة واحدة على الأقل وبداخلها سؤال واحد قبل اعتماد الأسئلة.");return}
+ state.categories=ready.map(g=>({name:g.name,questions:g.questions.map(q=>({v:q.v,q:q.q,a:q.a,time:q.time,used:false}))}));
+ state.scores=[0,0];state.turn=0;state.current=null;state.winnerShown=false;
+ if(typeof state.lifelines!=="undefined")state.lifelines=[{supervisor:false,double:false,block:false},{supervisor:false,double:false,block:false}];
+ if(typeof state.pending!=="undefined")state.pending=[{supervisor:false,double:false,block:false},{supervisor:false,double:false,block:false}];
+ save();render();$("questionLibraryOverlay").classList.remove("show");openStartMenu();
+ toast("تم اعتماد "+ready.length+" مجموعة و"+ready.reduce((n,g)=>n+g.questions.length,0)+" سؤال للمسابقة.");
+}
+$("openQuestionLibraryBtn").onclick=openQuestionLibrary;
+$("closeQuestionLibraryBtn").onclick=closeQuestionLibrary;
+$("qlBackBtn").onclick=closeQuestionLibrary;
+$("addQuestionGroupBtn").onclick=addLibraryGroup;
+$("applyQuestionLibraryBtn").onclick=applyQuestionLibrary;
+$("questionLibraryOverlay").addEventListener("click",event=>{if(event.target===$("questionLibraryOverlay"))closeQuestionLibrary()});
+
+loadQuestionLibrary();
 load();render();
 function openStartMenu(){const menu=$("startMenuOverlay");if(menu)menu.classList.add("show")}
 function hideStartMenu(){const menu=$("startMenuOverlay");if(menu)menu.classList.remove("show")}
@@ -747,7 +907,7 @@ document.addEventListener("DOMContentLoaded",()=>{
  }else if(mode==="duel"){
   const menu=document.getElementById("startMenuOverlay");if(menu)menu.classList.remove("show");
   const b=document.getElementById("onlineDuelBtn");if(b)b.click();
- }else if(mode==="host"||mode==="questions"){const b=document.getElementById("hostOpen");if(b)b.click();}
+ }else if(mode==="questions"){const menu=document.getElementById("startMenuOverlay");if(menu)menu.classList.remove("show");if(typeof openQuestionLibrary==="function")openQuestionLibrary();}else if(mode==="host"){const b=document.getElementById("settingsOpen");if(b)b.click();}
  else if(mode==="rules"){const r=document.getElementById("rulesOverlay");if(r)r.classList.add("show");}
 });
 </script>
