@@ -708,6 +708,7 @@ body[data-theme] .turn{border-color:var(--team-line);background:var(--team-soft)
   <section class="start-menu-group" aria-labelledby="startPlayTitle">
    <div class="start-menu-group-head"><span class="start-menu-group-icon">⚑</span><div><h3 id="startPlayTitle">أنماط اللعب</h3><small>اختر طريقة المنافسة المناسبة</small></div></div>
    <div class="start-menu-actions">
+    <button class="start-action" id="startOfflineBtn" type="button"><span>▦</span><strong>المسابقة الأوفلاين القديمة</strong><small>العب محليًا على نفس الجهاز بلوحة الفئات والنقاط والفرق والتحكيم</small><b class="start-action-arrow" aria-hidden="true">←</b></button>
     <button class="start-action" id="startOnlineBtn" type="button"><span>◎</span><strong>المسابقات الأونلاين</strong><small>أنشئ غرفة أو انضم إلى غرفة متاحة والعب مع فريقك</small><b class="start-action-arrow" aria-hidden="true">←</b></button>
     <button class="start-action" id="startDuelBtn" type="button"><span>⚔</span><strong>مواجهة أونلاين 1 ضد 1</strong><small>تحدَّ لاعبًا آخر في مواجهة مباشرة</small><b class="start-action-arrow" aria-hidden="true">←</b></button>
    </div>
@@ -1035,6 +1036,7 @@ document.body.classList.remove("setup-mode");document.body.classList.add("room-f
 $("startMenuOpen").onclick=()=>openStartMenu();
 
 
+$("startOfflineBtn").onclick=()=>{hideStartMenu();document.body.classList.remove("setup-mode");document.body.classList.add("room-flow-mode");render();toast("تم فتح المسابقة الأوفلاين القديمة. اللعب والتحكيم محليان على هذا الجهاز.")};
 $("startOnlineBtn").onclick=()=>{hideStartMenu();const b=$("onlineOpen");if(b)b.click();else toast("حمّل الصفحة مرة أخرى وحاول فتح الأونلاين")};
 
 $("startDuelBtn").onclick=()=>{hideStartMenu();const b=$("onlineDuelBtn");if(b)b.click();else toast("تعذر تحميل نظام المواجهات الأونلاين. حدّث الصفحة وحاول مرة أخرى.")};
@@ -1055,7 +1057,7 @@ document.addEventListener("DOMContentLoaded",()=>{
  }else if(mode==="duel"){
   const menu=document.getElementById("startMenuOverlay");if(menu)menu.classList.remove("show");
   const b=document.getElementById("onlineDuelBtn");if(b)b.click();
- }else if(mode==="questions"){const menu=document.getElementById("startMenuOverlay");if(menu)menu.classList.remove("show");if(typeof openQuestionLibrary==="function")openQuestionLibrary();}else if(mode==="host"){const b=document.getElementById("settingsOpen");if(b)b.click();}
+ }else if(mode==="offline"){const menu=document.getElementById("startMenuOverlay");if(menu)menu.classList.remove("show");}else if(mode==="questions"){const menu=document.getElementById("startMenuOverlay");if(menu)menu.classList.remove("show");if(typeof openQuestionLibrary==="function")openQuestionLibrary();}else if(mode==="host"){const b=document.getElementById("settingsOpen");if(b)b.click();}
 
 });
 </script>
