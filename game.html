@@ -630,6 +630,41 @@ body[data-theme] .turn{border-color:var(--team-line);background:var(--team-soft)
 .ql-footer{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;border-top:1px solid #e2e9e0;margin-top:16px;padding-top:14px}
 .ql-status{font-size:12px;color:#718078}
 @media(max-width:620px){.ql-groups{grid-template-columns:1fr}.question-library-modal{padding:15px;border-radius:18px}.ql-head h2{font-size:18px}}
+
+/* Hybrid question library workspace */
+.ql-workspace{width:min(1220px,100%);height:min(94vh,940px);max-height:94vh;display:flex;flex-direction:column;padding:20px;overflow:hidden}
+.ql-head-actions{display:flex;align-items:center;gap:8px}.ql-stats{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin:0 0 13px}
+.ql-stat{background:#f0f5ef;border:1px solid #e0e9de;border-radius:13px;padding:10px 13px}.ql-stat strong{display:block;font-size:21px;color:#174b38}.ql-stat span{font-size:11px;color:#718078}
+.ql-workspace-grid{display:grid;grid-template-columns:255px minmax(0,1fr);gap:13px;min-height:0;flex:1}
+.ql-sidebar,.ql-main{min-height:0;border:1px solid #e0e8df;border-radius:16px;background:#fff;padding:13px}
+.ql-sidebar{display:flex;flex-direction:column}.ql-sidebar-title{display:flex;justify-content:space-between;align-items:center;color:#174b38;margin-bottom:10px}
+.ql-sidebar-title span{background:#eef4ed;border-radius:20px;padding:3px 9px;font-size:11px}
+.ql-group-list{display:grid;gap:7px;overflow:auto;min-height:80px;align-content:start}
+.ql-group-choice{display:flex;align-items:center;gap:8px;width:100%;padding:10px;border:1px solid #e4ebe2;border-radius:11px;background:#fafcf9;text-align:right;color:#315344}
+.ql-group-choice.active{border-color:#43836a;background:#edf6ef;box-shadow:inset -3px 0 #36785a}
+.ql-group-choice span:first-child{flex:1;min-width:0;overflow-wrap:anywhere;font-weight:800;font-size:12px}.ql-group-choice small{color:#7a8b7f;font-size:10px}
+.ql-new-group{display:grid;gap:7px;border-top:1px solid #e8eee6;padding-top:11px;margin-top:11px}
+.ql-new-group input,.ql-current-group input,.ql-filterbar input,.ql-filterbar select,.ql-editor input,.ql-editor select,.ql-editor textarea{width:100%;min-width:0;border:1px solid #d8e2d8;border-radius:10px;padding:10px;background:#fff;color:#18382f;font:inherit}
+.ql-new-group button,.ql-current-group button,.ql-tools button,.ql-import-label{border:1px solid #d8e5d8;border-radius:10px;padding:9px 11px;background:#edf5ed;color:#24543f;font-size:12px;font-weight:900;text-align:center;cursor:pointer}
+.ql-main{display:flex;flex-direction:column;gap:11px;overflow:auto}
+.ql-main-toolbar{display:flex;justify-content:space-between;gap:12px;align-items:end;flex-wrap:wrap}
+.ql-current-group{display:grid;gap:5px;flex:1;min-width:180px}.ql-current-group label,.ql-editor label{font-size:12px;font-weight:900;color:#355647}
+.ql-current-group>div{display:flex;gap:6px}.ql-current-group input{font-weight:900}
+.ql-tools{display:flex;gap:6px;flex-wrap:wrap}.ql-tools input{display:none}
+.ql-filterbar{display:grid;grid-template-columns:minmax(140px,1fr) 135px auto;gap:7px}
+.ql-table-wrap{overflow:auto;border:1px solid #e5ece3;border-radius:12px;min-height:130px}
+.ql-table{width:100%;border-collapse:collapse;font-size:12px;text-align:right;min-width:560px}
+.ql-table th{background:#f1f6f0;color:#476354;padding:10px;white-space:nowrap}
+.ql-table td{padding:10px;border-top:1px solid #edf1eb;color:#344f42;vertical-align:top;line-height:1.7}
+.ql-table tr:hover td{background:#fbfdf9}.ql-table td:nth-child(1),.ql-table td:nth-child(4){white-space:nowrap;font-weight:900;color:#8a6b2d}
+.ql-row-actions{display:flex;gap:5px;white-space:nowrap}.ql-row-actions button{border:1px solid #dce6dc;border-radius:8px;padding:6px 8px;background:#f1f6f0;color:#24543f;font-size:11px;font-weight:800}.ql-row-actions .danger{background:#fff0ef;color:#a34249;border-color:#f0d3d1}
+.ql-table-wrap .ql-empty{border:0;background:#fff}.ql-editor{border:1px solid #dce8da;background:#f7faf5;border-radius:14px;padding:13px;display:grid;gap:10px}
+.ql-editor[hidden]{display:none}.ql-editor-head{display:flex;justify-content:space-between;align-items:center}.ql-editor-head strong{display:block;color:#174b38}.ql-editor-head small{font-size:11px;color:#78887e}
+.ql-editor>label{display:grid;gap:6px}.ql-editor textarea{resize:vertical}.ql-editor-fields{display:grid;grid-template-columns:1fr 1fr;gap:10px}.ql-editor-fields label{display:grid;gap:6px}
+.ql-editor-actions{display:flex;gap:7px}.ql-cancel{border:1px solid #dce6dc;background:#fff;border-radius:9px;padding:7px 10px;color:#526b5b}
+.ql-footer{flex-shrink:0}.ql-status{max-width:65%;line-height:1.6}
+@media(max-width:760px){.ql-workspace{padding:12px}.ql-workspace-grid{grid-template-columns:1fr;overflow:auto}.ql-sidebar{max-height:220px}.ql-group-list{grid-template-columns:repeat(2,minmax(0,1fr))}.ql-filterbar{grid-template-columns:1fr 110px}.ql-filterbar button{grid-column:1/-1}.ql-stats{gap:6px}.ql-stat{padding:8px}.ql-stat strong{font-size:17px}}
+@media(max-width:460px){.ql-group-list{grid-template-columns:1fr}.ql-editor-fields{grid-template-columns:1fr}.ql-stats{grid-template-columns:repeat(3,minmax(0,1fr))}.ql-stat span{font-size:10px}}
 </style>  <link rel="stylesheet" href="ihyaa-premium.css?v=20261107">
 <style>
 .quick-question-panel{padding:16px;border:1px solid #d9e5d9;border-radius:16px;background:#f7faf6;display:grid;gap:12px}
@@ -649,11 +684,25 @@ body[data-theme] .turn{border-color:var(--team-line);background:var(--team-soft)
 <header class="top"><div class="nav"><div class="brand"><img src="Arabic%20Calligraphy%20Emblem%20with%20Gold%20Accents.png" alt="شعار إحياء"><div><h1>مؤسسة إحياء</h1><p>جيل على خطى السابقين</p></div></div><div class="nav-actions"><button id="startMenuOpen">⌂ القائمة الرئيسية</button><button id="settingsOpen">⚙ إعدادات المسابقة</button></div></div><div class="hero"><div class="eyebrow">مسابقة تفاعلية • علم ومتعة وتنافس</div><h2>تحدّي المعرفة يبدأ من هنا</h2><p>اختر الفئة والنقاط، وتعاون مع فريقك للوصول إلى القمة.</p></div></header>
 <div class="start-menu-overlay" id="startMenuOverlay" role="dialog" aria-modal="true" aria-labelledby="startMenuTitle"><div class="start-menu-card"><div class="start-menu-brand">إحياء <span>•</span> مؤسسة إحياء</div><div class="start-menu-kicker">جيل على خطى السابقين</div><h2 id="startMenuTitle">ابدأ صناعة التحدّي</h2><p>جهّز أسئلتك، اختر طريقة اللعب، واجمع الفريقين في تجربة معرفية واحدة.</p><div class="start-menu-actions"><button class="start-action start-primary" id="startClassicBtn"><span>▶</span><strong>ابدأ المسابقة</strong><small>ادخل إلى لوحة الأسئلة والفريقين</small></button><button class="start-action" id="startOnlineBtn"><span>◎</span><strong>المسابقات الأونلاين</strong><small>أنشئ غرفة أو انضم إلى غرفة متاحة</small></button><button class="start-action" id="startDuelBtn"><span>⚔</span><strong>مواجهة أونلاين 1 ضد 1</strong><small>أنشئ مواجهة أو انضم إلى مواجهة مباشرة بين لاعبين</small></button><button class="start-action" id="openQuestionLibraryBtn" type="button"><span>✎</span><strong>إدارة الأسئلة</strong><small>أنشئ مجموعاتك وأسئلتك واحفظها للمسابقات القادمة</small></button></div><div class="start-menu-foot">يمكنك العودة إلى هذه القائمة في أي وقت من زر القائمة أعلى الصفحة.</div></div></div>
 <div class="question-library-overlay" id="questionLibraryOverlay" role="dialog" aria-modal="true" aria-labelledby="questionLibraryTitle">
- <section class="question-library-modal">
-  <header class="ql-head"><div><h2 id="questionLibraryTitle">إدارة الأسئلة</h2><p>مكتبة مستقلة تحفظ مجموعاتك على هذا الجهاز، ويمكنك تجهيزها للمسابقة وقتما تريد.</p></div><button class="close" id="closeQuestionLibraryBtn" type="button" aria-label="إغلاق">×</button></header>
-  <div class="ql-toolbar"><button class="primary" id="addQuestionGroupBtn" type="button">＋ إنشاء مجموعة أسئلة</button><button class="secondary" id="qlBackBtn" type="button">العودة للقائمة الرئيسية</button></div>
-  <div class="ql-groups" id="questionLibraryGroups"></div>
-  <footer class="ql-footer"><span class="ql-status" id="questionLibraryStatus" aria-live="polite">لم يتم اعتماد مجموعة للمسابقة بعد.</span><button class="primary" id="applyQuestionLibraryBtn" type="button">اعتماد الأسئلة للمسابقة</button></footer>
+ <section class="question-library-modal ql-workspace">
+  <header class="ql-head"><div><h2 id="questionLibraryTitle">مركز إدارة الأسئلة</h2><p>نظّم مجموعاتك، راجع الأسئلة وعدّلها من مكان واحد.</p></div><div class="ql-head-actions"><button class="secondary" id="qlBackBtn" type="button">القائمة الرئيسية</button><button class="close" id="closeQuestionLibraryBtn" type="button" aria-label="إغلاق">×</button></div></header>
+  <div class="ql-stats" id="questionLibraryStats"></div>
+  <div class="ql-workspace-grid">
+   <aside class="ql-sidebar"><div class="ql-sidebar-title"><strong>مجموعات الأسئلة</strong><span id="qlGroupCount">0</span></div><div id="questionLibraryGroups" class="ql-group-list"></div><div class="ql-new-group"><input id="newQuestionGroupName" maxlength="70" placeholder="اسم المجموعة الجديدة"><button type="button" id="addQuestionGroupBtn">＋ إنشاء مجموعة</button></div></aside>
+   <section class="ql-main">
+    <div class="ql-main-toolbar"><div class="ql-current-group"><label for="qlCurrentGroupName">اسم المجموعة</label><div><input id="qlCurrentGroupName" maxlength="70" placeholder="اختر مجموعة أولاً"><button id="saveQuestionGroupNameBtn" type="button">حفظ الاسم</button></div></div><div class="ql-tools"><button id="exportQuestionLibraryBtn" type="button">تصدير نسخة</button><label class="ql-import-label" for="importQuestionLibraryFile">استيراد JSON</label><input id="importQuestionLibraryFile" type="file" accept=".json,application/json" hidden></div></div>
+    <div class="ql-filterbar"><input id="qlSearchInput" type="search" placeholder="ابحث في نص السؤال أو الإجابة..."><select id="qlValueFilter"><option value="all">كل النقاط</option><option value="100">100 نقطة</option><option value="200">200 نقطة</option><option value="300">300 نقطة</option><option value="400">400 نقطة</option><option value="500">500 نقطة</option></select><button class="primary" id="newLibraryQuestionBtn" type="button">＋ إضافة سؤال</button></div>
+    <div class="ql-table-wrap"><table class="ql-table"><thead><tr><th>النقاط</th><th>السؤال</th><th>الإجابة</th><th>الوقت</th><th>إجراءات</th></tr></thead><tbody id="questionLibraryTableBody"></tbody></table><div class="ql-empty" id="qlNoQuestions">اختر مجموعة من القائمة أو أنشئ مجموعة جديدة.</div></div>
+    <form id="qlQuestionForm" class="ql-editor" hidden>
+     <div class="ql-editor-head"><div><strong id="qlEditorTitle">إضافة سؤال جديد</strong><small>اكتب البيانات ثم احفظها في المجموعة الحالية.</small></div><button type="button" id="cancelQuestionEditBtn" class="ql-cancel">إغلاق</button></div>
+     <label>نص السؤال<textarea id="qlQuestionText" rows="3" maxlength="1200" required placeholder="اكتب السؤال هنا..."></textarea></label>
+     <label>الإجابة الصحيحة<textarea id="qlAnswerText" rows="2" maxlength="800" required placeholder="اكتب الإجابة الصحيحة..."></textarea></label>
+     <div class="ql-editor-fields"><label>النقاط<select id="qlQuestionValue"><option>100</option><option>200</option><option>300</option><option>400</option><option>500</option></select></label><label>وقت الإجابة بالثواني<input id="qlQuestionTime" type="number" min="5" max="300" value="30" required></label></div>
+     <div class="ql-editor-actions"><button type="submit" class="primary">حفظ السؤال</button><button type="button" id="cancelQuestionEditBtn2" class="secondary">إلغاء</button></div>
+    </form>
+   </section>
+  </div>
+  <footer class="ql-footer"><span class="ql-status" id="questionLibraryStatus" aria-live="polite">الحفظ تلقائي بعد كل تعديل.</span><button class="primary" id="applyQuestionLibraryBtn" type="button">اعتماد الأسئلة للمسابقة</button></footer>
  </section>
 </div>
 <div class="overlay" id="rulesOverlay"><div class="modal rules-modal"><div class="modal-head"><h2>قوانين المسابقة</h2><span class="q-value">مؤسسة إحياء</span></div><div class="rules-intro">اقرأ القواعد قبل البداية حتى تكون المنافسة واضحة وعادلة للجميع.</div><section class="rules-section"><h3>المسابقة الكلاسيكية</h3><ol class="rules-list"><li>تُجرى قرعة البداية لتحديد الفريق الذي يختار السؤال الأول.</li><li>يظهر مؤقّت السؤال على الشاشة؛ المدة الافتراضية 30 ثانية وقد يغيّرها المنظّم من إعدادات السؤال.</li><li>الإجابة الصحيحة تمنح الفريق نقاط السؤال، ثم يُغلق السؤال ويُحدّث جدول النتائج.</li><li>الإجابة الخاطئة أو انتهاء الوقت يعني عدم إضافة نقاط، ويُغلق السؤال.</li><li>عند اعتماد إجابة صحيحة يحتفظ الفريق بدوره، وعند الإجابة الخاطئة ينتقل الدور إلى الفريق الآخر.</li><li>السؤال المستخدم لا يمكن اختياره مرة ثانية في الجولة نفسها.</li><li>للمنظّم تخطّي السؤال عند الحاجة؛ السؤال المتخطّى يُغلق ولا تُحتسب له نقاط.</li></ol></section><section class="rules-section"><h3>وسائل المساعدة</h3><ul class="rules-list"><li>الاستعانة بمشرف، ودبل النقاط، ومنع دور المنافس متاحة وفق إعدادات الجولة.</li><li>كل وسيلة مساعدة متاحة مرة واحدة لكل فريق، وتُطبّق على السؤال التالي بعد تفعيلها.</li><li>يجب تفعيل وسيلة المساعدة قبل اختيار السؤال؛ وبعد استخدامها لا يمكن استرجاعها في الجولة نفسها.</li></ul></section><section class="rules-section"><h3>الغرف الأونلاين</h3><ul class="rules-list"><li>يدخل كل لاعب باسم عرض فقط، دون الحاجة إلى بريد إلكتروني أو كلمة مرور شخصية.</li><li>يُشارك كود الغرفة مع اللاعبين؛ الغرفة المحمية تتطلب كلمة مرور الغرفة، أما المفتوحة فيمكن الانضمام إليها مباشرة.</li><li>يُوزّع الهوست اللاعبين على الفريقين ويبدأ الجولة عندما يصبح الفريقان جاهزين.</li><li>لا تظهر الإجابة الصحيحة للاعبين؛ يرسل اللاعب إجابته ويعتمد الهوست صحتها أو خطأها.</li><li>التزم باسم مناسب واحترم بقية المشاركين وقرارات المنظّم.</li></ul></section><section class="rules-section"><h3>مواجهة 1 ضد 1</h3><ul class="rules-list"><li>تتكوّن المواجهة من 15 سؤالًا عاديًا وسؤال ذهبي عند التعادل، ولكل سؤال 30 ثانية افتراضيًا.</li><li>الإجابة الصحيحة تمنح 100 نقطة، والسؤال الخامس عشر 200 نقطة، والفائز يحصل على 600 نقطة إضافية تُضاف للنتيجة النهائية.</li><li>لا يحق للاعب تغيير إجابته بعد إرسالها للسؤال الحالي.</li><li>الهوست مسؤول عن بدء المواجهة وإيقافها مؤقتًا أو استئنافها واعتماد الانتقال بين الأسئلة.</li><li>تُعرض النتيجة النهائية عند انتهاء المواجهة، وتُحتسب المكافأة وفق إعدادات النظام.</li></ul></section><p class="rules-note">قرار الهوست ينظّم سير المسابقة، ولا يغيّر الإجابات أو النقاط بعد اعتمادها إلا وفق أدوات اللعبة المتاحة.</p><button class="primary" id="rulesStart">فهمت، ابدأ المسابقة</button></div></div>
@@ -785,83 +834,123 @@ function closeQuestionLibrary(){
  $("questionLibraryOverlay").classList.remove("show");
  if(document.body.classList.contains("room-flow-mode"))openStartMenu();
 }
+
+let selectedQuestionGroupId=null;
+let editingQuestionId=null;
+function qlEscape(value){return String(value??"").replace(/[&<>"']/g,ch=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[ch]))}
+function currentQuestionGroup(){return questionLibrary.find(g=>g.id===selectedQuestionGroupId)||null}
 function renderQuestionLibrary(){
- const root=$("questionLibraryGroups");if(!root)return;root.innerHTML="";
- if(!questionLibrary.length){const empty=document.createElement("div");empty.className="ql-empty";empty.textContent="لا توجد مجموعات بعد. أنشئ مجموعة جديدة ثم أضف أسئلتك.";root.append(empty);return}
- questionLibrary.forEach(group=>{
-  const card=document.createElement("article");card.className="ql-group";
-  const head=document.createElement("div");head.className="ql-group-head";
-  const name=document.createElement("strong");name.textContent=group.name;
-  const count=document.createElement("span");count.className="ql-count";count.textContent=group.questions.length+" سؤال";
-  head.append(name,count);card.append(head);
-  const actions=document.createElement("div");actions.className="ql-actions";
-  const add=document.createElement("button");add.type="button";add.textContent="＋ إضافة سؤال";add.onclick=()=>addLibraryQuestion(group.id);
-  const rename=document.createElement("button");rename.type="button";rename.textContent="تعديل الاسم";rename.onclick=()=>renameLibraryGroup(group.id);
-  const remove=document.createElement("button");remove.type="button";remove.className="danger";remove.textContent="حذف المجموعة";remove.onclick=()=>deleteLibraryGroup(group.id);
-  actions.append(add,rename,remove);card.append(actions);
-  const list=document.createElement("div");list.className="ql-questions";
-  if(!group.questions.length){const p=document.createElement("p");p.className="hint";p.textContent="المجموعة فارغة — أضف أول سؤال.";list.append(p)}
-  group.questions.forEach(question=>{
-   const item=document.createElement("div");item.className="ql-question";
-   const meta=document.createElement("b");meta.textContent=question.v+" نقطة • "+question.time+" ثانية";
-   const q=document.createElement("p");q.textContent="السؤال: "+question.q;
-   const a=document.createElement("p");a.textContent="الإجابة: "+question.a;
-   const row=document.createElement("div");row.className="ql-actions";
-   const edit=document.createElement("button");edit.type="button";edit.textContent="تعديل";edit.onclick=()=>editLibraryQuestion(group.id,question.id);
-   const del=document.createElement("button");del.type="button";del.className="danger";del.textContent="حذف";del.onclick=()=>deleteLibraryQuestion(group.id,question.id);
-   row.append(edit,del);item.append(meta,q,a,row);list.append(item);
-  });
-  card.append(list);root.append(card);
+ const groups=$("questionLibraryGroups"),body=$("questionLibraryTableBody"),empty=$("qlNoQuestions");
+ if(!groups||!body)return;
+ if(!selectedQuestionGroupId&&questionLibrary.length)selectedQuestionGroupId=questionLibrary[0].id;
+ if(selectedQuestionGroupId&&!questionLibrary.some(g=>g.id===selectedQuestionGroupId))selectedQuestionGroupId=questionLibrary[0]?.id||null;
+ groups.innerHTML="";
+ questionLibrary.forEach(g=>{
+  const b=document.createElement("button");b.type="button";b.className="ql-group-choice"+(g.id===selectedQuestionGroupId?" active":"");
+  b.innerHTML="<span>"+qlEscape(g.name)+"</span><small>"+g.questions.length+" سؤال</small>";
+  b.onclick=()=>{selectedQuestionGroupId=g.id;editingQuestionId=null;$("qlQuestionForm").hidden=true;renderQuestionLibrary()};
+  groups.append(b);
  });
+ $("qlGroupCount").textContent=questionLibrary.length;
+ const total=questionLibrary.reduce((n,g)=>n+g.questions.length,0);
+ $("questionLibraryStats").innerHTML='<div class="ql-stat"><strong>'+questionLibrary.length+'</strong><span>مجموعة محفوظة</span></div><div class="ql-stat"><strong>'+total+'</strong><span>إجمالي الأسئلة</span></div><div class="ql-stat"><strong>'+questionLibrary.filter(g=>g.questions.length).length+'</strong><span>مجموعات جاهزة</span></div>';
+ const group=currentQuestionGroup();
+ $("qlCurrentGroupName").value=group?group.name:"";
+ $("qlCurrentGroupName").disabled=!group;$("saveQuestionGroupNameBtn").disabled=!group;$("newLibraryQuestionBtn").disabled=!group;
+ const query=($("qlSearchInput").value||"").trim().toLocaleLowerCase("ar"),valueFilter=$("qlValueFilter").value;
+ const rows=group?group.questions.filter(q=>(valueFilter==="all"||String(q.v)===valueFilter)&&(!query||(q.q+" "+q.a).toLocaleLowerCase("ar").includes(query))):[];
+ body.innerHTML="";
+ rows.forEach(q=>{
+  const tr=document.createElement("tr");
+  tr.innerHTML='<td>'+q.v+'</td><td>'+qlEscape(q.q)+'</td><td>'+qlEscape(q.a)+'</td><td>'+q.time+' ث</td><td><div class="ql-row-actions"><button type="button" data-ql-edit="'+qlEscape(q.id)+'">تعديل</button><button type="button" class="danger" data-ql-delete="'+qlEscape(q.id)+'">حذف</button><button type="button" data-ql-copy="'+qlEscape(q.id)+'">نسخ</button></div></td>';
+  body.append(tr);
+ });
+ empty.style.display=rows.length?"none":"block";
+ empty.textContent=!group?"أنشئ مجموعة جديدة أو اختر مجموعة من القائمة.":group.questions.length?"لا توجد نتائج مطابقة لبحثك أو فلترك.":"المجموعة فارغة. اضغط «إضافة سؤال» للبدء.";
+ $("questionLibraryStatus").textContent="الحفظ تلقائي على هذا الجهاز • "+(group?group.name:"لا توجد مجموعة محددة");
 }
 function addLibraryGroup(){
- const name=prompt("اكتب اسم مجموعة الأسئلة:");
- if(name===null)return;
- if(!name.trim()){alert("اكتب اسمًا للمجموعة.");return}
- questionLibrary.push({id:"g-"+Date.now()+"-"+Math.random().toString(36).slice(2,7),name:name.trim().slice(0,70),questions:[]});
- if(saveQuestionLibrary()){renderQuestionLibrary();qlStatus("تم إنشاء المجموعة وحفظها.")}
+ const input=$("newQuestionGroupName"),name=input.value.trim();
+ if(!name){input.focus();qlStatus("اكتب اسم المجموعة أولاً.");return}
+ if(questionLibrary.some(g=>g.name.toLocaleLowerCase("ar")===name.toLocaleLowerCase("ar"))){qlStatus("يوجد بالفعل مجموعة بهذا الاسم.");return}
+ const group={id:"g-"+Date.now()+"-"+Math.random().toString(36).slice(2,7),name:name.slice(0,70),questions:[]};
+ questionLibrary.push(group);selectedQuestionGroupId=group.id;input.value="";
+ if(saveQuestionLibrary()){renderQuestionLibrary();qlStatus("تم إنشاء المجموعة. أضف أول سؤال.")}
 }
-function renameLibraryGroup(id){
- const group=questionLibrary.find(g=>g.id===id);if(!group)return;
- const name=prompt("اسم المجموعة الجديد:",group.name);if(name===null)return;
- if(!name.trim()){alert("اسم المجموعة لا يمكن أن يكون فارغًا.");return}
- group.name=name.trim().slice(0,70);if(saveQuestionLibrary()){renderQuestionLibrary();qlStatus("تم تحديث اسم المجموعة.")}
+function saveLibraryGroupName(){
+ const group=currentQuestionGroup(),input=$("qlCurrentGroupName"),name=input.value.trim();if(!group)return;
+ if(!name){qlStatus("اسم المجموعة لا يمكن أن يكون فارغًا.");input.focus();return}
+ if(questionLibrary.some(g=>g.id!==group.id&&g.name.toLocaleLowerCase("ar")===name.toLocaleLowerCase("ar"))){qlStatus("يوجد بالفعل مجموعة بهذا الاسم.");return}
+ group.name=name.slice(0,70);if(saveQuestionLibrary()){renderQuestionLibrary();qlStatus("تم حفظ اسم المجموعة.")}
 }
-function deleteLibraryGroup(id){
- const group=questionLibrary.find(g=>g.id===id);if(!group)return;
- if(!confirm("حذف مجموعة «"+group.name+"» وكل أسئلتها؟"))return;
- questionLibrary=questionLibrary.filter(g=>g.id!==id);if(saveQuestionLibrary()){renderQuestionLibrary();qlStatus("تم حذف المجموعة.")}
+function openLibraryQuestionEditor(id=null){
+ const group=currentQuestionGroup();if(!group){qlStatus("أنشئ مجموعة أولاً.");return}
+ const item=id?group.questions.find(q=>q.id===id):null;editingQuestionId=item?.id||null;
+ $("qlEditorTitle").textContent=item?"تعديل السؤال":"إضافة سؤال جديد";
+ $("qlQuestionText").value=item?.q||"";$("qlAnswerText").value=item?.a||"";
+ $("qlQuestionValue").value=String(item?.v||100);$("qlQuestionTime").value=String(item?.time||30);
+ $("qlQuestionForm").hidden=false;$("qlQuestionText").focus();
 }
-function addLibraryQuestion(groupId){
- const group=questionLibrary.find(g=>g.id===groupId);if(!group)return;
- const q=prompt("اكتب نص السؤال:");if(q===null)return;
- if(!q.trim()){alert("نص السؤال مطلوب.");return}
- const a=prompt("اكتب الإجابة الصحيحة:");if(a===null)return;
- if(!a.trim()){alert("الإجابة مطلوبة.");return}
- const v=prompt("قيمة السؤال بالنقاط (100 إلى 500 أو أي قيمة حتى 10000):","100");if(v===null)return;
- const value=Number(v);if(!Number.isInteger(value)||value<1||value>10000){alert("أدخل قيمة صحيحة من 1 إلى 10000.");return}
- const time=prompt("مدة السؤال بالثواني (5 إلى 300):","30");if(time===null)return;
- const seconds=Number(time);if(!Number.isInteger(seconds)||seconds<5||seconds>300){alert("أدخل مدة من 5 إلى 300 ثانية.");return}
- group.questions.push({id:"q-"+Date.now()+"-"+Math.random().toString(36).slice(2,7),q:q.trim(),a:a.trim(),v:value,time:seconds});
- if(saveQuestionLibrary()){renderQuestionLibrary();qlStatus("تمت إضافة السؤال وحفظه.")}
+function saveLibraryQuestionForm(event){
+ event.preventDefault();const group=currentQuestionGroup();if(!group)return;
+ const q=$("qlQuestionText").value.trim(),a=$("qlAnswerText").value.trim(),v=Number($("qlQuestionValue").value),time=Number($("qlQuestionTime").value);
+ if(!q||!a){qlStatus("اكتب نص السؤال والإجابة الصحيحة.");return}
+ if(!Number.isInteger(v)||v<1||v>10000||!Number.isInteger(time)||time<5||time>300){qlStatus("تحقق من النقاط والوقت (5 إلى 300 ثانية).");return}
+ const item=editingQuestionId?group.questions.find(x=>x.id===editingQuestionId):null;
+ if(item)Object.assign(item,{q,a,v,time});else group.questions.push({id:"q-"+Date.now()+"-"+Math.random().toString(36).slice(2,7),q,a,v,time});
+ if(saveQuestionLibrary()){$("qlQuestionForm").hidden=true;editingQuestionId=null;renderQuestionLibrary();qlStatus(item?"تم تحديث السؤال وحفظه.":"تمت إضافة السؤال وحفظه.")}
 }
-function editLibraryQuestion(groupId,questionId){
- const group=questionLibrary.find(g=>g.id===groupId),item=group?.questions.find(q=>q.id===questionId);if(!item)return;
- const q=prompt("تعديل نص السؤال:",item.q);if(q===null)return;
- const a=prompt("تعديل الإجابة:",item.a);if(a===null)return;
- const v=prompt("قيمة السؤال:",String(item.v));if(v===null)return;
- const time=prompt("مدة السؤال بالثواني:",String(item.time));if(time===null)return;
- const value=Number(v),seconds=Number(time);
- if(!q.trim()||!a.trim()||!Number.isInteger(value)||value<1||value>10000||!Number.isInteger(seconds)||seconds<5||seconds>300){alert("راجع البيانات: السؤال والإجابة مطلوبان، والقيمة 1–10000، والوقت 5–300 ثانية.");return}
- Object.assign(item,{q:q.trim(),a:a.trim(),v:value,time:seconds});
- if(saveQuestionLibrary()){renderQuestionLibrary();qlStatus("تم تعديل السؤال وحفظه.")}
-}
-function deleteLibraryQuestion(groupId,questionId){
- const group=questionLibrary.find(g=>g.id===groupId);if(!group)return;
- if(!confirm("هل تريد حذف هذا السؤال نهائيًا من المكتبة؟"))return;
+function deleteLibraryQuestion(questionId){
+ const group=currentQuestionGroup();if(!group)return;
+ if(!group.questions.some(q=>q.id===questionId))return;
+ if(!confirm("حذف هذا السؤال من المجموعة؟"))return;
  group.questions=group.questions.filter(q=>q.id!==questionId);
  if(saveQuestionLibrary()){renderQuestionLibrary();qlStatus("تم حذف السؤال.")}
 }
+function duplicateLibraryQuestion(questionId){
+ const group=currentQuestionGroup();if(!group)return;
+ const item=group.questions.find(q=>q.id===questionId);if(!item)return;
+ group.questions.push({...item,id:"q-"+Date.now()+"-"+Math.random().toString(36).slice(2,7),q:item.q+" (نسخة)"});
+ if(saveQuestionLibrary()){renderQuestionLibrary();qlStatus("تم نسخ السؤال.")}
+}
+function exportQuestionLibrary(){
+ const data=JSON.stringify({format:"ihyaa-question-library-v2",groups:questionLibrary},null,2);
+ const url=URL.createObjectURL(new Blob([data],{type:"application/json"}));
+ const a=document.createElement("a");a.href=url;a.download="ihyaa-question-library.json";a.click();URL.revokeObjectURL(url);qlStatus("تم تجهيز نسخة JSON للتنزيل.");
+}
+function importQuestionLibraryFile(event){
+ const file=event.target.files?.[0];if(!file)return;
+ const reader=new FileReader();
+ reader.onload=()=>{
+  try{
+   const parsed=JSON.parse(String(reader.result||"")),incoming=Array.isArray(parsed)?parsed:parsed.groups;
+   if(!Array.isArray(incoming))throw new Error("invalid");
+   const clean=incoming.filter(g=>g&&typeof g==="object"&&String(g.name||"").trim()).map((g,i)=>({id:"import-"+Date.now()+"-"+i+"-"+Math.random().toString(36).slice(2,5),name:String(g.name).trim().slice(0,70),questions:Array.isArray(g.questions)?g.questions.filter(q=>q&&String(q.q||"").trim()&&String(q.a||"").trim()).map(q=>({id:"q-"+Math.random().toString(36).slice(2),q:String(q.q).trim(),a:String(q.a).trim(),v:Math.max(1,Math.min(10000,Math.round(Number(q.v)||100))),time:Math.max(5,Math.min(300,Math.round(Number(q.time)||30)))})):[]}));
+   if(!clean.length)throw new Error("empty");
+   const replace=confirm("هل تريد استبدال المكتبة الحالية بالمجموعات المستوردة؟ اضغط إلغاء لإضافتها إلى المكتبة الحالية.");
+   questionLibrary=replace?clean:questionLibrary.concat(clean);selectedQuestionGroupId=clean[0].id;
+   if(saveQuestionLibrary()){renderQuestionLibrary();qlStatus("تم استيراد "+clean.length+" مجموعة بنجاح.")}
+  }catch(e){qlStatus("ملف غير صالح. استخدم ملف JSON صادرًا من مكتبة إحياء.")}
+  event.target.value="";
+ };reader.readAsText(file);
+}
+$("addQuestionGroupBtn").onclick=addLibraryGroup;
+$("saveQuestionGroupNameBtn").onclick=saveLibraryGroupName;
+$("newLibraryQuestionBtn").onclick=()=>openLibraryQuestionEditor();
+$("cancelQuestionEditBtn").onclick=()=>{$("qlQuestionForm").hidden=true;editingQuestionId=null};
+$("cancelQuestionEditBtn2").onclick=()=>{$("qlQuestionForm").hidden=true;editingQuestionId=null};
+$("qlQuestionForm").addEventListener("submit",saveLibraryQuestionForm);
+$("qlSearchInput").addEventListener("input",renderQuestionLibrary);
+$("qlValueFilter").addEventListener("change",renderQuestionLibrary);
+$("questionLibraryTableBody").addEventListener("click",event=>{
+ const edit=event.target.closest("[data-ql-edit]"),del=event.target.closest("[data-ql-delete]"),copy=event.target.closest("[data-ql-copy]");
+ if(edit)openLibraryQuestionEditor(edit.dataset.qlEdit);
+ if(del)deleteLibraryQuestion(del.dataset.qlDelete);
+ if(copy)duplicateLibraryQuestion(copy.dataset.qlCopy);
+});
+$("exportQuestionLibraryBtn").onclick=exportQuestionLibrary;
+$("importQuestionLibraryFile").addEventListener("change",importQuestionLibraryFile);
+
 function applyQuestionLibrary(){
  const ready=questionLibrary.filter(g=>g.name.trim()&&g.questions.length);
  if(!ready.length){alert("أضف مجموعة واحدة على الأقل وبداخلها سؤال واحد قبل اعتماد الأسئلة.");return}
