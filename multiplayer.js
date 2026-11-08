@@ -58,7 +58,8 @@ style.textContent+=`
 .ihyBtn:disabled{opacity:.55;cursor:not-allowed}
 `;
 
-style.textContent+=`\n.ihyPointsGrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(90px,1fr));gap:9px;margin-top:10px}.ihyPointBtn{border:1px solid #c8d9ec;border-radius:12px;padding:13px 8px;background:linear-gradient(145deg,#fff,#eaf2fb);color:#1c4d7d;font-weight:900;font-size:16px;cursor:pointer;min-height:54px}.ihyPointBtn:hover:not(:disabled){border-color:#c39a4d;transform:translateY(-2px)}.ihyPointBtn:disabled{opacity:.48;cursor:not-allowed}.ihyPointBtn.used{background:#edf0f3;color:#718096}\n`;\nconst modal=node("div");modal.id="ihyaaOnline";const box=node("div","ihyBox");modal.append(box);document.body.append(modal);
+style.textContent+=`\n.ihyPointsGrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(90px,1fr));gap:9px;margin-top:10px}.ihyPointBtn{border:1px solid #c8d9ec;border-radius:12px;padding:13px 8px;background:linear-gradient(145deg,#fff,#eaf2fb);color:#1c4d7d;font-weight:900;font-size:16px;cursor:pointer;min-height:54px}.ihyPointBtn:hover:not(:disabled){border-color:#c39a4d;transform:translateY(-2px)}.ihyPointBtn:disabled{opacity:.48;cursor:not-allowed}.ihyPointBtn.used{background:#edf0f3;color:#718096}\n`;
+const modal=node("div");modal.id="ihyaaOnline";const box=node("div","ihyBox");modal.append(box);document.body.append(modal);
 const close=()=>{modal.classList.remove("open");if(timer)clearInterval(timer);timer=null};
 const shell=(title,content)=>{box.innerHTML="";const h=node("h2","",title);box.append(h,content);const x=node("button","ihyBtn","إغلاق");x.onclick=close;box.insertBefore(x,h);modal.classList.add("open")};
 const field=(parent,label,placeholder,type)=>{parent.append(node("label","",label));const i=node("input");i.placeholder=placeholder||"";i.type=type||"text";parent.append(i);return i};
