@@ -170,24 +170,34 @@ async function refreshSavedSetOptions(){
  const select=$("ihySavedSetSelect");if(!select)return;
  try{const rows=await rpc("ihyaa_list_saved_quizzes");select.innerHTML='<option value="">استخدم أسئلة لوحة اللعبة الحالية</option>';(rows||[]).forEach(q=>{const o=node("option","",q.title+" • "+(q.question_count||0)+" سؤال");o.value=q.id;select.append(o)})}catch(e){select.innerHTML='<option value="">تعذر تحميل المكتبة</option>'}
 }
-window.ihyaaSaveQuestionSetToOnlineLibrary=async function(payload={}){
+window.ihyaaSaveAllQuestionGroupsToOnlineLibrary=async function(payload={}){
  await auth();
  if(!profile)await restoreProfile();
- if(!profile){home();throw Error("سجّل اسم اللاعب أولًا من نافذة المسابقات الأونلاين، ثم ارجع واضغط حفظ المجموعة مرة أخرى.");}
- const title=String(payload.title||"").trim();
- if(title.length<2)throw Error("اسم المجموعة يجب أن يكون من حرفين على الأقل.");
- const questions=(Array.isArray(payload.questions)?payload.questions:[]).map(q=>({
-  category:String(q.category||"عام").trim()||"عام",
-  points:Number(q.points)||100,
-  question:String(q.question||"").trim(),
-  answer:String(q.answer||"").trim(),
-  seconds:Number(q.seconds)||30
- })).filter(q=>q.question&&q.answer).sort((a,b)=>a.points-b.points);
- if(!questions.length)throw Error("أضف سؤالًا واحدًا على الأقل مع إجابته.");
- if(questions.some(q=>!Number.isFinite(q.points)||q.points<1||q.points>10000||q.seconds<5||q.seconds>300))throw Error("تحقق من النقاط ووقت الإجابة لكل سؤال.");
- await rpc("ihyaa_save_quiz",{p_title:title,p_questions:questions});
+ if(!profile){home();throw Error("سجّل اسم اللاعب أولًا من نافذة المسابقات الأونلاين، ثم ارجع واضغط حفظ كل المجموعات.");}
+ const groups=(Array.isArray(payload.groups)?payload.groups:[]).map(g=>({
+  title:String(g.title||"").trim(),
+  questions:(Array.isArray(g.questions)?g.questions:[]).map(q=>({
+   category:String(q.category||g.title||"عام").trim()||"عام",
+   points:Number(q.points)||100,
+   question:String(q.question||"").trim(),
+   answer:String(q.answer||"").trim(),
+   seconds:Number(q.seconds)||30
+  })).filter(q=>q.question&&q.answer).sort((a,b)=>a.points-b.points)
+ })).filter(g=>g.title.length>=2&&g.questions.length);
+ if(!groups.length)throw Error("لا توجد مجموعات مكتملة للحفظ.");
+ for(const group of groups){
+  if(group.questions.some(q=>!Number.isFinite(q.points)||q.points<1||q.points>10000||q.seconds<5||q.seconds>300))throw Error("تحقق من النقاط ووقت الإجابة في مجموعة: "+group.title);
+ }
+ const existing=await rpc("ihyaa_list_saved_quizzes");
+ let saved=0,total=0;
+ for(const group of groups){
+  const match=(existing||[]).find(item=>String(item.title||"").trim()===group.title);
+  if(match?.id)await rpc("ihyaa_update_saved_quiz",{p_quiz:match.id,p_title:group.title,p_questions:group.questions});
+  else await rpc("ihyaa_save_quiz",{p_title:group.title,p_questions:group.questions});
+  saved++;total+=group.questions.length;
+ }
  await refreshSavedSetOptions();
- return {title,question_count:questions.length};
+ return {saved,questions:total};
 };
 function openQuestionSetEditor(target,questions=[],replaceId=null,onSaved=()=>{},titleValue=""){
  if(!target)return;target.innerHTML="";
