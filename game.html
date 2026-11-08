@@ -702,7 +702,7 @@ body[data-theme] .turn{border-color:var(--team-line);background:var(--team-soft)
     </form>
    </section>
   </div>
-  <footer class="ql-footer"><span class="ql-status" id="questionLibraryStatus" aria-live="polite">الحفظ تلقائي بعد كل تعديل.</span><div class="ql-footer-actions"><button class="gold" id="saveQuestionGroupToOnlineLibraryBtn" type="button">حفظ المجموعة في مكتبة الأونلاين</button><button class="primary" id="applyQuestionLibraryBtn" type="button">اعتماد الأسئلة للمسابقة</button></div></footer>
+  <footer class="ql-footer"><span class="ql-status" id="questionLibraryStatus" aria-live="polite">الحفظ تلقائي بعد كل تعديل.</span><div class="ql-footer-actions"><button class="gold" id="saveQuestionGroupToOnlineLibraryBtn" type="button">حفظ كل المجموعات في المكتبة</button><button class="primary" id="applyQuestionLibraryBtn" type="button">اعتماد الأسئلة للمسابقة</button></div></footer>
  </section>
 </div>
 <div class="overlay" id="rulesOverlay"><div class="modal rules-modal"><div class="modal-head"><h2>قوانين المسابقة</h2><span class="q-value">مؤسسة إحياء</span></div><div class="rules-intro">اقرأ القواعد قبل البداية حتى تكون المنافسة واضحة وعادلة للجميع.</div><section class="rules-section"><h3>المسابقة الكلاسيكية</h3><ol class="rules-list"><li>تُجرى قرعة البداية لتحديد الفريق الذي يختار السؤال الأول.</li><li>يظهر مؤقّت السؤال على الشاشة؛ المدة الافتراضية 30 ثانية وقد يغيّرها المنظّم من إعدادات السؤال.</li><li>الإجابة الصحيحة تمنح الفريق نقاط السؤال، ثم يُغلق السؤال ويُحدّث جدول النتائج.</li><li>الإجابة الخاطئة أو انتهاء الوقت يعني عدم إضافة نقاط، ويُغلق السؤال.</li><li>عند اعتماد إجابة صحيحة يحتفظ الفريق بدوره، وعند الإجابة الخاطئة ينتقل الدور إلى الفريق الآخر.</li><li>السؤال المستخدم لا يمكن اختياره مرة ثانية في الجولة نفسها.</li><li>للمنظّم تخطّي السؤال عند الحاجة؛ السؤال المتخطّى يُغلق ولا تُحتسب له نقاط.</li></ol></section><section class="rules-section"><h3>وسائل المساعدة</h3><ul class="rules-list"><li>الاستعانة بمشرف، ودبل النقاط، ومنع دور المنافس متاحة وفق إعدادات الجولة.</li><li>كل وسيلة مساعدة متاحة مرة واحدة لكل فريق، وتُطبّق على السؤال التالي بعد تفعيلها.</li><li>يجب تفعيل وسيلة المساعدة قبل اختيار السؤال؛ وبعد استخدامها لا يمكن استرجاعها في الجولة نفسها.</li></ul></section><section class="rules-section"><h3>الغرف الأونلاين</h3><ul class="rules-list"><li>يدخل كل لاعب باسم عرض فقط، دون الحاجة إلى بريد إلكتروني أو كلمة مرور شخصية.</li><li>يُشارك كود الغرفة مع اللاعبين؛ الغرفة المحمية تتطلب كلمة مرور الغرفة، أما المفتوحة فيمكن الانضمام إليها مباشرة.</li><li>يُوزّع الهوست اللاعبين على الفريقين ويبدأ الجولة عندما يصبح الفريقان جاهزين.</li><li>لا تظهر الإجابة الصحيحة للاعبين؛ يرسل اللاعب إجابته ويعتمد الهوست صحتها أو خطأها.</li><li>التزم باسم مناسب واحترم بقية المشاركين وقرارات المنظّم.</li></ul></section><section class="rules-section"><h3>مواجهة 1 ضد 1</h3><ul class="rules-list"><li>تتكوّن المواجهة من 15 سؤالًا عاديًا وسؤال ذهبي عند التعادل، ولكل سؤال 30 ثانية افتراضيًا.</li><li>الإجابة الصحيحة تمنح 100 نقطة، والسؤال الخامس عشر 200 نقطة، والفائز يحصل على 600 نقطة إضافية تُضاف للنتيجة النهائية.</li><li>لا يحق للاعب تغيير إجابته بعد إرسالها للسؤال الحالي.</li><li>الهوست مسؤول عن بدء المواجهة وإيقافها مؤقتًا أو استئنافها واعتماد الانتقال بين الأسئلة.</li><li>تُعرض النتيجة النهائية عند انتهاء المواجهة، وتُحتسب المكافأة وفق إعدادات النظام.</li></ul></section><p class="rules-note">قرار الهوست ينظّم سير المسابقة، ولا يغيّر الإجابات أو النقاط بعد اعتمادها إلا وفق أدوات اللعبة المتاحة.</p><button class="primary" id="rulesStart">فهمت، ابدأ المسابقة</button></div></div>
@@ -963,17 +963,19 @@ $("exportQuestionLibraryBtn").onclick=exportQuestionLibrary;
 $("importQuestionLibraryFile").addEventListener("change",importQuestionLibraryFile);
 
 async function saveCurrentGroupToOnlineLibrary(){
- const group=currentQuestionGroup(),button=$("saveQuestionGroupToOnlineLibraryBtn");
- if(!group){qlStatus("اختر مجموعة أولاً حتى تحفظها في مكتبة الأونلاين.");return}
- const questions=[...group.questions].sort((a,b)=>a.v-b.v).filter(q=>q.q.trim()&&q.a.trim()).map(q=>({category:group.name,points:q.v,question:q.q,answer:q.a,seconds:q.time||30}));
- if(!questions.length){qlStatus("أضف سؤالاً واحداً على الأقل مع إجابته قبل الحفظ.");return}
- if(typeof window.ihyaaSaveQuestionSetToOnlineLibrary!=="function"){qlStatus("تعذر تحميل نظام المكتبة الأونلاين. حدّث الصفحة وحاول مرة أخرى.");return}
- button.disabled=true;const oldLabel=button.textContent;button.textContent="جارٍ الحفظ…";
+ const button=$("saveQuestionGroupToOnlineLibraryBtn");
+ const groups=questionLibrary.filter(g=>String(g.name||"").trim()&&Array.isArray(g.questions)&&g.questions.some(q=>String(q.q||"").trim()&&String(q.a||"").trim())).map(g=>({
+  title:String(g.name).trim(),
+  questions:[...g.questions].filter(q=>String(q.q||"").trim()&&String(q.a||"").trim()).sort((a,b)=>a.v-b.v).map(q=>({category:g.name,points:q.v,question:q.q,answer:q.a,seconds:q.time||30}))
+ }));
+ if(!groups.length){qlStatus("لا توجد مجموعات مكتملة للحفظ. أضف أسئلة وإجابات أولاً.");return}
+ if(typeof window.ihyaaSaveAllQuestionGroupsToOnlineLibrary!=="function"){qlStatus("تعذر تحميل نظام المكتبة الأونلاين. حدّث الصفحة وحاول مرة أخرى.");return}
+ button.disabled=true;const oldLabel=button.textContent;button.textContent="جارٍ حفظ كل المجموعات…";
  try{
-  const result=await window.ihyaaSaveQuestionSetToOnlineLibrary({title:group.name,questions});
-  qlStatus("تم حفظ «"+group.name+"» في مكتبة حسابك ("+questions.length+" سؤالًا). يمكنك اختيارها عند إنشاء أي غرفة أونلاين.");
-  toast("تم حفظ المجموعة في مكتبة الأونلاين.");
- }catch(error){qlStatus("تعذر الحفظ في مكتبة الأونلاين: "+String(error?.message||error));}
+  const result=await window.ihyaaSaveAllQuestionGroupsToOnlineLibrary({groups});
+  qlStatus("تم حفظ "+result.saved+" مجموعة في مكتبة الأونلاين ("+result.questions+" سؤالًا). افتح قائمة مجموعات الأسئلة عند إنشاء غرفة واختر المجموعة المطلوبة.");
+  toast("تم حفظ كل المجموعات في المكتبة.");
+ }catch(error){qlStatus("تعذر حفظ المجموعات: "+String(error?.message||error));}
  finally{button.disabled=false;button.textContent=oldLabel}
 }
 function applyQuestionLibrary(){
