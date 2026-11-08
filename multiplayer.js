@@ -179,7 +179,16 @@ async function refreshSavedQuizzes(target){
 let libraryEditor=null;
 async function refreshSavedSetOptions(){
  const select=$("ihySavedSetSelect");if(!select)return;
- try{await auth();const rows=await rpc("ihyaa_list_saved_quizzes");select.innerHTML='<option value="">استخدم أسئلة لوحة اللعبة الحالية</option>';(rows||[]).forEach(q=>{const o=node("option","",q.title+" • "+(q.question_count||0)+" سؤال");o.value=q.id;select.append(o)})}catch(e){select.innerHTML='<option value="">تعذر تحميل المكتبة</option>'}
+ try{
+  await auth();const rows=await rpc("ihyaa_list_saved_quizzes");
+  select.innerHTML='<option value="">استخدم أسئلة لوحة اللعبة الحالية</option>';
+  if(Array.isArray(rows)&&rows.length){
+   const all=node("option","","📚 المكتبة كاملة — كل المجموعات ("+rows.length+")");
+   all.value="__ihyaa_all_saved_library__";select.append(all);
+   const divider=node("option","","──────── المجموعات الفردية ────────");divider.disabled=true;select.append(divider);
+   rows.forEach(q=>{const o=node("option","",q.title+" • "+(q.question_count||0)+" سؤال");o.value=q.id;select.append(o)});
+  }
+ }catch(e){select.innerHTML='<option value="">تعذر تحميل المكتبة</option>'}
 }
 window.ihyaaSaveAllQuestionGroupsToOnlineLibrary=async function(payload={}){
  await auth();
@@ -277,16 +286,28 @@ function home(){
  const pass=field(host,"كلمة مرور اختيارية","اتركها فارغة إذا لم تحتجها","password");
  const savedSet=node("select");savedSet.id="ihySavedSetSelect";savedSet.style.cssText="width:100%;padding:11px;border:1px solid #d7d8cd;border-radius:9px;margin:5px 0 12px;background:#fff;color:#17352d";
  savedSet.innerHTML='<option value="">استخدم أسئلة لوحة اللعبة الحالية</option>';
- host.append(node("label","","مجموعة الأسئلة"),savedSet,node("p","ihyMuted","اختر مجموعة محفوظة لتفعيلها في هذه الغرفة، أو اترك الاختيار فارغًا لاستخدام أسئلة اللوحة الحالية."));
+ host.append(node("label","","مصدر الأسئلة"),savedSet,node("p","ihyMuted","اختر «المكتبة كاملة» لإضافة كل المجموعات إلى غرفة واحدة، أو اختر مجموعة منفردة، أو استخدم أسئلة لوحة اللعبة الحالية."));
  button(host,"إنشاء غرفة",async()=>{
   await auth();if(!profile)throw Error("أنشئ ملف اللاعب أولًا.");
   if(title.value.trim().length<2)throw Error("اسم المسابقة يجب ألا يقل عن حرفين.");
   let qs=[];
-  if(savedSet.value){const saved=await rpc("ihyaa_get_saved_quiz",{p_quiz:savedSet.value});qs=[...(saved.questions||[])].sort((a,b)=>Number(a.points||0)-Number(b.points||0))}
-  else{try{state.categories.forEach(cat=>cat.questions.forEach(q=>{if(q.q&&q.a)qs.push({category:cat.name,points:q.v,question:q.q,answer:q.a,seconds:q.time||30})}))}catch(e){}}
-  if(!qs.length)throw Error("لا توجد أسئلة في المجموعة المختارة.");
+  if(savedSet.value==="__ihyaa_all_saved_library__"){
+   const groups=await rpc("ihyaa_list_saved_quizzes");
+   if(!Array.isArray(groups)||!groups.length)throw Error("لا توجد مجموعات محفوظة في المكتبة.");
+   const loaded=await Promise.all(groups.map(g=>rpc("ihyaa_get_saved_quiz",{p_quiz:g.id})));
+   loaded.forEach((saved,index)=>{
+    const groupTitle=String(saved.title||groups[index].title||"مجموعة أسئلة");
+    (saved.questions||[]).forEach(q=>{if(q.question&&q.answer)qs.push({...q,category:q.category&&q.category!=="عام"?q.category:groupTitle})});
+   });
+   qs.sort((a,b)=>Number(a.points||0)-Number(b.points||0));
+  }else if(savedSet.value){
+   const saved=await rpc("ihyaa_get_saved_quiz",{p_quiz:savedSet.value});
+   qs=[...(saved.questions||[])].sort((a,b)=>Number(a.points||0)-Number(b.points||0));
+  }else{try{state.categories.forEach(cat=>cat.questions.forEach(q=>{if(q.q&&q.a)qs.push({category:cat.name,points:q.v,question:q.q,answer:q.a,seconds:q.time||30})}))}catch(e){}}
+  if(!qs.length)throw Error("لا توجد أسئلة في مصدر الأسئلة المختار.");
   room=await rpc("ihyaa_create_room",{p_title:title.value.trim(),p_password:pass.value||null,p_settings:{},p_questions:qs});role="host";showRoom();
  },"gold");
+
  const join=node("div","ihyCard");join.append(node("h3","","الانضمام إلى غرفة"),node("p","ihyMuted","أدخل الكود الذي أرسله لك الهوست."));
  const code=field(join,"كود الغرفة","مثال: A1B2C3D4");code.maxLength=8;code.autocomplete="off";code.style.textTransform="uppercase";
  const pw=field(join,"كلمة المرور","إن وُجدت","password");
