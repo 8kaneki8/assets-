@@ -152,6 +152,7 @@ async function loadRoomSuggestions(target){
 async function refreshSavedQuizzes(target){
  target.textContent="جارٍ تحميل مجموعات الأسئلة…";
  try{
+  await auth();
   const rows=await rpc("ihyaa_list_saved_quizzes");target.innerHTML="";
   if(!Array.isArray(rows)||!rows.length){target.append(node("p","ihyMuted","لا توجد مجموعات محفوظة بعد. أنشئ مجموعة واختر الأسئلة التي تريد استخدامها في مسابقاتك القادمة."));return}
   rows.forEach(q=>{
@@ -163,12 +164,22 @@ async function refreshSavedQuizzes(target){
    button(actions,"حذف المجموعة",async()=>{if(!confirm("حذف مجموعة الأسئلة من مكتبتك؟"))return;await rpc("ihyaa_delete_saved_quiz",{p_quiz:q.id});await refreshSavedQuizzes(target);await refreshSavedSetOptions()},"ihyEditBtn");
    item.append(actions);target.append(item);
   });
- }catch(e){target.innerHTML="";target.append(node("p","ihyMuted","تعذر تحميل مكتبة الأسئلة. "+String(e?.message||e)))}
+ }catch(e){
+  target.innerHTML="";
+  const raw=String(e?.message||e||"");
+  const missing=/Could not find the function|function public\\.ihyaa_(list|save|get|delete|update)_saved_quiz|does not exist|schema cache/i.test(raw);
+  const denied=/permission denied|row-level security|not allowed/i.test(raw);
+  const message=missing
+   ?"تحديث قاعدة بيانات مكتبة الأسئلة غير مُطبّق أو لم تُحدّث ذاكرة الدوال بعد. افتح Supabase → SQL Editor وشغّل الملف supabase/patches/2026-11-08-question-library-repair.sql ثم أعد تحميل اللعبة."
+   :denied?"تم رفض الوصول إلى مكتبة الأسئلة. تأكد من تفعيل Anonymous Sign-ins وتشغيل تحديث المكتبة بحساب المشروع الصحيح."
+   :"تعذر تحميل مكتبة الأسئلة: "+raw;
+  target.append(node("p","ihyMuted",message));
+ }
 }
 let libraryEditor=null;
 async function refreshSavedSetOptions(){
  const select=$("ihySavedSetSelect");if(!select)return;
- try{const rows=await rpc("ihyaa_list_saved_quizzes");select.innerHTML='<option value="">استخدم أسئلة لوحة اللعبة الحالية</option>';(rows||[]).forEach(q=>{const o=node("option","",q.title+" • "+(q.question_count||0)+" سؤال");o.value=q.id;select.append(o)})}catch(e){select.innerHTML='<option value="">تعذر تحميل المكتبة</option>'}
+ try{await auth();const rows=await rpc("ihyaa_list_saved_quizzes");select.innerHTML='<option value="">استخدم أسئلة لوحة اللعبة الحالية</option>';(rows||[]).forEach(q=>{const o=node("option","",q.title+" • "+(q.question_count||0)+" سؤال");o.value=q.id;select.append(o)})}catch(e){select.innerHTML='<option value="">تعذر تحميل المكتبة</option>'}
 }
 window.ihyaaSaveAllQuestionGroupsToOnlineLibrary=async function(payload={}){
  await auth();
