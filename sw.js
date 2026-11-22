@@ -1,5 +1,5 @@
 "use strict";
-const CACHE_NAME = "ihyaa-app-shell-v1";
+const CACHE_NAME = "ihyaa-app-shell-v2";
 const BASE = new URL("./", self.registration.scope);
 const SHELL = [
   BASE.href,
@@ -18,7 +18,7 @@ self.addEventListener("fetch", event => {
   const request = event.request;
   if (request.method !== "GET" || new URL(request.url).origin !== self.location.origin) return;
   if (request.mode === "navigate") {
-    event.respondWith(fetch(request).then(response => {
+    event.respondWith(fetch(request.url, {cache:"no-store", credentials:"same-origin", headers:request.headers}).then(response => {
       if (response && response.ok) {
         const copy = response.clone();
         caches.open(CACHE_NAME).then(cache => cache.put(request, copy));
