@@ -1095,37 +1095,40 @@ const BANK=[
 ["عام • علوم","ما أكبر عضو في جسم الإنسان؟","الجلد"],
 ["ديني","من النبي الذي كلمه الله تكليمًا؟","موسى عليه السلام"],
 ];
-const KEY="ihyaaOfflineDuelV2";
+const KEY="ihyaaOfflineDuelV3";
+const LEGACY_KEY="ihyaaOfflineDuelV2";
+const TURN_SECONDS=50;
 let game=null,tick=null,root=null;
 const $=id=>document.getElementById(id);
 const node=(tag,cls,text)=>{const n=document.createElement(tag);if(cls)n.className=cls;if(text!==undefined)n.textContent=text;return n};
 const button=(label,fn,cls)=>{const b=node("button","iod-btn "+(cls||""),label);b.type="button";b.addEventListener("click",fn);return b};
 const persist=()=>{try{localStorage.setItem(KEY,JSON.stringify(game));return true}catch(e){return false}};
-const loadSaved=()=>{try{const v=JSON.parse(localStorage.getItem(KEY)||"null");if(!v||!Array.isArray(v.questions)||v.questions.length!==25)return null;v.turnTeam=Number.isInteger(v.turnTeam)?v.turnTeam:(v.index%2);v.timeoutCount=Number.isInteger(v.timeoutCount)?v.timeoutCount:0;v.remaining=Number.isFinite(v.remaining)?Math.min(15,v.remaining):15;return v}catch(e){return null}};
+const loadSaved=()=>{try{const raw=localStorage.getItem(KEY)||localStorage.getItem(LEGACY_KEY),v=raw?JSON.parse(raw):null;if(!v||!Array.isArray(v.questions)||v.questions.length!==25)return null;v.turnTeam=Number.isInteger(v.turnTeam)?(v.turnTeam===1?1:0):(v.index%2);v.timeoutCount=0;if(v.turnDuration!==TURN_SECONDS&&!v.finished){v.turnDuration=TURN_SECONDS;v.remaining=TURN_SECONDS;v.running=false;v.paused=false;v.deadline=0;}else{v.turnDuration=TURN_SECONDS;v.remaining=Number.isFinite(v.remaining)?Math.min(TURN_SECONDS,Math.max(0,v.remaining)):TURN_SECONDS;}return v}catch(e){return null}};
 const names=()=>[String(game.names[0]||"اللاعب الأول"),String(game.names[1]||"اللاعب الثاني")];
 function stopClock(){if(tick){clearInterval(tick);tick=null}}
-function remaining(){if(!game)return 15;const stored=Number.isFinite(game.remaining)?game.remaining:15;if(game.paused||!game.running)return Math.max(0,stored);return Math.max(0,(game.deadline-Date.now())/1000)}
+function remaining(){if(!game)return TURN_SECONDS;const stored=Number.isFinite(game.remaining)?game.remaining:TURN_SECONDS;if(game.paused||!game.running)return Math.max(0,stored);return Math.max(0,(game.deadline-Date.now())/1000)}
 function saveAndRender(){persist();render()}
 function startNew(n1,n2){
 const pool=BANK.map((x)=>({category:x[0],q:x[1],a:x[2]}));
 for(let i=pool.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[pool[i],pool[j]]=[pool[j],pool[i]]}
-game={names:[n1.trim()||"اللاعب الأول",n2.trim()||"اللاعب الثاني"],questions:pool,index:0,turnTeam:0,timeoutCount:0,scores:[0,0],elapsed:[0,0],correct:[0,0],history:[],running:false,paused:false,remaining:15,deadline:0,revealed:false,finished:false,createdAt:Date.now()};
-persist();render();
+game={names:[n1.trim()||"اللاعب الأول",n2.trim()||"اللاعب الثاني"],questions:pool,index:0,turnTeam:0,timeoutCount:0,turnDuration:TURN_SECONDS,scores:[0,0],elapsed:[0,0],correct:[0,0],history:[],running:false,paused:false,remaining:TURN_SECONDS,deadline:0,revealed:false,finished:false,createdAt:Date.now()};
+persist();render();startTimer();
 }
-function startTimer(){if(!game||game.finished||game.running||game.remaining<=0)return;game.running=true;game.paused=false;game.deadline=Date.now()+game.remaining*1000;persist();if(!tick)tick=setInterval(onTick,100);render()}
+function startTimer(){if(!game||game.finished||game.running||game.remaining<=0)return;game.turnDuration=TURN_SECONDS;game.running=true;game.paused=false;game.deadline=Date.now()+game.remaining*1000;persist();if(!tick)tick=setInterval(onTick,100);render()}
 function pauseTimer(){if(!game||!game.running)return;game.remaining=remaining();game.running=false;game.paused=true;game.deadline=0;stopClock();persist();render()}
-function handleTimeout(){if(!game||game.finished||!game.running)return;const team=game.turnTeam;game.remaining=0;game.running=false;game.paused=false;game.deadline=0;stopClock();game.scores[team]-=50;game.elapsed[team]+=15;game.history.push({team,correct:false,timeout:true,penalty:50,seconds:15,questionIndex:game.index});if(game.timeoutCount===0){game.timeoutCount=1;game.turnTeam=1-team;game.remaining=15;game.revealed=false;persist();render();return}game.timeoutCount=0;game.index++;game.turnTeam=1-team;game.remaining=15;game.revealed=false;if(game.index>=game.questions.length)game.finished=true;persist();render()}
+function handleTimeout(){if(!game||game.finished||!game.running)return;const team=game.turnTeam,used=Math.min(TURN_SECONDS,Math.max(0,TURN_SECONDS-remaining()));game.remaining=0;game.running=false;game.paused=false;game.deadline=0;stopClock();game.scores[team]-=50;game.elapsed[team]+=used;game.history.push({team,correct:false,timeout:true,penalty:50,seconds:used,questionIndex:game.index});game.index++;game.turnTeam=1-team;game.timeoutCount=0;game.remaining=TURN_SECONDS;game.revealed=false;if(game.index>=game.questions.length)game.finished=true;persist();render();if(!game.finished)startTimer()}
 function onTick(){if(!game||!game.running)return;const left=remaining();const t=$("iodTime");if(t){t.textContent=Math.ceil(left)+" ثانية";t.classList.toggle("urgent",left<=5)}if(left<=0)handleTimeout()}
 function reveal(){game.revealed=!game.revealed;render()}
 function next(correct){
-if(!game||game.finished||game.running)return;
-const team=game.turnTeam,used=Math.max(0,15-remaining());
+if(!game||game.finished)return;
+const team=game.turnTeam,used=Math.min(TURN_SECONDS,Math.max(0,TURN_SECONDS-remaining()));
+stopClock();game.running=false;game.paused=false;game.deadline=0;
 game.elapsed[team]+=used;
 if(correct){game.scores[team]+=100;game.correct[team]++}else{game.scores[team]-=50}
 game.history.push({team,correct:!!correct,timeout:false,seconds:used,penalty:correct?0:50,awarded:correct?100:0,questionIndex:game.index});
-game.index++;game.turnTeam=1-team;game.timeoutCount=0;game.running=false;game.paused=false;game.remaining=15;game.deadline=0;game.revealed=false;
+game.index++;game.turnTeam=1-team;game.timeoutCount=0;game.running=false;game.paused=false;game.remaining=TURN_SECONDS;game.deadline=0;game.revealed=false;
 if(game.index>=game.questions.length)game.finished=true;
-persist();render();
+persist();render();if(!game.finished)startTimer();
 }
 function advanceTimeout(){if(game&&game.remaining<=0)handleTimeout()}
 function open(){
@@ -1140,11 +1143,11 @@ render();
 function render(){
 if(!root)return;root.innerHTML="";
 const shell=node("div","iod-shell"),head=node("header","iod-head"),heading=node("div");
-heading.append(node("div","iod-title","مواجهة إحياء • أوفلاين 1 ضد 1"),node("div","iod-sub","25 سؤالًا • كل سؤال 100 نقطة • الصحيحة +100 والخاطئة أو انتهاء الوقت −50"));
+heading.append(node("div","iod-title","مواجهة إحياء • أوفلاين 1 ضد 1"),node("div","iod-sub","25 سؤالًا • 50 ثانية لكل لاعب في دوره • الصحيحة +100 والخاطئة أو انتهاء الوقت −50"));
 const actions=node("div","iod-controls");actions.append(button("القائمة الرئيسية",()=>{stopClock();if(game&&game.running)pauseTimer();root.remove();root=null;openStartMenu()}),button("إغلاق",()=>{if(game&&game.running)pauseTimer();stopClock();root.remove();root=null}));
 head.append(heading,actions);shell.append(head);
 if(!game){
-const setup=node("section","iod-card");setup.append(node("h2","","إعداد المواجهة"),node("p","iod-muted","أدخل اسمي اللاعبين. سيظهر السؤال للهوست فقط، والهوست هو من يبدأ المؤقت ويقيّم الإجابة."));
+const setup=node("section","iod-card");setup.append(node("h2","","إعداد المواجهة"),node("p","iod-muted","أدخل اسمي اللاعبين. لكل لاعب 50 ثانية مستقلة تبدأ تلقائيًا عند ظهور دوره. عندما يسجل الهوست الإجابة الصحيحة أو الخاطئة يتوقف المؤقت فورًا وينتقل السؤال للاعب الآخر بمهلة جديدة."));
 const n1=node("label","iod-field","اسم اللاعب الأول / الأحمر"),i1=node("input");i1.value=state.names[0]||"اللاعب الأول";n1.append(i1);
 const n2=node("label","iod-field","اسم اللاعب الثاني / الأزرق"),i2=node("input");i2.value=state.names[1]||"اللاعب الثاني";n2.append(i2);
 setup.append(n1,n2,button("ابدأ مواجهة جديدة",()=>startNew(i1.value,i2.value),"gold"));shell.append(setup);
@@ -1163,15 +1166,13 @@ const clock=node("div","iod-timer"+(left<=10?" urgent":""),Math.ceil(left)+" ث�
 const status=node("p","iod-muted",game.running?"المؤقت يعمل — استمع لإجابة اللاعب.":game.remaining<=0?"انتهى الوقت وتم تطبيق خصم 50 نقطة.":game.paused?"المؤقت متوقف مؤقتًا.":"ابدأ المؤقت عندما تكون جاهزًا.");card.append(status);
 if(game.revealed)card.append(node("div","iod-answer","الإجابة الصحيحة للهوست: "+question.a));
 const controls=node("div","iod-controls");
-if(!game.running&&game.remaining>0)controls.append(button(game.paused?"استئناف المؤقت":"ابدأ الـ 15 ثانية",game.paused?()=>{game.remaining=Math.max(0,game.remaining);startTimer();render()}:startTimer,"gold"));
+if(!game.running&&game.remaining>0)controls.append(button(game.paused?"استئناف المؤقت":"ابدأ الـ 50 ثانية",game.paused?()=>{game.remaining=Math.max(0,game.remaining);startTimer();render()}:startTimer,"gold"));
 if(game.running)controls.append(button("إيقاف المؤقت",pauseTimer,"red"));
 controls.append(button(game.revealed?"إخفاء الإجابة":"إظهار الإجابة للهوست",reveal));
-if(!game.running) {
 controls.append(button("إجابة صحيحة (+100) • التالي",()=>next(true),"gold"));
 controls.append(button("إجابة خاطئة (−50) • التالي",()=>next(false),"red"));
-}
 card.append(controls);shell.append(card);
-const note=node("p","iod-muted","15 ثانية لكل محاولة. الإجابة الصحيحة تمنح 100 نقطة، والإجابة الخاطئة تخصم 50 نقطة. انتهاء الوقت يخصم 50 نقطة ويمنح اللاعب الآخر فرصة السؤال نفسه؛ وإذا انتهت مهلة اللاعب الثاني ينتقل اللعب للسؤال التالي. الهوست يدير التقييم ويكشف الإجابة.");
+const note=node("p","iod-muted","لكل لاعب 50 ثانية مستقلة مع كل سؤال. يبدأ المؤقت تلقائيًا عند ظهور السؤال، ويتوقف فور تسجيل الهوست للإجابة. بعد الإجابة الصحيحة (+100) أو الخاطئة (−50) ينتقل السؤال التالي مباشرة للاعب الآخر ويبدأ له عدّاد جديد من 50 ثانية. إذا انتهت المهلة دون إجابة تُخصم 50 نقطة وينتقل الدور والسؤال التالي تلقائيًا.");
 shell.append(note);
 const hist=node("section","iod-card");hist.append(node("strong","","سجل الجولة"),node("div","iod-muted",game.history.length+" من 25 دورًا مكتملًا"));hist.append(button("عرض الإجابات السابقة",()=>showHistory(hist)));shell.append(hist);
 }
