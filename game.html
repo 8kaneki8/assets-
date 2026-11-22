@@ -1160,7 +1160,7 @@ const team=game.index%2,question=game.questions[game.index],left=remaining();
 const scores=node("section","iod-grid");
 [0,1].forEach(i=>{const card=node("div","iod-team "+(i===0?"red":"blue"));card.append(node("strong","",game.names[i]),node("div","iod-score",String(game.scores[i])),node("div","iod-muted",game.correct[i]+" إجابة صحيحة • "+game.elapsed[i].toFixed(1)+" ثانية مستخدمة"));scores.append(card)});
 shell.append(scores);
-const card=node("section","iod-card");card.append(node("div","iod-turn","الدور الحالي: "+game.names[team]+" • السؤال "+(game.index+1)+" من 50"),node("div","iod-progress"));card.lastChild.append(Object.assign(node("i"),{style:{width:(game.index/50*100)+"%"}}));
+const card=node("section","iod-card");card.append(node("div","iod-turn","الدور الحالي: "+game.names[team]+" • السؤال "+(game.index+1)+" من 50"),node("div","iod-progress"));const progressBar=node("i");progressBar.style.width=(game.index/50*100)+"%";card.lastChild.append(progressBar);
 card.append(node("div","iod-muted","التصنيف: "+question.category),node("div","iod-question",question.q));
 const clock=node("div","iod-timer"+(left<=10?" urgent":""),Math.ceil(left)+" ثانية");clock.id="iodTime";card.append(clock);
 const status=node("p","iod-muted",game.running?"المؤقت يعمل — استمع لإجابة اللاعب.":game.remaining<=0?"انتهى الوقت. اضغط التالي للانتقال إلى اللاعب الآخر.":game.paused?"المؤقت متوقف مؤقتًا.":"ابدأ المؤقت عندما تكون جاهزًا.");card.append(status);
