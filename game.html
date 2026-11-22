@@ -898,7 +898,7 @@ function toast(t){$("toast").textContent=t;$("toast").classList.add("show");setT
 function quickAdjustPoints(team,sign){
  const teamName=state.names[team]||("الفريق "+(team+1));
  const verb=sign>0?"إضافة":"خصم";
- const raw=prompt(verb+" نقاط "+teamName+"؟\\nاكتب عدد النقاط (من 1 إلى 10000):",sign>0?"50":"50");
+ const raw=prompt(verb+" نقاط "+teamName+"؟\nاكتب عدد النقاط (من 1 إلى 10000):",sign>0?"50":"50");
  if(raw===null)return;
  const amount=Number(String(raw).trim());
  if(!Number.isSafeInteger(amount)||amount<=0||amount>10000){toast("اكتب عددًا صحيحًا من 1 إلى 10000");return}
