@@ -293,11 +293,14 @@ body.fx-correct:after{animation:screenFlash .7s ease}
 body.fx-wrong:after{background:radial-gradient(circle,#d94d5c35,transparent 65%);animation:screenFlash .55s ease}
 @keyframes screenFlash{0%{opacity:0}25%{opacity:1}100%{opacity:0}}
 @media(prefers-reduced-motion:reduce){*,*:before,*:after{animation-duration:.01ms!important;animation-iteration-count:1!important;scroll-behavior:auto!important;transition-duration:.01ms!important}}
+/* Final motion polish */
+.preselect-help .lifelines-actions button.lifeline-tile:not(:disabled){animation:tileFloat 3.8s ease-in-out infinite}.preselect-help .lifelines-actions button.lifeline-tile.life-activated{animation:teamTileBurst .85s cubic-bezier(.16,1,.3,1)}
+@media(prefers-reduced-motion:reduce){.winner-card,.winner-crown,.winner-confetti i,.winner-rays,.preselect-help .lifelines-actions button}
 
 
 /* GRAND CHAMPION FINALE */
 .winner-overlay{position:fixed;inset:0;z-index:150;display:none;align-items:center;justify-content:center;padding:18px;background:radial-gradient(circle at 50% 35%,#174d3deF 0%,#071d18f5 68%);overflow:hidden}
-.winner-overlay.show{display:flex;animation:winnerFade .7s ease both}
+.winner-overlay.show{display:flex!important;animation:winnerFade .7s ease both}
 .winner-card{position:relative;z-index:2;width:min(680px,100%);padding:clamp(25px,5vw,48px);text-align:center;border:1px solid #e7cc8b;border-radius:30px;background:linear-gradient(145deg,#fffdf5,#f2ead6);box-shadow:0 35px 110px #0008,inset 0 0 0 7px #c6a45b18;animation:championRise 1s cubic-bezier(.16,1,.3,1) both}
 .winner-crown{font-size:clamp(58px,10vw,94px);line-height:1;filter:drop-shadow(0 9px 8px #b78b3b55);animation:crownFloat 2.6s ease-in-out infinite}
 .winner-kicker{margin:14px 0 5px;color:#987331;font-weight:900;letter-spacing:4px;font-size:13px}
@@ -755,18 +758,6 @@ const DEFAULT=[{name:"القرآن والتفسير",questions:[{v:100,q:"ما �
 {"v":300,"q":"ما الموضوع الذي تتحدث عنه سورة الإخلاص وتأخذ به ثلث القرآن؟","a":"التوحيد والإخلاص","time":60},
 {"v":400,"q":"كان الرجل يقرأ سورة الإخلاص ويرددها في قيام الليل ويكتفي بها.","a":"صح","time":60},
 {"v":500,"q":"قراءة سورة الإخلاص (3 سطور) تساوي في الكَمّ قراءة 202 صفحة من القرآن.","a":"خطأ (الصواب: تساويها في الجزاء لا في الكَمّ)","time":60}
-]},{"name":"لا حول ولا قوة إلا بالله","questions":[
-{"v":100,"q":"مَن الصحابي الذي سمعه النبي ﷺ يقول: «لا حول ولا قوة إلا بالله»؟","a":"أبو موسى الأشعري","time":60},
-{"v":200,"q":"اختصار الذِّكر بقول «لا حول الله» جائز ولا يغيّر المعنى.","a":"خطأ (الصواب: يغيّر المعنى)","time":60},
-{"v":300,"q":"ما معنى كلمة (الحَوْل) في «لا حول ولا قوة إلا بالله»؟","a":"التحوّل من حال إلى حال","time":60},
-{"v":400,"q":"ما معنى «لا حول ولا قوة إلا بالله» كما فسّرها ابن عباس رضي الله عنهما؟","a":"لا قدرة على الطاعة ولا ترك المعصية إلا بالله","time":60},
-{"v":500,"q":"على أي شيءٍ تدل كلمة «لا حول ولا قوة إلا بالله»؟","a":"الاستسلام وتفويض الأمر إلى الله","time":60}
-]},{"name":"القرآن والباقيات الصالحات","questions":[
-{"v":100,"q":"ماذا نقول عند نزول المصيبة؟","a":"إنا لله وإنا إليه راجعون","time":60},
-{"v":200,"q":"ينقسم القرآن الكريم إلى أربعة أقسام.","a":"خطأ (الصواب: ثلاثة أقسام)","time":60},
-{"v":300,"q":"كلمة «لا حول ولا قوة إلا بالله» كنزٌ من كنوز الجنة ومن الباقيات الصالحات.","a":"صح","time":60},
-{"v":400,"q":"أحد أقسام القرآن الثلاثة يتحدث عن الأمر والنهي و.....","a":"الثواب والعقاب","time":60},
-{"v":500,"q":"الباقيات الصالحات هي: الله أكبر، ولا إله إلا الله، وسبحان الله، ولا حول ولا قوة إلا بالله، و.....","a":"الحمد لله","time":60}
 ]}];
 let state={categories:DEFAULT.map(c=>({...c,questions:c.questions.map(x=>({...x,used:false}))})),names:["الفريق الأحمر","الفريق الأزرق"],scores:[0,0],turn:0,current:null,theme:"emerald",mode:"classic",duel:{active:false,questions:[],index:0,correct:[0,0]},sound:true,events:true,duelTotalMinutes:7,lifelines:[{supervisor:false,double:false,block:false},{supervisor:false,double:false,block:false}],pending:[{supervisor:false,double:false,block:false},{supervisor:false,double:false,block:false}]};
 const $=id=>document.getElementById(id);
@@ -786,13 +777,14 @@ function load(){
    q:String(q.q??""),a:String(q.a??""),time:Math.max(5,Math.min(300,Number.isFinite(Number(q.time))?Math.round(Number(q.time)):30)),used:!!q.used
   }))
  }));
- const newQuestionGroups=DEFAULT.filter(c=>["سورة الإخلاص","لا حول ولا قوة إلا بالله","القرآن والباقيات الصالحات"].includes(c.name));
+ const newQuestionGroups=DEFAULT.filter(c=>c.name==="سورة الإخلاص");
+ const retiredQuestionGroups=new Set(["لا حول ولا قوة إلا بالله","القرآن والباقيات الصالحات"]);
  const newGroupNames=new Set(newQuestionGroups.map(c=>c.name));
  const oldAndNewGroups=state.categories.filter(c=>c.name==="أسئلة المسابقة الجديدة"||newGroupNames.has(c.name));
  const usedByQuestion=new Map();
  oldAndNewGroups.forEach(c=>(c.questions||[]).forEach(q=>{if(q&&q.q)usedByQuestion.set(String(q.q),!!q.used)}));
- if(oldAndNewGroups.length||newQuestionGroups.some(c=>!state.categories.some(existing=>existing.name===c.name))){
-  state.categories=state.categories.filter(c=>c.name!=="أسئلة المسابقة الجديدة"&&!newGroupNames.has(c.name));
+ if(oldAndNewGroups.length||state.categories.some(existing=>retiredQuestionGroups.has(existing.name))||newQuestionGroups.some(c=>!state.categories.some(existing=>existing.name===c.name))){
+  state.categories=state.categories.filter(c=>c.name!=="أسئلة المسابقة الجديدة"&&!newGroupNames.has(c.name)&&!retiredQuestionGroups.has(c.name));
   newQuestionGroups.forEach(c=>state.categories.push({...c,questions:c.questions.map(q=>({...q,used:usedByQuestion.get(q.q)||false}))}));
   save();
  }
@@ -1102,39 +1094,14 @@ const BANK=[
 ["عام • ثقافة","كم عدد أضلاع الشكل السداسي؟","ستة"],
 ["عام • علوم","ما أكبر عضو في جسم الإنسان؟","الجلد"],
 ["ديني","من النبي الذي كلمه الله تكليمًا؟","موسى عليه السلام"],
-["ديني","ما اسم الغار الذي اختبأ فيه النبي ﷺ وأبو بكر أثناء الهجرة؟","غار ثور"],
-["عام • علوم","ما العنصر الكيميائي الذي رمزه Fe؟","الحديد"],
-["ديني","كم عدد ركعات صلاة الفجر المفروضة؟","ركعتان"],
-["ديني","ما اسم أم النبي عيسى عليه السلام؟","مريم عليها السلام"],
-["عام • جغرافيا","ما عاصمة أستراليا؟","كانبرا"],
-["ديني","ما اسم أول مسجد بُني في الإسلام؟","مسجد قباء"],
-["ديني","في أي سنة هجرية وقعت غزوة بدر؟","السنة الثانية للهجرة"],
-["عام • جغرافيا","ما أعلى جبل في العالم فوق مستوى سطح البحر؟","جبل إيفرست"],
-["ديني","من هو أول الخلفاء الراشدين؟","أبو بكر الصديق رضي الله عنه"],
-["ديني","ما اسم الكتاب الذي أُنزل على النبي داود عليه السلام؟","الزبور"],
-["عام • علوم","ما الجزء المسؤول عن إنتاج الطاقة في الخلية؟","الميتوكوندريا"],
-["عام • ثقافة","كم بتًا في البايت الواحد؟","8 بتات"],
-["ديني","كم عدد أشهر السنة الهجرية؟","اثنا عشر شهرًا"],
-["عام • ثقافة","ما العملة الرسمية لليابان؟","الين"],
-["ديني","ما السورة التي تعدل ثلث القرآن؟","سورة الإخلاص"],
-["ديني","من الصحابي الملقب بالفاروق؟","عمر بن الخطاب رضي الله عنه"],
-["عام • علوم","ما الجهاز المستخدم لقياس الضغط الجوي؟","البارومتر"],
-["ديني","ما اسم صلح النبي ﷺ مع قريش في السنة السادسة للهجرة؟","صلح الحديبية"],
-["ديني","من هو النبي الذي بنى السفينة بأمر الله؟","نوح عليه السلام"],
-["عام • جغرافيا","ما أكبر دولة في العالم من حيث المساحة؟","روسيا"],
-["عام • علوم","ما أسرع حيوان بري؟","الفهد"],
-["ديني","من الصحابي الذي لُقب بذي النورين؟","عثمان بن عفان رضي الله عنه"],
-["عام • ثقافة","من مؤلف رواية البؤساء؟","فيكتور هوغو"],
-["ديني","ما أول شهر في السنة الهجرية؟","المحرّم"],
-["عام • علوم","ما أكبر حيوان معروف على وجه الأرض؟","الحوت الأزرق"]
 ];
-const KEY="ihyaaOfflineDuelV1";
+const KEY="ihyaaOfflineDuelV2";
 let game=null,tick=null,root=null;
 const $=id=>document.getElementById(id);
 const node=(tag,cls,text)=>{const n=document.createElement(tag);if(cls)n.className=cls;if(text!==undefined)n.textContent=text;return n};
 const button=(label,fn,cls)=>{const b=node("button","iod-btn "+(cls||""),label);b.type="button";b.addEventListener("click",fn);return b};
 const persist=()=>{try{localStorage.setItem(KEY,JSON.stringify(game));return true}catch(e){return false}};
-const loadSaved=()=>{try{const v=JSON.parse(localStorage.getItem(KEY)||"null");if(!v||!Array.isArray(v.questions)||v.questions.length!==50)return null;v.turnTeam=Number.isInteger(v.turnTeam)?v.turnTeam:(v.index%2);v.timeoutCount=Number.isInteger(v.timeoutCount)?v.timeoutCount:0;v.remaining=Number.isFinite(v.remaining)?Math.min(15,v.remaining):15;return v}catch(e){return null}};
+const loadSaved=()=>{try{const v=JSON.parse(localStorage.getItem(KEY)||"null");if(!v||!Array.isArray(v.questions)||v.questions.length!==25)return null;v.turnTeam=Number.isInteger(v.turnTeam)?v.turnTeam:(v.index%2);v.timeoutCount=Number.isInteger(v.timeoutCount)?v.timeoutCount:0;v.remaining=Number.isFinite(v.remaining)?Math.min(15,v.remaining):15;return v}catch(e){return null}};
 const names=()=>[String(game.names[0]||"اللاعب الأول"),String(game.names[1]||"اللاعب الثاني")];
 function stopClock(){if(tick){clearInterval(tick);tick=null}}
 function remaining(){if(!game)return 15;const stored=Number.isFinite(game.remaining)?game.remaining:15;if(game.paused||!game.running)return Math.max(0,stored);return Math.max(0,(game.deadline-Date.now())/1000)}
@@ -1154,8 +1121,8 @@ function next(correct){
 if(!game||game.finished||game.running)return;
 const team=game.turnTeam,used=Math.max(0,15-remaining());
 game.elapsed[team]+=used;
-if(correct){game.scores[team]+=1;game.correct[team]++}
-game.history.push({team,correct:!!correct,timeout:false,seconds:used,questionIndex:game.index});
+if(correct){game.scores[team]+=100;game.correct[team]++}else{game.scores[team]-=50}
+game.history.push({team,correct:!!correct,timeout:false,seconds:used,penalty:correct?0:50,awarded:correct?100:0,questionIndex:game.index});
 game.index++;game.turnTeam=1-team;game.timeoutCount=0;game.running=false;game.paused=false;game.remaining=15;game.deadline=0;game.revealed=false;
 if(game.index>=game.questions.length)game.finished=true;
 persist();render();
@@ -1165,7 +1132,7 @@ function open(){
 stopClock();
 const old=$("ihyaaOfflineDuel");if(old)old.remove();
 root=node("div","iod-overlay");root.id="ihyaaOfflineDuel";
-const style=node("style");style.textContent="#ihyaaOfflineDuel{position:fixed;inset:0;z-index:14000;overflow:auto;background:radial-gradient(circle at 50% 0%,#183b34,#071713 70%);color:#f7f8f2;padding:clamp(12px,3vw,30px);font-family:Cairo,Tahoma,sans-serif}#ihyaaOfflineDuel *{box-sizing:border-box}#ihyaaOfflineDuel .iod-shell{max-width:1050px;margin:auto}#ihyaaOfflineDuel .iod-head{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;border-bottom:1px solid #ffffff24;padding:8px 0 18px}#ihyaaOfflineDuel .iod-title{font-size:clamp(23px,4vw,36px);font-weight:1000;color:#f0d89c}#ihyaaOfflineDuel .iod-sub{color:#bdcfc5;font-size:13px}#ihyaaOfflineDuel .iod-btn{border:1px solid #ffffff2b;border-radius:12px;padding:11px 15px;background:#1c3c33;color:#fff;font:inherit;font-weight:900;cursor:pointer}#ihyaaOfflineDuel .iod-btn.gold{background:linear-gradient(135deg,#f0dca9,#c5a35d);color:#173126;border-color:#e7d29b}#ihyaaOfflineDuel .iod-btn.red{background:#7c2937;border-color:#d66b79}#ihyaaOfflineDuel .iod-btn:disabled{opacity:.45;cursor:not-allowed}#ihyaaOfflineDuel .iod-card{margin:16px 0;padding:clamp(16px,3vw,25px);border:1px solid #ffffff22;border-radius:20px;background:linear-gradient(145deg,#14372e,#0c241e);box-shadow:0 18px 55px #0003}#ihyaaOfflineDuel .iod-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}#ihyaaOfflineDuel .iod-team{padding:16px;border:1px solid #ffffff24;border-radius:16px;background:#ffffff09}#ihyaaOfflineDuel .iod-team.red{border-top:4px solid #ff6b78}#ihyaaOfflineDuel .iod-team.blue{border-top:4px solid #65b5ff}#ihyaaOfflineDuel .iod-team strong{display:block;font-size:16px}#ihyaaOfflineDuel .iod-score{font-size:34px;font-weight:1000}#ihyaaOfflineDuel .iod-team.red .iod-score{color:#ff8791}#ihyaaOfflineDuel .iod-team.blue .iod-score{color:#82c5ff}#ihyaaOfflineDuel .iod-turn{display:inline-flex;padding:7px 12px;border-radius:99px;background:#f0d89c1a;color:#f0d89c;font-weight:900}#ihyaaOfflineDuel .iod-question{font-size:clamp(21px,3.2vw,31px);font-weight:900;line-height:1.9;margin:16px 0}#ihyaaOfflineDuel .iod-timer{font-size:clamp(30px,5vw,44px);font-weight:1000;color:#f3d995;font-variant-numeric:tabular-nums}#ihyaaOfflineDuel .iod-timer.urgent{color:#ff7b86}#ihyaaOfflineDuel .iod-answer{padding:13px 15px;margin:12px 0;border:1px dashed #e2c47d;border-radius:12px;background:#e2c47d12;color:#ffe6ad;font-weight:900}#ihyaaOfflineDuel .iod-controls{display:flex;gap:9px;flex-wrap:wrap;margin-top:16px}#ihyaaOfflineDuel .iod-field{display:grid;gap:6px;margin:12px 0;color:#dce8df;font-weight:800}#ihyaaOfflineDuel .iod-field input{width:100%;padding:12px;border-radius:11px;border:1px solid #ffffff2c;background:#081b16;color:#fff;font:inherit}#ihyaaOfflineDuel .iod-muted{color:#b6c9be;line-height:1.9;font-size:13px}#ihyaaOfflineDuel .iod-history{display:grid;gap:7px;margin-top:12px}#ihyaaOfflineDuel .iod-history-row{display:flex;justify-content:space-between;gap:10px;padding:9px 12px;border-radius:10px;background:#ffffff09;color:#dce8df;font-size:12px}#ihyaaOfflineDuel .iod-result{text-align:center;padding:30px 15px}#ihyaaOfflineDuel .iod-result h2{font-size:clamp(30px,6vw,52px);color:#f2d48b;margin:8px 0}#ihyaaOfflineDuel .iod-progress{height:8px;border-radius:20px;background:#ffffff1c;overflow:hidden;margin-top:12px}#ihyaaOfflineDuel .iod-progress i{display:block;height:100%;background:linear-gradient(90deg,#55b5ff,#f1d58e);transition:width .2s}@media(max-width:620px){#ihyaaOfflineDuel .iod-grid{grid-template-columns:1fr}#ihyaaOfflineDuel .iod-controls .iod-btn{flex:1}}";
+const style=node("style");style.textContent="#ihyaaOfflineDuel{position:fixed;inset:0;z-index:14000;overflow:auto;background:radial-gradient(circle at 50% 0%,#183b34,#071713 70%);color:#f7f8f2;padding:clamp(12px,3vw,30px);font-family:Cairo,Tahoma,sans-serif}#ihyaaOfflineDuel *{box-sizing:border-box}#ihyaaOfflineDuel .iod-shell{max-width:1050px;margin:auto}#ihyaaOfflineDuel .iod-head{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;border-bottom:1px solid #ffffff24;padding:8px 0 18px}#ihyaaOfflineDuel .iod-title{font-size:clamp(23px,4vw,36px);font-weight:1000;color:#f0d89c}#ihyaaOfflineDuel .iod-sub{color:#bdcfc5;font-size:13px}#ihyaaOfflineDuel .iod-btn{border:1px solid #ffffff2b;border-radius:12px;padding:11px 15px;background:#1c3c33;color:#fff;font:inherit;font-weight:900;cursor:pointer}#ihyaaOfflineDuel .iod-btn.gold{background:linear-gradient(135deg,#f0dca9,#c5a35d);color:#173126;border-color:#e7d29b}#ihyaaOfflineDuel .iod-btn.red{background:#7c2937;border-color:#d66b79}#ihyaaOfflineDuel .iod-btn:disabled{opacity:.45;cursor:not-allowed}#ihyaaOfflineDuel .iod-card{margin:16px 0;padding:clamp(16px,3vw,25px);border:1px solid #ffffff22;border-radius:20px;background:linear-gradient(145deg,#14372e,#0c241e);box-shadow:0 18px 55px #0003}#ihyaaOfflineDuel .iod-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}#ihyaaOfflineDuel .iod-team{padding:16px;border:1px solid #ffffff24;border-radius:16px;background:#ffffff09}#ihyaaOfflineDuel .iod-team.red{border-top:4px solid #ff6b78}#ihyaaOfflineDuel .iod-team.blue{border-top:4px solid #65b5ff}#ihyaaOfflineDuel .iod-team strong{display:block;font-size:16px}#ihyaaOfflineDuel .iod-score{font-size:34px;font-weight:1000}#ihyaaOfflineDuel .iod-team.red .iod-score{color:#ff8791}#ihyaaOfflineDuel .iod-team.blue .iod-score{color:#82c5ff}#ihyaaOfflineDuel .iod-turn{display:inline-flex;padding:7px 12px;border-radius:99px;background:#f0d89c1a;color:#f0d89c;font-weight:900}#ihyaaOfflineDuel .iod-question{font-size:clamp(21px,3.2vw,31px);font-weight:900;line-height:1.9;margin:16px 0}#ihyaaOfflineDuel .iod-timer{font-size:clamp(30px,5vw,44px);font-weight:1000;color:#f3d995;font-variant-numeric:tabular-nums}#ihyaaOfflineDuel .iod-timer.urgent{color:#ff7b86}#ihyaaOfflineDuel .iod-answer{padding:13px 15px;margin:12px 0;border:1px dashed #e2c47d;border-radius:12px;background:#e2c47d12;color:#ffe6ad;font-weight:900}#ihyaaOfflineDuel .iod-controls{display:flex;gap:9px;flex-wrap:wrap;margin-top:16px}#ihyaaOfflineDuel .iod-field{display:grid;gap:6px;margin:12px 0;color:#dce8df;font-weight:800}#ihyaaOfflineDuel .iod-field input{width:100%;padding:12px;border-radius:11px;border:1px solid #ffffff2c;background:#081b16;color:#fff;font:inherit}#ihyaaOfflineDuel .iod-muted{color:#b6c9be;line-height:1.9;font-size:13px}#ihyaaOfflineDuel .iod-history{display:grid;gap:7px;margin-top:12px}#ihyaaOfflineDuel .iod-history-row{display:flex;justify-content:space-between;gap:10px;padding:9px 12px;border-radius:10px;background:#ffffff09;color:#dce8df;font-size:12px}#ihyaaOfflineDuel .iod-result{text-align:center;padding:30px 15px}#ihyaaOfflineDuel .iod-result h2{font-size:clamp(30px,6vw,52px);color:#f2d48b;margin:8px 0}#ihyaaOfflineDuel .iod-progress{height:8px;border-radius:20px;background:#ffffff1c;overflow:hidden;margin-top:12px}#ihyaaOfflineDuel .iod-progress i{display:block;height:100%;background:linear-gradient(90deg,#55b5ff,#f1d58e);transition:width .2s}#ihyaaOfflineDuel .iod-score.negative{color:#ff7584!important;animation:iodPenaltyPulse .65s ease}#ihyaaOfflineDuel .iod-card{animation:iodCardIn .55s cubic-bezier(.2,.8,.2,1) both}#ihyaaOfflineDuel .iod-card.iod-result{position:relative;isolation:isolate;overflow:hidden;border-color:#d7bd7d;background:linear-gradient(145deg,#183f34,#0a211b);animation:iodChampionRise .9s cubic-bezier(.16,1,.3,1) both}#ihyaaOfflineDuel .iod-result>*:not(.iod-confetti){position:relative;z-index:1}#ihyaaOfflineDuel .iod-confetti{position:absolute;inset:0;z-index:0;overflow:hidden;pointer-events:none}#ihyaaOfflineDuel .iod-confetti i{position:absolute;left:var(--x);top:-14%;width:8px;height:14px;border-radius:2px;background:var(--c);animation:iodConfettiFall var(--d) linear var(--delay) infinite}#ihyaaOfflineDuel .iod-champion-crown{font-size:clamp(58px,10vw,90px);filter:drop-shadow(0 8px 14px #d4ad5a66);animation:iodCrown .9s ease-in-out infinite alternate}#ihyaaOfflineDuel .iod-champion-kicker{margin:8px 0 12px;color:#eed69c;font-size:12px;font-weight:1000;letter-spacing:1px}#ihyaaOfflineDuel .iod-winner-red{box-shadow:0 0 0 1px #ff758433,0 20px 65px #7a243a55}#ihyaaOfflineDuel .iod-winner-blue{box-shadow:0 0 0 1px #78c2ff44,0 20px 65px #174a7a66}#ihyaaOfflineDuel .iod-winner-tie{box-shadow:0 0 0 1px #e9cb7a44,0 20px 65px #8c692c55}@keyframes iodCardIn{from{opacity:0;transform:translateY(16px) scale(.985)}to{opacity:1;transform:none}}@keyframes iodChampionRise{0%{opacity:0;transform:translateY(45px) scale(.9);filter:blur(6px)}70%{opacity:1;transform:translateY(-5px) scale(1.01);filter:none}100%{transform:none}}@keyframes iodCrown{to{transform:translateY(-10px) rotate(5deg)}}@keyframes iodConfettiFall{to{transform:translate3d(25px,115vh,0) rotate(720deg)}}@keyframes iodPenaltyPulse{50%{transform:scale(1.14);text-shadow:0 0 18px #ff758477}}@media(prefers-reduced-motion:reduce){#ihyaaOfflineDuel .iod-card,#ihyaaOfflineDuel .iod-champion-crown,#ihyaaOfflineDuel .iod-confetti i,#ihyaaOfflineDuel .iod-score.negative{animation:none!important}}@media(max-width:620px){#ihyaaOfflineDuel .iod-grid{grid-template-columns:1fr}#ihyaaOfflineDuel .iod-controls .iod-btn{flex:1}}";
 document.head.append(style);document.body.append(root);
 game=loadSaved();
 render();
@@ -1173,7 +1140,7 @@ render();
 function render(){
 if(!root)return;root.innerHTML="";
 const shell=node("div","iod-shell"),head=node("header","iod-head"),heading=node("div");
-heading.append(node("div","iod-title","مواجهة إحياء • أوفلاين 1 ضد 1"),node("div","iod-sub","50 سؤالًا • 15 ثانية لكل لاعب • انتهاء الوقت يخصم 50 نقطة ويمرر السؤال"));
+heading.append(node("div","iod-title","مواجهة إحياء • أوفلاين 1 ضد 1"),node("div","iod-sub","25 سؤالًا • كل سؤال 100 نقطة • الصحيحة +100 والخاطئة أو انتهاء الوقت −50"));
 const actions=node("div","iod-controls");actions.append(button("القائمة الرئيسية",()=>{stopClock();if(game&&game.running)pauseTimer();root.remove();root=null;openStartMenu()}),button("إغلاق",()=>{if(game&&game.running)pauseTimer();stopClock();root.remove();root=null}));
 head.append(heading,actions);shell.append(head);
 if(!game){
@@ -1183,14 +1150,14 @@ const n2=node("label","iod-field","اسم اللاعب الثاني / الأزر
 setup.append(n1,n2,button("ابدأ مواجهة جديدة",()=>startNew(i1.value,i2.value),"gold"));shell.append(setup);
 }else if(game.finished){
 const winner=game.scores[0]===game.scores[1]?(game.elapsed[0]===game.elapsed[1]?-1:(game.elapsed[0]<game.elapsed[1]?0:1)):(game.scores[0]>game.scores[1]?0:1);
-const result=node("section","iod-card iod-result");result.append(node("div","iod-turn","انتهت الأسئلة الخمسون"),node("h2","",winner<0?"تعادل المواجهة": "🏆 "+game.names[winner]),node("p","iod-muted","النتيجة: "+game.names[0]+" "+game.scores[0]+" — "+game.scores[1]+" "+game.names[1]),node("p","iod-muted",game.scores[0]===game.scores[1]?"تساوى اللاعبان في الإجابات الصحيحة؛ حُسم التعادل بإجمالي زمن الإجابة.":"الفائز هو صاحب أعلى مجموع نقاط بعد احتساب خصم التأخر عن الإجابة."),node("p","iod-muted","إجمالي زمن الإجابة: "+game.names[0]+" "+game.elapsed[0].toFixed(1)+" ثانية • "+game.names[1]+" "+game.elapsed[1].toFixed(1)+" ثانية"));
+const result=node("section","iod-card iod-result");result.classList.add("iod-winner-"+(winner<0?"tie":winner===0?"red":"blue"));const confetti=node("div","iod-confetti");const palette=winner===0?["#ff8794","#d84c60","#f2d58e","#fff"]:winner===1?["#8acaff","#397db9","#f2d58e","#fff"]:["#f2d58e","#fff0c2","#d6aa55","#fff"];for(let i=0;i<64;i++){const bit=node("i");bit.style.setProperty("--x",Math.random()*100+"%");bit.style.setProperty("--d",(2.8+Math.random()*3.2)+"s");bit.style.setProperty("--delay",(-Math.random()*4)+"s");bit.style.setProperty("--c",palette[i%palette.length]);confetti.append(bit)}result.append(confetti,node("div","iod-champion-crown","👑"),node("div","iod-champion-kicker","مؤسسة إحياء • لحظة التتويج"),node("div","iod-turn","انتهت الأسئلة الخمسة والعشرون"),node("h2","",winner<0?"تعادل المواجهة":"🏆 "+game.names[winner]),node("p","iod-muted","النتيجة النهائية: "+game.names[0]+" "+game.scores[0]+" نقطة — "+game.scores[1]+" نقطة "+game.names[1]),node("p","iod-muted",game.scores[0]===game.scores[1]?"تساوى اللاعبان في النقاط؛ حُسم التعادل بإجمالي زمن الإجابة.":"الفائز هو صاحب أعلى مجموع نقاط بعد احتساب خصم الإجابات الخاطئة والمهل المنتهية."),node("p","iod-muted","الإجابات الصحيحة: "+game.correct[0]+" — "+game.correct[1]+" • إجمالي زمن الإجابة: "+game.names[0]+" "+game.elapsed[0].toFixed(1)+" ثانية • "+game.names[1]+" "+game.elapsed[1].toFixed(1)+" ثانية"));
 result.append(button("مواجهة جديدة",()=>{game=null;persist();render()},"gold"),button("عرض سجل الإجابات",()=>showHistory(result)));shell.append(result);
 }else{
 const team=game.turnTeam,question=game.questions[game.index],left=remaining();
 const scores=node("section","iod-grid");
-[0,1].forEach(i=>{const card=node("div","iod-team "+(i===0?"red":"blue"));card.append(node("strong","",game.names[i]),node("div","iod-score",String(game.scores[i])),node("div","iod-muted",game.correct[i]+" إجابة صحيحة • "+game.elapsed[i].toFixed(1)+" ثانية • "+game.history.filter(h=>h.team===i&&h.timeout).length+" مهلة منتهية"));scores.append(card)});
+[0,1].forEach(i=>{const card=node("div","iod-team "+(i===0?"red":"blue"));const score=node("div","iod-score",String(game.scores[i]));if(game.scores[i]<0)score.classList.add("negative");card.append(node("strong","",game.names[i]),score,node("div","iod-muted",game.correct[i]+" إجابة صحيحة • "+game.elapsed[i].toFixed(1)+" ثانية • "+game.history.filter(h=>h.team===i&&h.timeout).length+" مهلة منتهية"));scores.append(card)});
 shell.append(scores);
-const card=node("section","iod-card");card.append(node("div","iod-turn","الدور الحالي: "+game.names[team]+" • السؤال "+(game.index+1)+" من 50"),node("div","iod-progress"));const progressBar=node("i");progressBar.style.width=(game.index/50*100)+"%";card.lastChild.append(progressBar);
+const card=node("section","iod-card");card.append(node("div","iod-turn","الدور الحالي: "+game.names[team]+" • السؤال "+(game.index+1)+" من 25"),node("div","iod-progress"));const progressBar=node("i");progressBar.style.width=(game.index/25*100)+"%";card.lastChild.append(progressBar);
 card.append(node("div","iod-muted","التصنيف: "+question.category),node("div","iod-question",question.q));
 const clock=node("div","iod-timer"+(left<=10?" urgent":""),Math.ceil(left)+" ثانية");clock.id="iodTime";card.append(clock);
 const status=node("p","iod-muted",game.running?"المؤقت يعمل — استمع لإجابة اللاعب.":game.remaining<=0?"انتهى الوقت وتم تطبيق خصم 50 نقطة.":game.paused?"المؤقت متوقف مؤقتًا.":"ابدأ المؤقت عندما تكون جاهزًا.");card.append(status);
@@ -1200,20 +1167,20 @@ if(!game.running&&game.remaining>0)controls.append(button(game.paused?"استئ�
 if(game.running)controls.append(button("إيقاف المؤقت",pauseTimer,"red"));
 controls.append(button(game.revealed?"إخفاء الإجابة":"إظهار الإجابة للهوست",reveal));
 if(!game.running) {
-controls.append(button("إجابة صحيحة (+1) • التالي",()=>next(true),"gold"));
-controls.append(button("إجابة خاطئة • التالي",()=>next(false),"red"));
+controls.append(button("إجابة صحيحة (+100) • التالي",()=>next(true),"gold"));
+controls.append(button("إجابة خاطئة (−50) • التالي",()=>next(false),"red"));
 }
 card.append(controls);shell.append(card);
-const note=node("p","iod-muted","لكل لاعب 15 ثانية. إذا انتهى الوقت تُخصم 50 نقطة فورًا وينتقل نفس السؤال للاعب الآخر. إذا انتهى وقت اللاعب الثاني أيضًا تُخصم منه 50 نقطة وينتقل اللعب للسؤال التالي. الإجابة الصحيحة تمنح نقطة واحدة، والخاطئة لا تخصم نقاطًا. الهوست يدير التقييم ويكشف الإجابة.");
+const note=node("p","iod-muted","15 ثانية لكل محاولة. الإجابة الصحيحة تمنح 100 نقطة، والإجابة الخاطئة تخصم 50 نقطة. انتهاء الوقت يخصم 50 نقطة ويمنح اللاعب الآخر فرصة السؤال نفسه؛ وإذا انتهت مهلة اللاعب الثاني ينتقل اللعب للسؤال التالي. الهوست يدير التقييم ويكشف الإجابة.");
 shell.append(note);
-const hist=node("section","iod-card");hist.append(node("strong","","سجل الجولة"),node("div","iod-muted",game.history.length+" من 50 دورًا مكتملًا"));hist.append(button("عرض الإجابات السابقة",()=>showHistory(hist)));shell.append(hist);
+const hist=node("section","iod-card");hist.append(node("strong","","سجل الجولة"),node("div","iod-muted",game.history.length+" من 25 دورًا مكتملًا"));hist.append(button("عرض الإجابات السابقة",()=>showHistory(hist)));shell.append(hist);
 }
 root.append(shell);
 if(game&&game.running){stopClock();tick=setInterval(onTick,100)}
 }
 function showHistory(parent){
 const list=node("div","iod-history");
-(game?.history||[]).forEach((h,i)=>{const q=game.questions[Number.isInteger(h.questionIndex)?h.questionIndex:i],row=node("div","iod-history-row");row.append(node("span","",game.names[h.team]+" • "+q.q),node("strong","",h.timeout?"انتهى الوقت (−50)":h.correct?"صحيحة (+1)":"خاطئة"));list.append(row)});
+(game?.history||[]).forEach((h,i)=>{const q=game.questions[Number.isInteger(h.questionIndex)?h.questionIndex:i],row=node("div","iod-history-row");row.append(node("span","",game.names[h.team]+" • "+q.q),node("strong","",h.timeout?"انتهى الوقت (−50)":h.correct?"صحيحة (+100)":"خاطئة (−50)"));list.append(row)});
 parent.append(list);
 }
 $("startOfflineDuelBtn")?.addEventListener("click",()=>{hideStartMenu();open()});
