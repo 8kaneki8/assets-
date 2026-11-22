@@ -126,5 +126,8 @@ footer{border-top-color:#ffffff18;color:#8da8c8}
 </main>
 <footer><span>© مؤسسة إحياء — جميع الحقوق محفوظة</span><span class="footer-mark">جِيلٌ عَلَى خُطَى السَّابِقِينَ</span></footer>
 </div>
+<script>
+if("serviceWorker" in navigator && location.protocol==="https:") window.addEventListener("load",()=>navigator.serviceWorker.register("./sw.js").catch(()=>{}));
+</script>
 </body>
 </html>
