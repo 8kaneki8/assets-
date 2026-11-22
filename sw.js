@@ -1,5 +1,5 @@
 "use strict";
-const CACHE_NAME = "ihyaa-app-shell-v13";
+const CACHE_NAME = "ihyaa-app-shell-v14";
 const BASE = new URL("./", self.registration.scope);
 const SHELL = [
   BASE.href,
