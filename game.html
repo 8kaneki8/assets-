@@ -1103,34 +1103,33 @@ const $=id=>document.getElementById(id);
 const node=(tag,cls,text)=>{const n=document.createElement(tag);if(cls)n.className=cls;if(text!==undefined)n.textContent=text;return n};
 const button=(label,fn,cls)=>{const b=node("button","iod-btn "+(cls||""),label);b.type="button";b.addEventListener("click",fn);return b};
 const persist=()=>{try{localStorage.setItem(KEY,JSON.stringify(game));return true}catch(e){return false}};
-const loadSaved=()=>{try{const v=JSON.parse(localStorage.getItem(KEY)||"null");return v&&Array.isArray(v.questions)&&v.questions.length===50?v:null}catch(e){return null}};
+const loadSaved=()=>{try{const v=JSON.parse(localStorage.getItem(KEY)||"null");if(!v||!Array.isArray(v.questions)||v.questions.length!==50)return null;v.turnTeam=Number.isInteger(v.turnTeam)?v.turnTeam:(v.index%2);v.timeoutCount=Number.isInteger(v.timeoutCount)?v.timeoutCount:0;v.remaining=Number.isFinite(v.remaining)?Math.min(15,v.remaining):15;return v}catch(e){return null}};
 const names=()=>[String(game.names[0]||"اللاعب الأول"),String(game.names[1]||"اللاعب الثاني")];
 function stopClock(){if(tick){clearInterval(tick);tick=null}}
-function remaining(){if(!game)return 50;if(game.paused)return Math.max(0,game.remaining||0);if(!game.running)return Math.max(0,game.remaining||50);return Math.max(0,(game.deadline-Date.now())/1000)}
+function remaining(){if(!game)return 15;if(game.paused)return Math.max(0,game.remaining||0);if(!game.running)return Math.max(0,game.remaining||15);return Math.max(0,(game.deadline-Date.now())/1000)}
 function saveAndRender(){persist();render()}
 function startNew(n1,n2){
 const pool=BANK.map((x)=>({category:x[0],q:x[1],a:x[2]}));
 for(let i=pool.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[pool[i],pool[j]]=[pool[j],pool[i]]}
-game={names:[n1.trim()||"اللاعب الأول",n2.trim()||"اللاعب الثاني"],questions:pool,index:0,scores:[0,0],elapsed:[0,0],correct:[0,0],history:[],running:false,paused:false,remaining:50,deadline:0,revealed:false,finished:false,createdAt:Date.now()};
+game={names:[n1.trim()||"اللاعب الأول",n2.trim()||"اللاعب الثاني"],questions:pool,index:0,turnTeam:0,timeoutCount:0,scores:[0,0],elapsed:[0,0],correct:[0,0],history:[],running:false,paused:false,remaining:15,deadline:0,revealed:false,finished:false,createdAt:Date.now()};
 persist();render();
 }
 function startTimer(){if(!game||game.finished||game.running||game.remaining<=0)return;game.running=true;game.paused=false;game.deadline=Date.now()+game.remaining*1000;persist();if(!tick)tick=setInterval(onTick,100);render()}
 function pauseTimer(){if(!game||!game.running)return;game.remaining=remaining();game.running=false;game.paused=true;game.deadline=0;stopClock();persist();render()}
-function onTick(){if(!game||!game.running)return;const left=remaining();const t=$("iodTime");if(t){t.textContent=Math.ceil(left)+" ثانية";t.classList.toggle("urgent",left<=10)}if(left<=0){game.remaining=0;game.running=false;game.paused=false;game.deadline=0;stopClock();game.history.push({team:game.index%2,correct:false,timeout:true,seconds:50});game.elapsed[game.index%2]+=50;persist();render()}}
+function handleTimeout(){if(!game||game.finished||!game.running)return;const team=game.turnTeam;game.remaining=0;game.running=false;game.paused=false;game.deadline=0;stopClock();game.scores[team]-=50;game.elapsed[team]+=15;game.history.push({team,correct:false,timeout:true,penalty:50,seconds:15,questionIndex:game.index});if(game.timeoutCount===0){game.timeoutCount=1;game.turnTeam=1-team;game.remaining=15;game.revealed=false;persist();render();return}game.timeoutCount=0;game.index++;game.turnTeam=1-team;game.remaining=15;game.revealed=false;if(game.index>=game.questions.length)game.finished=true;persist();render()}
+function onTick(){if(!game||!game.running)return;const left=remaining();const t=$("iodTime");if(t){t.textContent=Math.ceil(left)+" ثانية";t.classList.toggle("urgent",left<=5)}if(left<=0)handleTimeout()}
 function reveal(){game.revealed=!game.revealed;render()}
 function next(correct){
-if(!game||game.finished)return;
-const team=game.index%2,used=Math.max(0,50-remaining());
-if(game.running){game.remaining=remaining();game.running=false;game.deadline=0;stopClock()}
-if(game.remaining<=0){correct=false}
+if(!game||game.finished||game.running)return;
+const team=game.turnTeam,used=Math.max(0,15-remaining());
 game.elapsed[team]+=used;
-if(correct){game.scores[team]++;game.correct[team]++}
-game.history.push({team,correct:!!correct,timeout:false,seconds:used});
-game.index++;game.running=false;game.paused=false;game.remaining=50;game.deadline=0;game.revealed=false;
+if(correct){game.scores[team]+=1;game.correct[team]++}
+game.history.push({team,correct:!!correct,timeout:false,seconds:used,questionIndex:game.index});
+game.index++;game.turnTeam=1-team;game.timeoutCount=0;game.running=false;game.paused=false;game.remaining=15;game.deadline=0;game.revealed=false;
 if(game.index>=game.questions.length)game.finished=true;
 persist();render();
 }
-function advanceTimeout(){if(!game||game.running||game.remaining>0)return;game.index++;game.running=false;game.paused=false;game.remaining=50;game.deadline=0;game.revealed=false;if(game.index>=game.questions.length)game.finished=true;persist();render()}
+function advanceTimeout(){if(game&&game.remaining<=0)handleTimeout()}
 function open(){
 stopClock();
 const old=$("ihyaaOfflineDuel");if(old)old.remove();
@@ -1143,7 +1142,7 @@ render();
 function render(){
 if(!root)return;root.innerHTML="";
 const shell=node("div","iod-shell"),head=node("header","iod-head"),heading=node("div");
-heading.append(node("div","iod-title","مواجهة إحياء • أوفلاين 1 ضد 1"),node("div","iod-sub","50 سؤالًا عامًا • 50 ثانية لكل دور • تحكم كامل للهوست"));
+heading.append(node("div","iod-title","مواجهة إحياء • أوفلاين 1 ضد 1"),node("div","iod-sub","50 سؤالًا • 15 ثانية لكل لاعب • انتهاء الوقت يخصم 50 نقطة ويمرر السؤال"));
 const actions=node("div","iod-controls");actions.append(button("القائمة الرئيسية",()=>{stopClock();if(game&&game.running)pauseTimer();root.remove();root=null;openStartMenu()}),button("إغلاق",()=>{if(game&&game.running)pauseTimer();stopClock();root.remove();root=null}));
 head.append(heading,actions);shell.append(head);
 if(!game){
@@ -1156,25 +1155,25 @@ const winner=game.scores[0]===game.scores[1]?(game.elapsed[0]===game.elapsed[1]?
 const result=node("section","iod-card iod-result");result.append(node("div","iod-turn","انتهت الأسئلة الخمسون"),node("h2","",winner<0?"تعادل المواجهة": "🏆 "+game.names[winner]),node("p","iod-muted","النتيجة: "+game.names[0]+" "+game.scores[0]+" — "+game.scores[1]+" "+game.names[1]),node("p","iod-muted",game.scores[0]===game.scores[1]?"تساوى اللاعبان في الإجابات الصحيحة؛ حُسم التعادل بإجمالي زمن الإجابة.":"الفائز هو صاحب أكبر عدد من الإجابات الصحيحة."),node("p","iod-muted","إجمالي زمن الإجابة: "+game.names[0]+" "+game.elapsed[0].toFixed(1)+" ثانية • "+game.names[1]+" "+game.elapsed[1].toFixed(1)+" ثانية"));
 result.append(button("مواجهة جديدة",()=>{game=null;persist();render()},"gold"),button("عرض سجل الإجابات",()=>showHistory(result)));shell.append(result);
 }else{
-const team=game.index%2,question=game.questions[game.index],left=remaining();
+const team=game.turnTeam,question=game.questions[game.index],left=remaining();
 const scores=node("section","iod-grid");
-[0,1].forEach(i=>{const card=node("div","iod-team "+(i===0?"red":"blue"));card.append(node("strong","",game.names[i]),node("div","iod-score",String(game.scores[i])),node("div","iod-muted",game.correct[i]+" إجابة صحيحة • "+game.elapsed[i].toFixed(1)+" ثانية مستخدمة"));scores.append(card)});
+[0,1].forEach(i=>{const card=node("div","iod-team "+(i===0?"red":"blue"));card.append(node("strong","",game.names[i]),node("div","iod-score",String(game.scores[i])),node("div","iod-muted",game.correct[i]+" إجابة صحيحة • "+game.elapsed[i].toFixed(1)+" ثانية • "+game.history.filter(h=>h.team===i&&h.timeout).length+" مهلة منتهية"));scores.append(card)});
 shell.append(scores);
 const card=node("section","iod-card");card.append(node("div","iod-turn","الدور الحالي: "+game.names[team]+" • السؤال "+(game.index+1)+" من 50"),node("div","iod-progress"));const progressBar=node("i");progressBar.style.width=(game.index/50*100)+"%";card.lastChild.append(progressBar);
 card.append(node("div","iod-muted","التصنيف: "+question.category),node("div","iod-question",question.q));
 const clock=node("div","iod-timer"+(left<=10?" urgent":""),Math.ceil(left)+" ثانية");clock.id="iodTime";card.append(clock);
-const status=node("p","iod-muted",game.running?"المؤقت يعمل — استمع لإجابة اللاعب.":game.remaining<=0?"انتهى الوقت. اضغط التالي للانتقال إلى اللاعب الآخر.":game.paused?"المؤقت متوقف مؤقتًا.":"ابدأ المؤقت عندما تكون جاهزًا.");card.append(status);
+const status=node("p","iod-muted",game.running?"المؤقت يعمل — استمع لإجابة اللاعب.":game.remaining<=0?"انتهى الوقت وتم تطبيق خصم 50 نقطة.":game.paused?"المؤقت متوقف مؤقتًا.":"ابدأ المؤقت عندما تكون جاهزًا.");card.append(status);
 if(game.revealed)card.append(node("div","iod-answer","الإجابة الصحيحة للهوست: "+question.a));
 const controls=node("div","iod-controls");
-if(!game.running&&game.remaining>0)controls.append(button(game.paused?"استئناف المؤقت":"ابدأ الـ 50 ثانية",game.paused?()=>{game.remaining=Math.max(0,game.remaining);startTimer();render()}:startTimer,"gold"));
+if(!game.running&&game.remaining>0)controls.append(button(game.paused?"استئناف المؤقت":"ابدأ الـ 15 ثانية",game.paused?()=>{game.remaining=Math.max(0,game.remaining);startTimer();render()}:startTimer,"gold"));
 if(game.running)controls.append(button("إيقاف المؤقت",pauseTimer,"red"));
 controls.append(button(game.revealed?"إخفاء الإجابة":"إظهار الإجابة للهوست",reveal));
-if(game.remaining>0) {
-controls.append(button("إجابة صحيحة • التالي",()=>next(true),"gold"));
+if(!game.running) {
+controls.append(button("إجابة صحيحة (+1) • التالي",()=>next(true),"gold"));
 controls.append(button("إجابة خاطئة • التالي",()=>next(false),"red"));
-}else controls.append(button("انتهى الوقت • التالي",advanceTimeout,"gold"));
+}
 card.append(controls);shell.append(card);
-const note=node("p","iod-muted","بعد سماع الإجابة اضغط «إيقاف المؤقت» إذا أردت تثبيت الزمن، ثم اختر صحيحة أو خاطئة. سينتقل الدور تلقائيًا للاعب الآخر مع سؤال جديد. لا يحتاج اللاعبان إلى حساب أو اتصال بالإنترنت.");
+const note=node("p","iod-muted","لكل لاعب 15 ثانية. إذا انتهى الوقت تُخصم 50 نقطة فورًا وينتقل نفس السؤال للاعب الآخر. إذا انتهى وقت اللاعب الثاني أيضًا تُخصم منه 50 نقطة وينتقل اللعب للسؤال التالي. الإجابة الصحيحة تمنح نقطة واحدة، والخاطئة لا تخصم نقاطًا. الهوست يدير التقييم ويكشف الإجابة.");
 shell.append(note);
 const hist=node("section","iod-card");hist.append(node("strong","","سجل الجولة"),node("div","iod-muted",game.history.length+" من 50 دورًا مكتملًا"));hist.append(button("عرض الإجابات السابقة",()=>showHistory(hist)));shell.append(hist);
 }
@@ -1183,7 +1182,7 @@ if(game&&game.running){stopClock();tick=setInterval(onTick,100)}
 }
 function showHistory(parent){
 const list=node("div","iod-history");
-(game?.history||[]).forEach((h,i)=>{const q=game.questions[i],row=node("div","iod-history-row");row.append(node("span","",game.names[h.team]+" • "+q.q),node("strong","",h.timeout?"انتهى الوقت":h.correct?"صحيحة":"خاطئة"));list.append(row)});
+(game?.history||[]).forEach((h,i)=>{const q=game.questions[i],row=node("div","iod-history-row");row.append(node("span","",game.names[h.team]+" • "+q.q),node("strong","",h.timeout?"انتهى الوقت (−50)":h.correct?"صحيحة (+1)":"خاطئة"));list.append(row)});
 parent.append(list);
 }
 $("startOfflineDuelBtn")?.addEventListener("click",()=>{hideStartMenu();open()});
