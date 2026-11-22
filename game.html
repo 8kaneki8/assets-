@@ -1139,6 +1139,7 @@ const style=node("style");style.textContent="#ihyaaOfflineDuel{position:fixed;in
 document.head.append(style);document.body.append(root);
 game=loadSaved();
 render();
+if(game&&!game.finished&&!game.running&&!game.paused)startTimer();
 }
 function render(){
 if(!root)return;root.innerHTML="";
